@@ -6,7 +6,6 @@ import FeaturesTab from "@/components/FeaturesTab";
 import FunFact from "@/components/FunFact";
 import FAQ from "@/components/FAQ";
 import Pricing from "@/components/Pricing";
-import Contact from "@/components/Contact";
 import Blog from "@/components/Blog";
 
 export const metadata: Metadata = { //quyết định data chung như title (nó chính là tag metadata mà khi gõ html hay tự động gen khi viết html thuần)
