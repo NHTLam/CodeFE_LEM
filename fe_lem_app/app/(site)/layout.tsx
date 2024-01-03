@@ -3,8 +3,6 @@
 // Folder app có thể coi là phía server của react, do đó các file đặt trong này sẽ được sử dụng để render trước chứ không xử lý phía máy khách để cải thiện tốc độ xử lý.
 "use client";//Xác định file này sẽ được xử lý máy khách. Điều này là do các xử lý liên quan đến các thao tác như State, onClick, etc cần được xử lý phía máy khách để tránh lỗi.
 
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import Lines from "@/components/Lines";
 import ScrollToTop from "@/components/ScrollToTop";
 import { ThemeProvider } from "next-themes";
@@ -12,13 +10,9 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
-import ToasterContext from "../context/ToastContext";
+import ToasterContext from "./context/ToastContext";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children,}: {children: React.ReactNode;}) { 
   return (
     <html lang="en" suppressHydrationWarning> {/* suppressHydrationWarning được sử dụng để tắt cảnh báo hydrate*/}
       <body className={`dark:bg-black ${inter.className}`}>
@@ -28,10 +22,8 @@ export default function RootLayout({
           defaultTheme="light"
         >
           <Lines />
-          <Header />
           <ToasterContext />
           {children}
-          <Footer />
           <ScrollToTop />
         </ThemeProvider> {/* được sử dụng để chủ động cấu hình việc thay đổi theme của ứng dụng - chính là chức năng đổi sáng tối của web*/}
       </body>
