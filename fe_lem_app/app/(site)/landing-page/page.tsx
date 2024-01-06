@@ -13,7 +13,7 @@ export const metadata: Metadata = { //quyết định data chung như title (nó
   description: 'Lam Educational Management',
 }
 
-export default function Home() {
+export default function LandingPage() {
   return (
     <main>
       <Hero />

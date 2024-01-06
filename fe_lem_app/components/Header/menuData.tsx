@@ -1,23 +1,23 @@
-import { Menu } from "@/types/menu";
+import { Menu } from "@/models/menu";
 
 const menuData: Menu[] = [
   {
     id: 1,
     title: "Home",
     newTab: false,
-    path: "/",
+    path: "/landing-page",
   },
   {
     id: 2,
     title: "Blog",
     newTab: false,
-    path: "/blog",
+    path: "/landing-page/blog",
   },
   {
     id: 2.1,
     title: "Docs",
     newTab: false,
-    path: "/docs",
+    path: "/landing-page/docs",
   },
   {
     id: 3,
@@ -28,7 +28,7 @@ const menuData: Menu[] = [
         id: 31,
         title: "Create Class",
         newTab: false,
-        path: "/blog",
+        path: "/landing-page/blog",
       },
       {
         id: 34,
@@ -46,13 +46,13 @@ const menuData: Menu[] = [
         id: 35,
         title: "Do an exam",
         newTab: false,
-        path: "/docs",
+        path: "/landing-page/docs",
       },
       {
         id: 35.1,
         title: "Create Table",
         newTab: false,
-        path: "/support",
+        path: "/landing-page/support",
       },
       {
         id: 36,
