@@ -33,8 +33,8 @@ export default function DocsPage() {
                 <p className="text-body-color dark:text-body-color-dark text-base">
                   Please visit:{" "}
                   <b>
-                    <a href="https://nextjstemplates.com/docs">
-                      nextjstemplates.com/docs
+                    <a href="">
+                      lem@org.com
                     </a>
                   </b>{" "}
                   to check out the real docs, setup guide and even video
