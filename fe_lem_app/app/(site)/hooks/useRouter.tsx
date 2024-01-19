@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { usePathname } from "next/navigation";
-import { HiChat } from "react-icons/hi";
 import {
-    HiArrowLeftOnRectangle,
-    HiUsers
-} from "react-icons/hi2";
+    MessageCircleMore,
+    User,
+    ArrowLeft ,
+  } from "lucide-react";
 //import signOut from "next-auth/react";
 import useConversation from "./useConservation";
 
@@ -16,20 +16,20 @@ const useRoutes = () => {
         {
             label: 'Chat',
             href: '/conversations',
-            icon: HiChat,
+            icon: <MessageCircleMore className="h-4 w-4 mr-2" />,
             active: pathname === '/conversations' || !! conversationId
         },
         {
             label: 'Users',
             href: '/users',
-            icon: HiUsers,
+            icon: <User className="h-4 w-4 mr-2" />,
             active: pathname === '/users'
         },
         {
             label: 'Logout',
             href: '#',
             //onClick: ()→ signOut(),
-            icon: HiArrowLeftOnRectangle
+            icon: <ArrowLeft className="h-4 w-4 mr-2" />,
         }
     ], [pathname, conversationId]);
 
