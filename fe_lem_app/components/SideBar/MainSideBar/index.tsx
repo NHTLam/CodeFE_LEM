@@ -44,21 +44,21 @@ export const Sidebar = ({
   const fakeUserMemberships = [
     {
       id: "1",
-      slug: "a",
+      slug: "",
       imageUrl: "",
-      name: "a",
+      name: "Lớp 5A",
     },
     {
       id: "2",
-      slug: "a",
+      slug: "",
       imageUrl: "",
-      name: "a",
+      name: "Không gian làm việc của tôi",
     },
     {
       id: "3",
-      slug: "a",
+      slug: "",
       imageUrl: "",
-      name: "a",
+      name: "Bảng công việc nhóm",
     },
     
   ];

@@ -7,6 +7,7 @@ import {
   CreditCard,
   Layout,
   Settings,
+  LibraryBig
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -83,7 +84,8 @@ export const NavItem = ({
       >
         <div className="flex items-center gap-x-2 h-9">
           <div className="relative">
-            <Avatar isBordered radius="lg" name='Jane' />
+            {/* <Avatar isBordered radius="lg" name='Jane' /> */}
+            <LibraryBig/>
           </div>
           <span className="font-medium text-sm">
             {organization.name}
