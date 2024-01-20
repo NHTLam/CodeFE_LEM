@@ -3,6 +3,8 @@ import { useLocalStorage } from "usehooks-ts";
 import { Button } from "@nextui-org/react";
 import { Accordion } from "@/components/ui/accordion";
 import { NavItem, Organization } from "./sideItem";
+import Link from "next/link";
+import { Plus } from "lucide-react";
 
 interface SidebarProps {
   storageKey?: string;
@@ -62,7 +64,7 @@ export const Sidebar = ({
   ];
 
   const mappedData = fakeUserMemberships.map((membership) => ({
-    organization: membership, // Assuming you want the entire membership as "organization"
+    organization: membership,
   }));
   
   const isLoadedOrg = true;
@@ -86,16 +88,17 @@ export const Sidebar = ({
 
   return (
     <>
-      <div className="font-medium text-xs flex items-center mb-1">
+      <div className="font-medium text-xs flex items-center mb-1" suppressHydrationWarning>
         <span className="pl-4">
           Workspaces
         </span>
-        <Button
-          type="button"
-          variant="ghost"
-          className="ml-auto"
-        >
-        </Button>
+        <Button isIconOnly color="danger" aria-label="Like" className="ml-auto pt-2 pb-2 pl-4 pr-4">
+          <Link href="">
+              <Plus
+                className="w-4"
+              />
+            </Link>
+        </Button>  
       </div>
       <Accordion
         type="multiple"

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@nextui-org/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import {Avatar} from "@nextui-org/react";
 
 export type Organization = {
   id: string;
@@ -80,14 +81,9 @@ export const NavItem = ({
           isActive && !isExpanded && "bg-sky-500/10 text-sky-700"
         )}
       >
-        <div className="flex items-center gap-x-2">
-          <div className="w-7 h-7 relative">
-            <Image
-              fill
-              src={organization.imageUrl}
-              alt="Organization"
-              className="rounded-sm object-cover"
-            />
+        <div className="flex items-center gap-x-2 h-9">
+          <div className="relative">
+            <Avatar isBordered radius="lg" name='Jane' />
           </div>
           <span className="font-medium text-sm">
             {organization.name}
@@ -99,9 +95,9 @@ export const NavItem = ({
           <Button
             key={route.href}
             size="sm"
-            onClick={() => onClick(route.href)}
+            //onClick={() => onClick(route.href)}
             className={cn(
-              "w-full font-normal justify-start pl-10 mb-1",
+              "w-full font-normal justify-start pl-10 pt-3 pb-3",
               pathname === route.href && "bg-sky-500/10 text-sky-700"
             )}
             variant="ghost"
