@@ -21,7 +21,6 @@ export default function RootLayout({children,}: {children: React.ReactNode;}) {
           attribute="class"
           defaultTheme="light"
         >
-          <Lines />
           <ToasterContext />
           {children}
           <ScrollToTop />

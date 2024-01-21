@@ -1,12 +1,12 @@
 import { Metadata } from "next";
-import Hero from "@/components/Hero";
-import Feature from "@/components/Features";
-import About from "@/components/About";
-import FeaturesTab from "@/components/FeaturesTab";
-import FunFact from "@/components/FunFact";
-import FAQ from "@/components/FAQ";
-import Pricing from "@/components/Pricing";
-import Blog from "@/components/Blog";
+import Hero from "@/components/ComponentsLandingPage/Hero";
+import Feature from "@/components/ComponentsLandingPage/Features";
+import About from "@/components/ComponentsLandingPage/About";
+import FeaturesTab from "@/components/ComponentsLandingPage/FeaturesTab";
+import FunFact from "@/components/Board/FunFact";
+import FAQ from "@/components/ComponentsLandingPage/FAQ";
+import Pricing from "@/components/ComponentsLandingPage/Pricing";
+import Blog from "@/components/ComponentsLandingPage/Blog";
 
 export const metadata: Metadata = { //quyết định data chung như title (nó chính là tag metadata mà khi gõ html hay tự động gen khi viết html thuần)
   title: 'LEM',
