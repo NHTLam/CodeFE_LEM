@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { Input } from "@nextui-org/react";
 
 import { FormErrors } from "./form-error";
-import { useFormStatus } from "react-dom";
+// import { useFormStatus } from "react-dom";
 
 interface FormInputProps {
   id: string;
@@ -33,35 +33,24 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(({
   defaultValue = "",
   onBlur
 }, ref) => {
-  const { pending } = useFormStatus();
+  // const { pending } = useFormStatus();
+  const pending = false;
 
   return (
-    <div className="space-y-2">
-      <div className="space-y-1">
-        {label ? (
-          label
-        ) : null}
-        <Input
-          onBlur={onBlur}
-          defaultValue={defaultValue}
-          ref={ref}
-          required={required}
-          name={id}
-          id={id}
-          placeholder={placeholder}
-          type={type}
-          disabled={pending || disabled}
-          className={cn(
-            "text-sm px-2 py-1 h-7",
-            className,
-          )}
-          aria-describedby={`${id}-error`}
-        />
-      </div>
-      <FormErrors
+    <div>
+      <Input
+        required={required}
+        name={id}
+        id={id}
+        placeholder={label}
+        type={type}
+        disabled={pending || disabled}
+        className={`text-sm border ${cn(className, "w-full focus:border-2")}`}
+      />
+      {/* <FormErrors
         id={id}
         errors={errors}
-      />
+      /> */}
     </div>
   )
 });

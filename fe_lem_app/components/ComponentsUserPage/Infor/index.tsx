@@ -1,7 +1,6 @@
 "use client";
 
-import Image from "next/image";
-import { CreditCard } from "lucide-react";
+import { Home, CreditCard } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
@@ -12,17 +11,21 @@ interface InfoProps {
 
 // Define the fake data function
 const useFakeOrganization = () => {
-    const [organization, setOrganization] = useState<{
-      id: string;
-      name: string;
-      imageUrl: string;
-    } | null>(null);
-  
-    return {
-      organization,
-      isLoaded: true, // Assuming fake data is always loaded
-    };
+  const [organization, setOrganization] = useState<{
+    id: string;
+    name: string;
+    imageUrl: string;
+  } | null>({
+    id: "1",
+    name: "Lớp 5A",
+    imageUrl: "",
+  });
+
+  return {
+    organization,
+    isLoaded: true, // Assuming fake data is always loaded
   };
+};
 
 export const Info = ({
   isPro,
@@ -36,14 +39,9 @@ export const Info = ({
   }
 
   return (
-    <div className="flex items-center gap-x-4">
-      <div className="w-[60px] h-[60px] relative">
-        <Image
-          fill
-          src={organization?.imageUrl!}
-          alt="Organization"
-          className="rounded-md object-cover"
-        />
+    <div className="flex items-center gap-x-4 pb-4 pl-3">
+      <div className="relative">
+        <Home className="w-[40px] h-[40px]"/>
       </div>
       <div className="space-y-1">
         <p className="font-semibold text-xl">

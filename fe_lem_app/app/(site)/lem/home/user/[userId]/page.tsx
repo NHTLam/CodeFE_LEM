@@ -7,8 +7,8 @@ const OrganizationIdPage = async () => {
 
   return (
     <div className="w-full mb-20">
-      <Info isPro={isPro} />
-      <hr></hr>
+      <Info isPro={isPro}/>
+      <hr className="py-2"></hr>
       <div className="px-2 md:px-4">
         <Suspense fallback={<BoardList.Skeleton />}>
           <BoardList />

@@ -78,19 +78,17 @@ export const FormPopover = ({
             <X className="h-4 w-4" />
           </Button>
         </PopoverClose>
-        <form action={onSubmit} className="space-y-4">
-          <div className="space-y-4">
-            <FormPicker
-              id="image"
-              // errors={fieldErrors}
-            />
-            <FormInput
-              id="title"
-              label="Board title"
-              type="text"
-              // errors={fieldErrors}
-            />
-          </div>
+        <form action={onSubmit}>
+          <FormPicker
+            id="image"
+            // errors={fieldErrors}
+          />
+          <FormInput
+            id="title"
+            label="Board title"
+            type="text"
+            // errors={fieldErrors}
+          />
           <FormSubmit className="w-full">
             Create
           </FormSubmit>

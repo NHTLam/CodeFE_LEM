@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import Image from "next/image";
 import {
   Activity,
   CreditCard,
@@ -18,7 +17,6 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@nextui-org/react";
 import { Skeleton } from "@/components/ui/skeleton";
-import {Avatar} from "@nextui-org/react";
 
 export type Organization = {
   id: string;

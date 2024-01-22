@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Check, Loader2 } from "lucide-react";
-import { useFormStatus } from "react-dom";
+// import { useFormStatus } from "react-dom";
 import { useEffect, useState } from "react";
 
 import { cn } from "@/lib/utils";
@@ -21,32 +21,33 @@ export const FormPicker = ({
   id,
   errors,
 }: FormPickerProps) => {
-  const { pending } = useFormStatus();
+  // const { pending } = useFormStatus();
+  const pending = false;
 
   const [images, setImages] = useState<Array<Record<string, any>>>(defaultImages);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
 
   useEffect(() => {
     const fetchImages = async () => {
-      try {
-        const result = await unsplash.photos.getRandom({
-          collectionIds: ["317099"],
-          count: 9,
-        });
+      // try {
+      //   const result = await unsplash.photos.getRandom({
+      //     collectionIds: ["317099"],
+      //     count: 9,
+      //   });
 
-        if (result && result.response) {
-          const newImages = (result.response as Array<Record<string, any>>);
-          setImages(newImages);
-        } else {
-          console.error("Failed to get images from Unsplash");
-        }
-      } catch (error) {
-        console.log(error);
-        setImages(defaultImages);
-      } finally {
-        setIsLoading(false);
-      }
+      //   if (result && result.response) {
+      //     const newImages = (result.response as Array<Record<string, any>>);
+      //     setImages(newImages);
+      //   } else {
+      //     console.error("Failed to get images from Unsplash");
+      //   }
+      // } catch (error) {
+      //   console.log(error);
+      //   setImages(defaultImages);
+      // } finally {
+      //   setIsLoading(false);
+      // }
     };
 
     fetchImages();
