@@ -1,6 +1,6 @@
 "use client";
 
-import { useFormStatus } from "react-dom";
+// import { useFormStatus } from "react-dom";
 import { KeyboardEventHandler, forwardRef } from "react";
 
 import { cn } from "@/lib/utils";
@@ -35,7 +35,8 @@ export const FormTextarea = forwardRef<HTMLTextAreaElement, FormTextareaProps>((
   className,
   defaultValue
 }, ref) => {
-  const { pending } = useFormStatus();
+  //const { pending } = useFormStatus();
+  const pending = false;
 
   return (
     <div className="space-y-2 w-full">
