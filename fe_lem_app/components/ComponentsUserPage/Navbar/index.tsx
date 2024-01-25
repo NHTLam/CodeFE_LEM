@@ -1,7 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 
-const MainNav = () => {
+const Navbar = () => {
   return (
     <nav className="fixed z-50 top-0 px-4 w-full h-14 border-b shadow-sm bg-white flex items-center">
       <div className="flex items-center gap-x-4">
@@ -26,4 +25,4 @@ const MainNav = () => {
   );
 };
 
-export default MainNav;
+export default Navbar;
