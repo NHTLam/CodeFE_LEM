@@ -17,7 +17,7 @@ export const Sidebar = ({
     storageKey,
     {}
   );
-
+  
   const defaultAccordionValue: string[] = Object.keys(expanded)
     .reduce((acc: string[], key: string) => {
       if (expanded[key]) {
@@ -87,7 +87,7 @@ export const Sidebar = ({
   // }
 
   return (
-    <>
+    <div>
       <div className="font-medium text-xs flex items-center mb-1" suppressHydrationWarning>
         <span className="pl-4">
           Workspaces
@@ -115,6 +115,6 @@ export const Sidebar = ({
           />
         ))}
       </Accordion>
-    </>
+    </div>
   );
 };

@@ -31,10 +31,10 @@ const Footer = () => {
                 <a href="index.html" className="relative">
                   <Image
                     width={110}
-                    height={80}
+                    height={0}
                     src="/images/logo/logo-dark.png"
                     alt="Logo"
-                    className="dark:hidden"
+                    className="dark:hidden h-auto"
                   />
                   <Image
                     width={110}

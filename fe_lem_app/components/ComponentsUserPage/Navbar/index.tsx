@@ -8,8 +8,8 @@ const Navbar = () => {
           src="/images/logo/logo-dark.png"
           alt="logo"
           width={100}
-          height={10}
-          className="w-full dark:hidden"
+          height={0}
+          className="dark:hidden h-auto"
         />
         {/* <Link
           href=""

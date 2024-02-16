@@ -20,7 +20,7 @@ const nextConfig = {
         destination: '/landing-page',
       },
     ]
-  },
+  }
 };
 
 module.exports = nextConfig;

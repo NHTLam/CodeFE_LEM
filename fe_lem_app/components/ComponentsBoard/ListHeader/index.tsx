@@ -11,23 +11,23 @@ import { FormInput } from "@/components/Form/form-input";
 import { ListOption } from "@/components/ComponentsBoard/ListOption";
 
 interface ListHeaderProps {
-    data: {
-        id: string;
-        title: string;
-        order: number;
-        boardId: string;
-        createdAt: Date;
-        updatedAt: Date;
-        cards: {
-          id: string;
-          title: string;
-          order: number;
-          description: string | null;
-          listId: string;
-          createdAt: Date;
-          updatedAt: Date;
-        }[];
-      };
+  data: {
+    id: string;
+    title: string;
+    order: number;
+    boardId: string;
+    createdAt: Date;
+    updatedAt: Date;  
+    cards: {
+      id: string;
+      title: string;
+      order: number;
+      description: string | null;
+      listId: string;
+      createdAt: Date;
+      updatedAt: Date;
+    }[];
+  };
   onAddCard: () => void;
 };
 

@@ -28,8 +28,9 @@ export const FormSubmit = ({
       className={cn(className)}
       style={{ 
         marginTop: "10px",
-        borderRadius: "10px",
+        borderRadius: "0px",
         color: "white",
+        padding: "10px"
       }}
     >
       {children}

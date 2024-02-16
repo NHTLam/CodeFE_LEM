@@ -5,6 +5,7 @@ import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@nextui-org/react";
 
+import { FieldValues, UseFormRegister, useForm } from "react-hook-form";
 import { FormErrors } from "./form-error";
 // import { useFormStatus } from "react-dom";
 
@@ -18,7 +19,7 @@ interface FormInputProps {
   errors?: Record<string, string[] | undefined>;
   className?: string;
   defaultValue?: string;
-  onBlur?: () => void;
+  register: UseFormRegister<FieldValues>;
 };
 
 export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(({
@@ -31,21 +32,21 @@ export const FormInput = forwardRef<HTMLInputElement, FormInputProps>(({
   errors,
   className,
   defaultValue = "",
-  onBlur
+  register
 }, ref) => {
   // const { pending } = useFormStatus();
   const pending = false;
 
   return (
     <div>
-      <Input
+      <Input    
+        {...register("name")}
         required={required}
-        name={id}
         id={id}
         placeholder={label}
         type={type}
         disabled={pending || disabled}
-        className={`text-sm border ${cn(className, "w-full focus:border-2")}`}
+        className={`text-sm border w-full h-full`}
       />
       {/* <FormErrors
         id={id}

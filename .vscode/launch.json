@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug FE",
+      "type": "msedge",
+      "request": "launch",
+      "url": "http://localhost:3001/#",
+      "webRoot": "${workspaceFolder}/fe_lem_app",
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/fe_lem_app",
+      ],
+      "sourceMaps": true,
+    },
+    {
+      "name": "Debug FE (server side))",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "cd fe_lem_app && npm run dev",
+      "serverReadyAction": {
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
+    }
+  ]
+}

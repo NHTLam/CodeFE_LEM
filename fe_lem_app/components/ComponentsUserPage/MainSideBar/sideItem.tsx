@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@nextui-org/react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useState, useEffect } from "react";
 
 export type Organization = {
   id: string;
@@ -40,6 +41,11 @@ export const NavItem = ({
 }: NavItemProps) => {
   const router = useRouter();
   const pathname = usePathname();
+  const [rendered, setRendered] = useState(false);
+
+  useEffect(() => {
+    setRendered(true);
+  }, []);
 
   const routes = [
     {
@@ -90,34 +96,36 @@ export const NavItem = ({
           </span>
         </div>
       </AccordionTrigger>
-      <AccordionContent className="pt-1 text-neutral-700">
-        {routes.map((route) => (
-          <Button
-            key={route.href}
-            size="sm"
-            //onClick={() => onClick(route.href)}
-            className={cn(
-              "w-full font-normal justify-start pl-10 pt-3 pb-3",
-              pathname === route.href && "bg-sky-500/10 text-sky-700"
-            )}
-            variant="ghost"
-          >
-            {route.icon}
-            {route.label}
-          </Button>
-        ))}
-      </AccordionContent>
+      {rendered && (
+        <AccordionContent className="pt-1 text-neutral-700">
+          {routes.map((route) => (
+            <Button
+              key={route.href}
+              size="sm"
+              //onClick={() => onClick(route.href)}
+              className={cn(
+                "w-full font-normal justify-start pl-10 pt-3 pb-3",
+                pathname === route.href && "bg-sky-500/10 text-sky-700"
+              )}
+              variant="ghost"
+            >
+              {route.icon}
+              {route.label}
+            </Button>
+          ))}
+        </AccordionContent>
+      )}
     </AccordionItem>
   );
 };
 
-NavItem.Skeleton = function SkeletonNavItem() {
-  return (
-    <div className="flex items-center gap-x-2">
-      <div className="w-10 h-10 relative shrink-0">
-        <Skeleton className="h-full w-full absolute" />
-      </div>
-      <Skeleton className="h-10 w-full" />
-    </div>
-  );
-};
+// NavItem.Skeleton = function SkeletonNavItem() {
+//   return (
+//     <div className="flex items-center gap-x-2">
+//       <div className="w-10 h-10 relative shrink-0">
+//         <Skeleton className="h-full w-full absolute" />
+//       </div>
+//       <Skeleton className="h-10 w-full" />
+//     </div>
+//   );
+// };

@@ -1,6 +1,6 @@
 "use client";
 
-import { ElementRef, useRef } from "react";
+import { ElementRef, useRef, useState } from "react";
 import { toast } from "sonner";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -13,8 +13,9 @@ import {
 } from "@/components/ui/popover";
 //import { useAction } from "@/hooks/useAction";
 import { Button } from "@nextui-org/react";
-// import { createBoard } from "@/actions/create-board";
+import { Create } from "@/services/board-service";
 //import { useProModal } from "@/hooks/use-pro-modal";
+import { useForm } from "react-hook-form";
 
 import { FormInput } from "./form-input";
 import { FormSubmit } from "./form-submit";
@@ -34,9 +35,9 @@ export const FormPopover = ({
   sideOffset = 0,
 }: FormPopoverProps) => {
   //const proModal = useProModal();
-  const router = useRouter();
   const closeRef = useRef<ElementRef<"button">>(null);
-
+  const { register, handleSubmit, formState: { errors }, getValues } = useForm();
+  const [urlImg, setUrlImg] = useState("");
   // const { execute, fieldErrors } = useAction(createBoard, {
   //   onSuccess: (data) => {
   //     toast.success("Board created!");
@@ -49,13 +50,13 @@ export const FormPopover = ({
   //   }
   // });
 
-  const onSubmit = (formData: FormData) => {
-    const title = formData.get("title") as string;
-    const image = formData.get("image") as string;
-
-    //execute({ title, image });
-  }
-
+  const onSubmit = (data) => {
+    const name = getValues("name");
+    const imageUrl = urlImg;
+    // Gọi hàm Create để truyền dữ liệu về phía BE
+    Create({ name, imageUrl });
+  };
+  
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -78,15 +79,17 @@ export const FormPopover = ({
             <X className="h-4 w-4" />
           </Button>
         </PopoverClose>
-        <form action={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <FormPicker
-            id="image"
+            id="imageUrl"
+            setUrlImg={setUrlImg}
             // errors={fieldErrors}
           />
           <FormInput
-            id="title"
+            id = "name"
             label="Board title"
             type="text"
+            register={register}
             // errors={fieldErrors}
           />
           <FormSubmit className="w-full">

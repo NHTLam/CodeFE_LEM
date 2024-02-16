@@ -31,8 +31,8 @@ const About = () => {
               <Image
                 src="/images/about/about-light-01.png"
                 alt="About"
-                className="dark:hidden"
-                fill
+                className="dark:hidden logo-image"
+                fill sizes="(max-width: 768px) 100vw, 33vw"
               />
               <Image
                 src="/images/about/about-dark-01.png"

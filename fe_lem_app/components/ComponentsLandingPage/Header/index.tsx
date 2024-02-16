@@ -41,16 +41,16 @@ const Header = () => {
             <Image
               src="/images/logo/logo-light.png"
               alt="logo"
-              width={119.03}
+              width={120}
               height={30}
               className="hidden w-full dark:block"
             />
             <Image
               src="/images/logo/logo-dark.png"
               alt="logo"
-              width={119.03}
-              height={30}
-              className="w-full dark:hidden"
+              width={120}
+              height={0}
+              className="dark:hidden h-auto"
             />
           </a>
 
@@ -157,7 +157,7 @@ const Header = () => {
           <div className="mt-7 flex items-center gap-6 xl:mt-0">
             <ThemeToggler />
             <Link
-              href="lem/home/user/1"
+              href="lem/home/user"
               className="flex items-center justify-center rounded-full bg-primary px-7.5 py-2.5 text-regular text-white duration-300 ease-in-out hover:bg-primaryho"
             >
               Get Start
