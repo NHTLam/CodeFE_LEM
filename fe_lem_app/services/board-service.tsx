@@ -1,7 +1,7 @@
 import { Board } from '@/models/board'
 import { NextResponse } from 'next/server'
 
-const DATA_SOURCE_URL = process.env.BASE_URL ?? process.env.PUBLIC_BASE_URL + "/lem/board/"
+const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/board/"
 
 export async function FetchData() {
     // debugger;

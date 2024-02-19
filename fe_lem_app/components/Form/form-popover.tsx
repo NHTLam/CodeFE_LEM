@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/popover";
 //import { useAction } from "@/hooks/useAction";
 import { Button } from "@nextui-org/react";
-import { Create } from "@/services/board-service";
+import { Create, FetchData } from "@/services/board-service";
 //import { useProModal } from "@/hooks/use-pro-modal";
 import { useForm } from "react-hook-form";
 
@@ -50,11 +50,12 @@ export const FormPopover = ({
   //   }
   // });
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const name = getValues("name");
     const imageUrl = urlImg;
     // Gọi hàm Create để truyền dữ liệu về phía BE
-    Create({ name, imageUrl });
+    // await Create({ name, imageUrl });
+    await FetchData();
   };
   
   return (

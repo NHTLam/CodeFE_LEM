@@ -16,12 +16,16 @@
       "name": "Debug FE (server side))",
       "type": "node-terminal",
       "request": "launch",
-      "command": "cd fe_lem_app && npm run dev",
+      "command": "npm run dev",
       "serverReadyAction": {
         "pattern": "- Local:.+(https?://.+)",
         "uriFormat": "%s",
         "action": "debugWithChrome"
-      }
+      },
+      "cwd": "${workspaceFolder}/fe_lem_app",
+      "resolveSourceMapLocations": [
+        "${workspaceFolder}/fe_lem_app",
+      ],
     }
   ]
 }
