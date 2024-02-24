@@ -13,13 +13,15 @@ import {
 } from "@/components/ui/popover";
 //import { useAction } from "@/hooks/useAction";
 import { Button } from "@nextui-org/react";
-import { Create, FetchData } from "@/services/board-service";
 //import { useProModal } from "@/hooks/use-pro-modal";
 import { useForm } from "react-hook-form";
 
 import { FormInput } from "./form-input";
 import { FormSubmit } from "./form-submit";
 import { FormPicker } from "./form-picker";
+import { Create } from "@/services/board-service";
+import { useAction } from "@/hooks/useAction";
+import { Board } from "@/models/board";
 
 interface FormPopoverProps {
   children: React.ReactNode;
@@ -38,24 +40,23 @@ export const FormPopover = ({
   const closeRef = useRef<ElementRef<"button">>(null);
   const { register, handleSubmit, formState: { errors }, getValues } = useForm();
   const [urlImg, setUrlImg] = useState("");
-  // const { execute, fieldErrors } = useAction(createBoard, {
-  //   onSuccess: (data) => {
-  //     toast.success("Board created!");
-  //     closeRef.current?.click();
-  //     router.push(`/board/${data.id}`);
-  //   },
-  //   onError: (error) => {
-  //     toast.error(error);
-  //     //proModal.onOpen();
-  //   }
-  // });
+  
+  const { execute } = useAction(Create, {
+    onSuccess: () => {
+      toast.success("Board created!");
+      closeRef.current?.click();
+      // router.push(`/board/${data.id}`);
+    },
+    onError: (error) => {
+      toast.error(error);
+    }
+  });
 
-  const onSubmit = async (data) => {
+  const onSubmit = async () => {
     const name = getValues("name");
     const imageUrl = urlImg;
-    // Gọi hàm Create để truyền dữ liệu về phía BE
-    // await Create({ name, imageUrl });
-    await FetchData();
+    const board = {name: name, imageUrl: imageUrl}
+    await execute(board);
   };
   
   return (

@@ -1,9 +1,5 @@
 import { useState, useCallback } from "react";
 
-import { ActionState, FieldErrors } from "@/lib/create-safe-action";
-
-type Action<TInput, TOutput> = (data: TInput) => Promise<ActionState<TInput, TOutput>>;
-
 interface UseActionOptions<TOutput> {
   onSuccess?: (data: TOutput) => void;
   onError?: (error: string) => void;
@@ -11,12 +7,9 @@ interface UseActionOptions<TOutput> {
 };
 
 export const useAction = <TInput, TOutput> (
-  action: Action<TInput, TOutput>,
+  action: (data: TInput) => Promise<TOutput>,
   options: UseActionOptions<TOutput> = {}
 ) => {
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors<TInput> | undefined>(
-    undefined
-  );
   const [error, setError] = useState<string | undefined>(undefined);
   const [data, setData] = useState<TOutput | undefined>(undefined);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -27,22 +20,11 @@ export const useAction = <TInput, TOutput> (
 
       try {
         const result = await action(input);
-
-        if (!result) {
-          return;
-        }
-
-        setFieldErrors(result.fieldErrors);
-
-        if (result.error) {
-          setError(result.error);
-          options.onError?.(result.error);
-        }
-
-        if (result.data) {
-          setData(result.data);
-          options.onSuccess?.(result.data);
-        }
+        setData(result);
+        options.onSuccess?.(result);
+      } catch (error) {
+        setError(error.toString());
+        options.onError?.(error.toString());
       } finally {
         setIsLoading(false);
         options.onComplete?.();
@@ -53,7 +35,6 @@ export const useAction = <TInput, TOutput> (
 
   return {
     execute,
-    fieldErrors,
     error,
     data,
     isLoading,
