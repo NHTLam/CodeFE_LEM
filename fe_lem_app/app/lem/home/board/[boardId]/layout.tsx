@@ -1,6 +1,7 @@
 import { notFound, redirect } from "next/navigation";
 
 import Navbar from "@/components/ComponentsUserPage/Navbar";
+import { GetData } from "@/services/board-service";
 
 const useFakeAuth = () => {
     const user = {
@@ -24,27 +25,14 @@ export async function generateMetadata({ params }: {params: { boardId: string; }
 
     if (!userId) {
         return {
-        title: "Board",
+            title: "Board",
         };
     }
 
-    //   const board = await db.board.findUnique({
-    //     where: {
-    //       id: params.boardId,
-    //       userId
-    //     }
-    //   });
-
-    const board = {
-        id: "1",
-        title: "Board 1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        imageThumbUrl: "https://images.unsplash.com/photo-1683009427692-8a28348b0965?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    };
+    const board = await GetData(Number(params.boardId));
 
     return {
-    title: board?.title || "Board",
+        title: board?.name || "Board",
     };
 }
 
@@ -55,20 +43,7 @@ const BoardIdLayout = async ({ children, params,}: { children: React.ReactNode; 
         redirect("/select-org");
     }
 
-    //   const board = await db.board.findUnique({
-    //     where: {
-    //       id: params.boardId,
-    //       userId,
-    //     },
-    //   });
-
-    const board = {
-        id: "1",
-        title: "Board 1",
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        imageThumbUrl: "https://images.unsplash.com/photo-1683009427692-8a28348b0965?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-    };
+    const board = await GetData(Number(params.boardId));
 
     if (!board) {
         notFound();
@@ -77,13 +52,13 @@ const BoardIdLayout = async ({ children, params,}: { children: React.ReactNode; 
     return (
         <div
             className="relative h-full bg-no-repeat bg-cover bg-center"
-            style={{ backgroundImage: `url(${board.imageThumbUrl})` }}
+            style={{ backgroundImage: `url(${board.imageUrl})` }}
         >
         <Navbar />
         <div className="absolute inset-0 bg-black/10" />
-        <main className="relative pt-28 h-full">
-            {children}
-        </main>
+            <main className="relative pt-28 h-full">
+                {children}
+            </main>
         </div>
     );
 };

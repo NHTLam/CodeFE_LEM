@@ -20,6 +20,24 @@ export async function FetchData() {
     }
 }
 
+export async function GetData(id: number) {
+    try
+    {
+        const res = await fetch(DATA_SOURCE_URL + "get",{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id})
+        })   
+        const Boards: Board = await res.json()
+        return Boards;
+    } catch (error) {
+        console.error('Error parsing JSON:', error);
+        return null;
+    }
+}
+
 export async function Create(board : any){
     try {
         debugger;

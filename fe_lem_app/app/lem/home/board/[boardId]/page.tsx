@@ -1,5 +1,4 @@
 import { redirect } from "next/navigation";
-
 import { ListContainer } from "@/components/ComponentsBoard/ListContainer";
 
 interface BoardIdPageProps {
@@ -34,30 +33,12 @@ const BoardIdPage = async ({
     redirect("/select-org");
   }
   
-//   const lists = await db.list.findMany({
-//     where: {
-//       boardId: params.boardId,
-//       board: {
-//         userId,
-//       },
-//     },
-//     include: {
-//       cards: {
-//         orderBy: {
-//           order: "asc",
-//         },
-//       },
-//     },
-//     orderBy: {
-//       order: "asc",
-//     },
-//   });
-const lists = [
+  const lists = [
     {
       id: "75b54a35-54a5-43f5-954d-4a554a3f54a5",
       title: "To-Do List",
       order: 1,
-      boardId: "654a354a-54a3-54a5-4a53-454a354a554a", // Giả sử đây là ID của Board liên quan
+      boardId: "654a354a-54a3-54a5-4a53-454a354a554a",
       createdAt: new Date(),
       updatedAt: new Date(),
       cards: [

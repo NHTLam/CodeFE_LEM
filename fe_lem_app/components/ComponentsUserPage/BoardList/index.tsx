@@ -29,39 +29,6 @@ export const BoardList = async () => {
     return redirect("/select-org");
   }
 
-//   const boards = await db.board.findMany({
-//     where: {
-//       userId,
-//     },
-//     orderBy: {
-//       createdAt: "desc"
-//     }
-//   });
-
-  // const boards = [
-  //   {
-  //     id: "1",
-  //     title: "Board 1",
-  //     createdAt: new Date(),
-  //     updatedAt: new Date(),
-  //     imageThumbUrl: "https://images.unsplash.com/photo-1683009427692-8a28348b0965?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  //   },
-  //   {
-  //     id: "2",
-  //     title: "Board 2",
-  //     createdAt: new Date(),
-  //     updatedAt: new Date(),
-  //     imageThumbUrl: "https://images.unsplash.com/photo-1705850653966-62ec3e79713a?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  //   },
-  //   {
-  //     id: "3",
-  //     title: "Board 3",
-  //     createdAt: new Date(),
-  //     updatedAt: new Date(),
-  //     imageThumbUrl: "https://images.unsplash.com/photo-1705835254007-628c4d924e23?q=80&w=1935&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-  //   },
-  // ];
-
   const boards = await FetchData();
 
   // const availableCount = await getAvailableCount();
