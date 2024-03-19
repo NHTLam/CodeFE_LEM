@@ -46,7 +46,7 @@ export const BoardList = async () => {
           <Link
             key={board.id}
             href={`/lem/home/board/${board.id}`}
-            className="group relative aspect-video bg-no-repeat bg-center bg-cover bg-sky-700 rounded-sm h-full w-full p-2 overflow-hidden"
+            className="group relative aspect-video bg-no-repeat bg-center bg-cover bg-sky-700 rounded-sm h-35 w-60 p-2 overflow-hidden"
             style={{ backgroundImage: `url(${board.imageUrl})` }}
           >
             <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition" />
@@ -58,7 +58,7 @@ export const BoardList = async () => {
         <FormPopover sideOffset={10} side="right">
           <div
             role="button"
-            className="aspect-video relative h-full w-full bg-muted rounded-sm flex flex-col gap-y-1 items-center justify-center hover:opacity-75 transition"
+            className="border aspect-video relative h-35 w-60 bg-muted rounded-sm flex flex-col gap-y-1 items-center justify-center hover:opacity-75 transition"
           >
             <p className="text-sm">Create new board</p>
             <span className="text-xs">

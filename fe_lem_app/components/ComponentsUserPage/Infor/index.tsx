@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, CreditCard } from "lucide-react";
+import { Home, CreditCard, Search } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
@@ -51,6 +51,14 @@ export const Info = ({
           <CreditCard className="h-3 w-3 mr-1" />
           {isPro ? "Pro" : "Free"}
         </div>
+      </div>
+      <div className="flex absolute right-10">
+        <Search/>
+        <input
+          type="text"
+          placeholder="Search"
+          className="ml-2 w-full border-solid border-b-2 !bg-white focus:border-waterloo focus:placeholder:text-black focus-visible:outline-none dark:border-strokedark dark:!bg-black dark:focus:border-manatee dark:focus:placeholder:text-white"
+        />
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 "use client";
 import { useLocalStorage } from "usehooks-ts";
-import { Button } from "@nextui-org/react";
+import { Button, Input } from "@nextui-org/react";
 import { Accordion } from "@/components/ui/accordion";
 import { NavItem, Organization } from "./sideItem";
 import Link from "next/link";
-import { Plus, CalendarDays, ClipboardList, Settings, Presentation } from "lucide-react";
+import { Plus, CalendarDays, ClipboardList, Settings, Presentation, Search, Home } from "lucide-react";
 
 interface SidebarProps {
   storageKey?: string;
@@ -87,7 +87,7 @@ export const Sidebar = ({
   // }
 
   return (
-    <div>
+    <div className="border-r pr-2">
       <div className="font-medium text-xs flex items-center mb-1" suppressHydrationWarning>
         <span className="pl-4">
           My classes
@@ -101,24 +101,36 @@ export const Sidebar = ({
         </Button>  
       </div>
       <div>
+        <Link href="/lem/home/user/user_home_page">       
+          <button
+            className="pl-15 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+          >
+            <span className="mr-3">
+              <Home/>
+            </span>
+            Home
+          </button>
+        </Link>
         <button
-          className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full items-center justify-center rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+          className="pl-15 mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
         >
           <span className="mr-3">
             <ClipboardList/>
           </span>
           My board
         </button>
+        <Link href="/lem/home/user/calendar">       
+          <button
+            className="pl-15 mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+          >
+            <span className="mr-3">
+              <CalendarDays/>
+            </span>
+            Calendar
+          </button>
+        </Link>
         <button
-          className="mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full items-center justify-center rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
-        >
-          <span className="mr-3">
-            <CalendarDays/>
-          </span>
-          Calendar
-        </button>
-        <button
-          className="mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full items-center justify-center rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+          className="pl-15 mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
         >
           <span className="mr-3">
             <Presentation/>
@@ -126,7 +138,7 @@ export const Sidebar = ({
           Meeting
         </button>
         <button
-          className="mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full items-center justify-center rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+          className="pl-15 mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
         >
           <span className="mr-3">
             <Settings/>
@@ -135,6 +147,14 @@ export const Sidebar = ({
         </button>
       </div>
       <hr className="mt-5 mb-5"/>
+      <div className="flex">
+        <Search/>
+        <input
+          type="text"
+          placeholder="Search"
+          className="ml-2 mb-5 w-full border-solid border-b-2 !bg-white focus:border-waterloo focus:placeholder:text-black focus-visible:outline-none dark:border-strokedark dark:!bg-black dark:focus:border-manatee dark:focus:placeholder:text-white"
+        />
+      </div>
       <Accordion
         type="multiple"
         defaultValue={defaultAccordionValue}
