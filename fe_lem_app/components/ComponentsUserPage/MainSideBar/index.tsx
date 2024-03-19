@@ -94,10 +94,10 @@ export const Sidebar = ({
         </span>
         <Button isIconOnly color="danger" aria-label="Like" className="ml-auto pt-2 pb-2 pl-4 pr-4">
           <Link href="">
-              <Plus
-                className="w-4"
-              />
-            </Link>
+            <Plus
+              className="w-4"
+            />
+          </Link>
         </Button>  
       </div>
       <div>
