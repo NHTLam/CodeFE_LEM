@@ -4,7 +4,7 @@ import { Button } from "@nextui-org/react";
 import { Accordion } from "@/components/ui/accordion";
 import { NavItem, Organization } from "./sideItem";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { Plus, CalendarDays, ClipboardList, Settings, Presentation } from "lucide-react";
 
 interface SidebarProps {
   storageKey?: string;
@@ -90,7 +90,7 @@ export const Sidebar = ({
     <div>
       <div className="font-medium text-xs flex items-center mb-1" suppressHydrationWarning>
         <span className="pl-4">
-          Workspaces
+          My classes
         </span>
         <Button isIconOnly color="danger" aria-label="Like" className="ml-auto pt-2 pb-2 pl-4 pr-4">
           <Link href="">
@@ -100,6 +100,41 @@ export const Sidebar = ({
             </Link>
         </Button>  
       </div>
+      <div>
+        <button
+          className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full items-center justify-center rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+        >
+          <span className="mr-3">
+            <ClipboardList/>
+          </span>
+          My board
+        </button>
+        <button
+          className="mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full items-center justify-center rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+        >
+          <span className="mr-3">
+            <CalendarDays/>
+          </span>
+          Calendar
+        </button>
+        <button
+          className="mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full items-center justify-center rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+        >
+          <span className="mr-3">
+            <Presentation/>
+          </span>
+          Meeting
+        </button>
+        <button
+          className="mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full items-center justify-center rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+        >
+          <span className="mr-3">
+            <Settings/>
+          </span>
+          Settings
+        </button>
+      </div>
+      <hr className="mt-5 mb-5"/>
       <Accordion
         type="multiple"
         defaultValue={defaultAccordionValue}
