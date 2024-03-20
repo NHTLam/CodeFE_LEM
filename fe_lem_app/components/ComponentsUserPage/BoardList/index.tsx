@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { HelpCircle, User2 } from "lucide-react";
+import { HelpCircle, School } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { FormPopover } from "@/components/Form/form-popover";
@@ -38,7 +38,6 @@ export const BoardList = async () => {
   return (
     <div className="space-y-4">
       <div className="flex items-center font-semibold text-lg text-neutral-700">
-        <User2 className="h-6 w-6 mr-2" />
         Your boards
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">

@@ -133,7 +133,7 @@ export const ListUser = async () => {
         {roles?.map((role) => (
             <> 
                 <div className="flex mx-40">
-                    <div className="flex items-center font-semibold text-2xl text-neutral-700">
+                    <div className="flex items-center font-semibold text-2xl text-blue-500">
                         {role.Id === 1 ? (<GraduationCap className="h-10 w-10 mr-2" />) : (<Users className="h-10 w-10 mr-2" />)}
                         {role.Name}
                     </div>
@@ -156,7 +156,7 @@ export const ListUser = async () => {
                                         {user.UserName}
                                     </p>
                                     <div className="flex items-center text-xs text-muted-foreground">
-                                        Full name:{user.FullName}, Email: {user.Email}, Phone: {user.Phone}
+                                        Full name: {user.FullName}, Email: {user.Email}, Phone: {user.Phone}
                                     </div>
                                 </div>
                                 <div className="flex absolute right-45 gap-2">
