@@ -4,28 +4,36 @@ import { Button, Input } from "@nextui-org/react";
 import { Accordion } from "@/components/ui/accordion";
 import { NavItem, Organization } from "./sideItem";
 import Link from "next/link";
-import { Plus, CalendarDays, ClipboardList, Settings, Presentation, Search, Home } from "lucide-react";
+import {
+  Plus,
+  CalendarDays,
+  ClipboardList,
+  Settings,
+  Presentation,
+  Search,
+  Home,
+} from "lucide-react";
 
 interface SidebarProps {
   storageKey?: string;
-};
+}
 
-export const Sidebar = ({
-  storageKey = "t-sidebar-state",
-}: SidebarProps) => {
+export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
   const [expanded, setExpanded] = useLocalStorage<Record<string, any>>(
     storageKey,
-    {}
+    {},
   );
-  
-  const defaultAccordionValue: string[] = Object.keys(expanded)
-    .reduce((acc: string[], key: string) => {
+
+  const defaultAccordionValue: string[] = Object.keys(expanded).reduce(
+    (acc: string[], key: string) => {
       if (expanded[key]) {
         acc.push(key);
       }
 
       return acc;
-  }, []);
+    },
+    [],
+  );
 
   const onExpand = (id: string) => {
     setExpanded((curr) => ({
@@ -33,14 +41,14 @@ export const Sidebar = ({
       [id]: !expanded[id],
     }));
   };
-  
+
   const fakeActiveOrganization = {
     id: "1",
     slug: "a",
     imageUrl: "",
     name: "a",
   };
-  
+
   const fakeUserMemberships = [
     {
       id: "1",
@@ -60,13 +68,12 @@ export const Sidebar = ({
       imageUrl: "",
       name: "Bảng công việc nhóm",
     },
-    
   ];
 
   const mappedData = fakeUserMemberships.map((membership) => ({
     organization: membership,
   }));
-  
+
   const isLoadedOrg = true;
   const isLoadedOrgList = true;
 
@@ -88,72 +95,54 @@ export const Sidebar = ({
 
   return (
     <div className="border-r pr-2">
-      <div className="font-medium text-xs flex items-center mb-1" suppressHydrationWarning>
-        <span className="pl-4">
-          My classes
-        </span>
-        <Button isIconOnly color="danger" aria-label="Like" className="ml-auto pt-2 pb-2 pl-4 pr-4">
-          <Link href="">
-            <Plus
-              className="w-4"
-            />
-          </Link>
-        </Button>  
-      </div>
       <div>
-        <Link href="/lem/home/user/user_home_page">       
-          <button
-            className="pl-15 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
-          >
+        <Link href="/lem/home/user/user-home-page">
+          <button className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
             <span className="mr-3">
-              <Home/>
+              <Home />
             </span>
             Home
           </button>
         </Link>
-        <button
-          className="pl-15 mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
-        >
+        <button className="text-body-color dark:text-body-color-dark dark:shadow-two mt-5 flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
           <span className="mr-3">
-            <ClipboardList/>
+            <ClipboardList />
           </span>
           My board
         </button>
-        <Link href="/lem/home/user/calendar">       
-          <button
-            className="pl-15 mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
-          >
+        <Link href="/lem/home/user/calendar">
+          <button className="text-body-color dark:text-body-color-dark dark:shadow-two mt-5 flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
             <span className="mr-3">
-              <CalendarDays/>
+              <CalendarDays />
             </span>
             Calendar
           </button>
         </Link>
-        <button
-          className="pl-15 mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
-        >
+        <button className="text-body-color dark:text-body-color-dark dark:shadow-two mt-5 flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
           <span className="mr-3">
-            <Presentation/>
+            <Presentation />
           </span>
           Meeting
         </button>
-        <button
-          className="pl-15 mt-5 text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
-        >
+        <button className="text-body-color dark:text-body-color-dark dark:shadow-two mt-5 flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
           <span className="mr-3">
-            <Settings/>
+            <Settings />
           </span>
           Settings
         </button>
       </div>
-      <hr className="mt-5 mb-5"/>
-      <div className="flex">
-        <Search/>
+      <hr className="mb-1 mt-5" />
+      <div className="mb-2 flex">
         <input
           type="text"
           placeholder="Search"
-          className="ml-2 mb-5 w-full border-solid border-b-2 !bg-white focus:border-waterloo focus:placeholder:text-black focus-visible:outline-none dark:border-strokedark dark:!bg-black dark:focus:border-manatee dark:focus:placeholder:text-white"
+          className="mb-2 ml-1 w-full grow border-b-2 border-solid !bg-white focus:border-waterloo focus:placeholder:text-black focus-visible:outline-none dark:border-strokedark dark:!bg-black dark:focus:border-manatee dark:focus:placeholder:text-white"
         />
+        <button className="my-1 ml-2 flex w-10 justify-center rounded-sm border border-stroke px-3 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
+          <Link href="">
+            <Plus className="w-4" />
+          </Link>
+        </button>
       </div>
       <Accordion
         type="multiple"

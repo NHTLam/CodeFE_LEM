@@ -2,19 +2,23 @@ import Navbar from "@/components/ComponentsUserPage/Navbar";
 import { Sidebar } from "@/components/ComponentsUserPage/MainSideBar";
 import { Toaster } from "sonner";
 
-export default function HomeLayout({ children, }: { children: React.ReactNode }) {
-   return (
-      <>
-         <Navbar />
-         <Toaster />
-         <main className="h-screen pt-20 md:pt-20 px-4 2xl:max-w-screen-xl">
-         <div className="flex gap-x-7">
-            <div className="w-64 shrink-0 hidden md:block">
-               <Sidebar />
-            </div>
-            {children}
-         </div>
+export default function HomeLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <Navbar />
+      <Toaster />
+      <main className="h-screen px-4 pt-20 md:pt-20 2xl:max-w-screen-xl">
+        <div className="flex gap-x-7">
+          <div className="hidden w-64 shrink-0 md:block">
+            <Sidebar />
+          </div>
+          {children}
+        </div>
       </main>
-      </>
-   );
+    </>
+  );
 }

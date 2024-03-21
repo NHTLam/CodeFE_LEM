@@ -1,63 +1,36 @@
 "use client";
 
-import { Home, CreditCard, Search } from "lucide-react";
+import { Home, CreditCard, Search, Trash, Pin, Filter } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState } from "react";
+import Link from "next/link";
 
-interface InfoProps {
-  isPro: boolean;
-};
-
-// Define the fake data function
-const useFakeOrganization = () => {
-  const [organization, setOrganization] = useState<{
-    id: string;
-    name: string;
-    imageUrl: string;
-  } | null>({
-    id: "1",
-    name: "Lớp 5A",
-    imageUrl: "",
-  });
-
-  return {
-    organization,
-    isLoaded: true, // Assuming fake data is always loaded
-  };
-};
-
-export const Info = ({
-  isPro,
-}: InfoProps) => {
-  const { organization, isLoaded } = useFakeOrganization();
-
-  if (!isLoaded) {
-    return (
-      <Info.Skeleton />
-    );
-  }
+export const Info = () => {
+  // if (!isLoaded) {
+  //   return <Info.Skeleton />;
+  // }
 
   return (
     <div className="flex items-center gap-x-4 pb-4 pl-3">
-      <div className="relative">
-        <Home className="w-[40px] h-[40px]"/>
+      <div className="flex gap-2">
+        <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
+          <Filter className="pr-1" /> Filter
+        </button>
+        <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+          <Pin className="pr-1" /> Pin
+        </button>
+        <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none">
+          <Trash className="pr-1" /> Trash
+        </button>
       </div>
-      <div className="space-y-1">
-        <p className="font-semibold text-xl">
-          {organization?.name}
-        </p>
-        <div className="flex items-center text-xs text-muted-foreground">
-          <CreditCard className="h-3 w-3 mr-1" />
-          {isPro ? "Pro" : "Free"}
-        </div>
-      </div>
-      <div className="flex absolute right-10">
-        <Search/>
+
+      <div className="absolute right-10 flex">
+        <Search className="mr-1 mt-1" />
         <input
           type="text"
           placeholder="Search"
-          className="ml-2 w-full border-solid border-b-2 !bg-white focus:border-waterloo focus:placeholder:text-black focus-visible:outline-none dark:border-strokedark dark:!bg-black dark:focus:border-manatee dark:focus:placeholder:text-white"
+          className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
         />
       </div>
     </div>
@@ -67,13 +40,13 @@ export const Info = ({
 Info.Skeleton = function SkeletonInfo() {
   return (
     <div className="flex items-center gap-x-4">
-      <div className="w-[60px] h-[60px] relative">
-        <Skeleton className="w-full h-full absolute" />
+      <div className="relative h-[60px] w-[60px]">
+        <Skeleton className="absolute h-full w-full" />
       </div>
       <div className="space-y-2">
         <Skeleton className="h-10 w-[200px]" />
         <div className="flex items-center">
-          <Skeleton className="h-4 w-4 mr-2" />
+          <Skeleton className="mr-2 h-4 w-4" />
           <Skeleton className="h-4 w-[100px]" />
         </div>
       </div>

@@ -3,15 +3,15 @@ import Link from "next/link";
 
 const Navbar = () => {
   return (
-    <nav className="fixed z-50 top-0 px-4 w-full h-14 border-b shadow-sm bg-white flex items-center">
+    <nav className="fixed top-0 z-50 flex h-14 w-full items-center border-b bg-white px-4 shadow-sm">
       <div className="flex items-center gap-x-4">
-        <Link href="/">
+        <Link href="/lem/home/user/user-home-page">
           <Image
             src="/images/logo/logo-dark.png"
             alt="logo"
             width={100}
             height={0}
-            className="dark:hidden h-auto"
+            className="h-auto dark:hidden"
           />
         </Link>
 
@@ -21,9 +21,6 @@ const Navbar = () => {
         >
           Create
         </Link> */}
-      </div>
-      <div className="ml-auto flex items-center gap-x-2">
-
       </div>
     </nav>
   );
