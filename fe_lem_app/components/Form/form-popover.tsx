@@ -9,7 +9,7 @@ import { PopoverClose } from "@radix-ui/react-popover";
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger
+  PopoverTrigger,
 } from "@/components/ui/popover";
 //import { useAction } from "@/hooks/useAction";
 import { Button } from "@nextui-org/react";
@@ -28,7 +28,7 @@ interface FormPopoverProps {
   side?: "left" | "right" | "top" | "bottom";
   align?: "start" | "center" | "end";
   sideOffset?: number;
-};
+}
 
 export const FormPopover = ({
   children,
@@ -38,9 +38,14 @@ export const FormPopover = ({
 }: FormPopoverProps) => {
   //const proModal = useProModal();
   const closeRef = useRef<ElementRef<"button">>(null);
-  const { register, handleSubmit, formState: { errors }, getValues } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
   const [urlImg, setUrlImg] = useState("");
-  
+
   const { execute } = useAction(Create, {
     onSuccess: () => {
       toast.success("Board created!");
@@ -49,33 +54,31 @@ export const FormPopover = ({
     },
     onError: (error) => {
       toast.error(error);
-    }
+    },
   });
 
   const onSubmit = async () => {
     const name = getValues("name");
     const imageUrl = urlImg;
-    const board = {name: name, imageUrl: imageUrl}
+    const board = { name: name, imageUrl: imageUrl };
     await execute(board);
   };
-  
+
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        {children}
-      </PopoverTrigger>
+      <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent
         align={align}
         className="w-80 pt-3"
         side={side}
         sideOffset={sideOffset}
       >
-        <div className="text-sm font-medium text-center text-neutral-600 pb-4">
+        <div className="pb-4 text-center text-sm font-medium text-neutral-600">
           Create board
         </div>
         <PopoverClose ref={closeRef} asChild>
           <Button
-            className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600"
+            className="absolute right-2 top-2 h-auto w-auto p-2 text-neutral-600"
             variant="ghost"
           >
             <X className="h-4 w-4" />
@@ -88,15 +91,15 @@ export const FormPopover = ({
             // errors={fieldErrors}
           />
           <FormInput
-            id = "name"
+            id="name"
             label="Board title"
             type="text"
             register={register}
             // errors={fieldErrors}
           />
-          <FormSubmit className="w-full">
-            Create
-          </FormSubmit>
+          <div className="mt-3">
+            <FormSubmit>Create</FormSubmit>
+          </div>
         </form>
       </PopoverContent>
     </Popover>

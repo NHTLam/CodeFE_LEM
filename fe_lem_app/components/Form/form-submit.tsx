@@ -1,39 +1,22 @@
 "use client";
-
-//import { useState, useEffect } from 'react';
-
-import { cn } from "@/lib/utils";
-import { Button } from "@nextui-org/react";
-
 interface FormSubmitProps {
   children: React.ReactNode;
   disabled?: boolean;
   className?: string;
-};
+}
 
-export const FormSubmit = ({
-  children,
-  disabled,
-  className
-}: FormSubmitProps) => {
+export const FormSubmit = ({ children, disabled }: FormSubmitProps) => {
   // const [isPending, setIsPending] = useState(false);
   const isPending = false;
 
   return (
-    <Button
+    <button
       disabled={isPending || disabled}
       type="submit"
-      size="sm"
       color="primary"
-      className={cn(className)}
-      style={{ 
-        marginTop: "10px",
-        borderRadius: "0px",
-        color: "white",
-        padding: "10px"
-      }}
+      className="my-1 flex w-full justify-center rounded-sm border border-stroke bg-blue-500 py-1 text-base text-white outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
     >
       {children}
-    </Button>
+    </button>
   );
 };
