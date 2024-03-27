@@ -19,50 +19,47 @@ import { Button } from "@nextui-org/react";
 
 interface ListOptionsProps {
   data: {
+    id: string;
+    title: string;
+    order: number;
+    boardId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    cards: {
       id: string;
       title: string;
       order: number;
-      boardId: string;
+      description: string | null;
+      listId: string;
       createdAt: Date;
       updatedAt: Date;
-      cards: {
-        id: string;
-        title: string;
-        order: number;
-        description: string | null;
-        listId: string;
-        createdAt: Date;
-        updatedAt: Date;
-      }[];
-    };
+    }[];
+  };
   onAddCard: () => void;
-};
+}
 
-export const ListOption = ({
-  data,
-  onAddCard,
-}: ListOptionsProps) => {
+export const ListOption = ({ data, onAddCard }: ListOptionsProps) => {
   const closeRef = useRef<ElementRef<"button">>(null);
 
-//   const { execute: executeDelete } = useAction(deleteList, {
-//     onSuccess: (data) => {
-//       toast.success(`List "${data.title}" deleted`);
-//       closeRef.current?.click();
-//     },
-//     onError: (error) => {
-//       toast.error(error);
-//     }
-//   });
+  //   const { execute: executeDelete } = useAction(deleteList, {
+  //     onSuccess: (data) => {
+  //       toast.success(`List "${data.title}" deleted`);
+  //       closeRef.current?.click();
+  //     },
+  //     onError: (error) => {
+  //       toast.error(error);
+  //     }
+  //   });
 
-//   const { execute: executeCopy } = useAction(copyList, {
-//     onSuccess: (data) => {
-//       toast.success(`List "${data.title}" copied`);
-//       closeRef.current?.click();
-//     },
-//     onError: (error) => {
-//       toast.error(error);
-//     }
-//   });
+  //   const { execute: executeCopy } = useAction(copyList, {
+  //     onSuccess: (data) => {
+  //       toast.success(`List "${data.title}" copied`);
+  //       closeRef.current?.click();
+  //     },
+  //     onError: (error) => {
+  //       toast.error(error);
+  //     }
+  //   });
 
   const onDelete = (formData: FormData) => {
     const id = formData.get("id") as string;
@@ -85,42 +82,43 @@ export const ListOption = ({
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="px-0 pt-3 pb-3" side="bottom" align="start">
-        <div className="text-sm font-medium text-center text-neutral-600 pb-4">
+      <PopoverContent align="start" className="bg-white">
+        <div className="pb-4 text-center text-sm font-medium text-neutral-600">
           List actions
         </div>
         <PopoverClose ref={closeRef} asChild>
-          <Button className="h-auto w-auto p-2 absolute top-2 right-2 text-neutral-600" variant="ghost">
+          <Button
+            className="absolute right-2 top-2 h-auto w-auto p-2 text-neutral-600"
+            variant="ghost"
+          >
             <X className="h-4 w-4" />
           </Button>
         </PopoverClose>
-        <Button
+        <button
           onClick={onAddCard}
-          className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm"
-          variant="ghost"
+          className="my-1 flex w-full justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
         >
-          Add card...
-        </Button>
+          Add card
+        </button>
         <form action={onCopy}>
           <input hidden name="id" id="id" value={data.id} />
           <input hidden name="boardId" id="boardId" value={data.boardId} />
-          <FormSubmit
-            className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm"
+          <button
+            type="submit"
+            className="my-1 flex w-full justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
           >
-            Copy list...
-          </FormSubmit>
+            Duplicate List
+          </button>
         </form>
-        <hr />
-        <form
-          action={onDelete}
-        >
+        <form action={onDelete}>
           <input hidden name="id" id="id" value={data.id} />
           <input hidden name="boardId" id="boardId" value={data.boardId} />
-          <FormSubmit
-            className="rounded-none w-full h-auto p-2 px-5 justify-start font-normal text-sm"
+          <button
+            type="submit"
+            className="my-1 flex w-full justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
           >
             Delete this list
-          </FormSubmit>
+          </button>
         </form>
       </PopoverContent>
     </Popover>

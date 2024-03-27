@@ -7,6 +7,7 @@ import { useState, useRef, ElementRef } from "react";
 
 //import { useAction } from "@/hooks/use-action";
 //import { updateList } from "@/actions/update-list";
+import { useForm } from "react-hook-form";
 import { FormInput } from "@/components/Form/form-input";
 import { ListOption } from "@/components/ComponentsBoard/ListOption";
 
@@ -17,7 +18,7 @@ interface ListHeaderProps {
     order: number;
     boardId: string;
     createdAt: Date;
-    updatedAt: Date;  
+    updatedAt: Date;
     cards: {
       id: string;
       title: string;
@@ -29,15 +30,17 @@ interface ListHeaderProps {
     }[];
   };
   onAddCard: () => void;
-};
+}
 
-export const ListHeader = ({
-  data,
-  onAddCard,
-}: ListHeaderProps) => {
+export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
   const [title, setTitle] = useState(data.title);
   const [isEditing, setIsEditing] = useState(false);
-
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
   const formRef = useRef<ElementRef<"form">>(null);
   const inputRef = useRef<ElementRef<"input">>(null);
 
@@ -53,36 +56,36 @@ export const ListHeader = ({
     setIsEditing(false);
   };
 
-//   const { execute } = useAction(updateList, {
-//     onSuccess: (data) => {
-//       toast.success(`Renamed to "${data.title}"`);
-//       setTitle(data.title);
-//       disableEditing();
-//     },
-//     onError: (error) => {
-//       toast.error(error);
-//     }
-//   });
+  //   const { execute } = useAction(updateList, {
+  //     onSuccess: (data) => {
+  //       toast.success(`Renamed to "${data.title}"`);
+  //       setTitle(data.title);
+  //       disableEditing();
+  //     },
+  //     onError: (error) => {
+  //       toast.error(error);
+  //     }
+  //   });
 
-  const handleSubmit = (formData: FormData) => {
-    const title = formData.get("title") as string;
-    const id = formData.get("id") as string;
-    const boardId = formData.get("boardId") as string;
+  // const handleSubmit = (formData: FormData) => {
+  //   const title = formData.get("title") as string;
+  //   const id = formData.get("id") as string;
+  //   const boardId = formData.get("boardId") as string;
 
-    if (title === data.title) {
-      return disableEditing();
-    }
+  //   if (title === data.title) {
+  //     return disableEditing();
+  //   }
 
-    // execute({
-    //   title,
-    //   id,
-    //   boardId,
-    // });
-  }
+  //   // execute({
+  //   //   title,
+  //   //   id,
+  //   //   boardId,
+  //   // });
+  // };
 
   const onBlur = () => {
     formRef.current?.requestSubmit();
-  }
+  };
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
@@ -93,37 +96,35 @@ export const ListHeader = ({
   useEventListener("keydown", onKeyDown);
 
   return (
-    <div className="pt-2 px-2 text-sm font-semibold flex justify-between items-start- gap-x-2">
+    <div className="items-start- flex justify-between gap-x-2 px-2 pt-2 text-sm font-semibold">
       {isEditing ? (
-        <form 
+        <form
           ref={formRef}
-          action={handleSubmit}  
+          // action={handleSubmit}
           className="flex-1 px-[2px]"
         >
           <input hidden id="id" name="id" value={data.id} />
           <input hidden id="boardId" name="boardId" value={data.boardId} />
           <FormInput
             ref={inputRef}
-            onBlur={onBlur}
+            //onBlur={onBlur}
             id="title"
             placeholder="Enter list title.."
             defaultValue={title}
-            className="text-sm px-[7px] py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition truncate bg-transparent focus:bg-white"
+            className="hover:border-input focus:border-input h-7 truncate border-transparent bg-transparent px-[7px] py-1 text-sm font-medium transition focus:bg-white"
+            register={register}
           />
           <button type="submit" hidden />
         </form>
       ) : (
         <div
           onClick={enableEditing}
-          className="w-full text-sm px-2.5 py-1 h-7 font-medium border-transparent"
+          className="h-7 w-full border-transparent px-2.5 py-1 text-sm font-medium"
         >
           {title}
         </div>
       )}
-      <ListOption
-        onAddCard={onAddCard}
-        data={data}
-      />
+      <ListOption onAddCard={onAddCard} data={data} />
     </div>
   );
 };

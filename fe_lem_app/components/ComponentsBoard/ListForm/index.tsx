@@ -11,8 +11,16 @@ import { useEventListener, useOnClickOutside } from "usehooks-ts";
 import { FormInput } from "@/components/Form/form-input";
 import { FormSubmit } from "@/components/Form/form-submit";
 import { Button } from "@nextui-org/react";
+import { useForm } from "react-hook-form";
 
 export const ListForm = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm();
+
   const router = useRouter();
   const params = useParams();
 
@@ -46,7 +54,7 @@ export const ListForm = () => {
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
       disableEditing();
-    };
+    }
   };
 
   useEventListener("keydown", onKeyDown);
@@ -60,52 +68,43 @@ export const ListForm = () => {
     //   title,
     //   boardId
     // });
-  }
+  };
 
   if (isEditing) {
     return (
-      <li className="shrink-0 h-full w-[272px] select-none">
+      <li className="h-full w-[272px] shrink-0 select-none">
         <form
           action={onSubmit}
           ref={formRef}
-          className="w-full p-3 rounded-md bg-white space-y-4 shadow-md"
+          className="w-full space-y-4 rounded-md bg-white p-3 shadow-md"
         >
           <FormInput
             ref={inputRef}
             //errors={fieldErrors}
             id="title"
-            className="text-sm px-2 py-1 h-7 font-medium border-transparent hover:border-input focus:border-input transition"
+            className="hover:border-input focus:border-input h-7 border-transparent px-2 py-1 text-sm font-medium transition"
             placeholder="Enter list title..."
+            register={register}
           />
-          <input
-            hidden
-            value={params.boardId}
-            name="boardId"
-          />
+          <input hidden value={params.boardId} name="boardId" />
           <div className="flex items-center gap-x-1">
-            <FormSubmit>
-              Add list
-            </FormSubmit>
-            <Button 
-              onClick={disableEditing}
-              size="sm"
-              variant="ghost"
-            >
+            <FormSubmit>Add list</FormSubmit>
+            <Button onClick={disableEditing} size="sm" variant="ghost">
               <X className="h-5 w-5" />
             </Button>
           </div>
         </form>
       </li>
     );
-  };
+  }
 
   return (
-    <li className="shrink-0 h-full w-[272px] select-none">
+    <li className="h-full w-[272px] shrink-0 select-none">
       <button
         onClick={enableEditing}
-        className="w-full rounded-md bg-white/80 hover:bg-white/50 transition p-3 flex items-center font-medium text-sm"
+        className="flex w-full items-center rounded-md bg-white/80 p-3 text-sm font-medium transition hover:bg-white/50"
       >
-        <Plus className="h-4 w-4 mr-2" />
+        <Plus className="mr-2 h-4 w-4" />
         Add a list
       </button>
     </li>
