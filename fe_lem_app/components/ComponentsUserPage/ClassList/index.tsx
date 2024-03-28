@@ -1,9 +1,7 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { School } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { FormPopover } from "@/components/Form/form-popover";
 import { FetchData } from "@/services/board-service";
 import { ListBox } from "@/components/ListBox";
 
