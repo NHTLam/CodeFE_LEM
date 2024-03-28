@@ -86,7 +86,7 @@ export const ListPostPinned = () => {
   ]
 
   return (
-    <div className="flex-1 flex-col rounded-lg border-2 border-cyan-600 m-4 w-96">
+    <div className="flex-1 flex-col rounded-lg border border-slate-500 m-4 w-96">
       {classEvents?.map((classEvent, index) => (
         <Card key={index} className=" p-4">
           <CardHeader className="flex gap-3">
