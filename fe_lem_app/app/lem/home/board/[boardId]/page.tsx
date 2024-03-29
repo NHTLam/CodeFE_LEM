@@ -5,34 +5,32 @@ interface BoardIdPageProps {
   params: {
     boardId: string;
   };
-};
+}
 
 const useFakeAuth = () => {
-    const user = {
-        userId: "1234567890",
-        username: "John Doe",
-        email: "johndoe@example.com",
-    };
+  const user = {
+    userId: "1234567890",
+    username: "John Doe",
+    email: "johndoe@example.com",
+  };
 
-    return {
-        userId: user.userId,
-        username: user.username,
-        email: user.email,
-        isAuthenticated: true,
-        isLoading: false,
-        error: null,
-    };
+  return {
+    userId: user.userId,
+    username: user.username,
+    email: user.email,
+    isAuthenticated: true,
+    isLoading: false,
+    error: null,
+  };
 };
 
-const BoardIdPage = async ({
-  params,
-}: BoardIdPageProps) => {
+const BoardIdPage = async ({ params }: BoardIdPageProps) => {
   const { userId } = useFakeAuth();
 
   if (!userId) {
     redirect("/select-org");
   }
-  
+
   const lists = [
     {
       id: "75b54a35-54a5-43f5-954d-4a554a3f54a5",
@@ -55,7 +53,8 @@ const BoardIdPage = async ({
           id: "354a354a-354a-54a3-54a3-54a354a354a3",
           title: "Finish project proposal",
           order: 2,
-          description: "Write up the proposal and send it to the client by Friday.",
+          description:
+            "Write up the proposal and send it to the client by Friday.",
           listId: "75b54a35-54a5-43f5-954d-4a554a3f54a5",
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -84,11 +83,8 @@ const BoardIdPage = async ({
   ];
 
   return (
-    <div className="p-4 pt-30 h-full overflow-x-auto">
-      <ListContainer
-        boardId={params.boardId}
-        data={lists}
-      />
+    <div className="h-full overflow-x-auto p-4 pt-30">
+      <ListContainer boardId={params.boardId} data={lists} />
     </div>
   );
 };

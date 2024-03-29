@@ -1,9 +1,7 @@
 import { Calendar } from "@/components/ComponentsUserPage/Calendar";
 
 const CalendarPage = async () => {
-    return (
-        <Calendar/>
-    );
+  return <Calendar />;
 };
 
 export default CalendarPage;

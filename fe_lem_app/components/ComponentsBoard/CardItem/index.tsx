@@ -2,11 +2,13 @@
 
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { Draggable } from "@hello-pangea/dnd";
+import Datepicker from "react-tailwindcss-datepicker";
 import {
   CheckCircle,
   CheckIcon,
   ChevronDown,
   ClipboardList,
+  SendHorizontal,
   X,
 } from "lucide-react";
 import { title } from "process";
@@ -30,6 +32,15 @@ interface CardItemProps {
 export const CardItem = ({ data, index }: CardItemProps) => {
   // const cardModal = useCardModal();
   const [showModal, setShowModal] = useState(false);
+  const [value, setValue] = useState({
+    startDate: new Date(),
+    endDate: new Date("11-03-2024"),
+  });
+
+  const handleValueChange = (newValue) => {
+    console.log("newValue:", newValue);
+    setValue(newValue);
+  };
 
   const member = [
     { name: "Member A" },
@@ -76,7 +87,7 @@ export const CardItem = ({ data, index }: CardItemProps) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity" />
           </Transition.Child>
 
           <div className="fixed inset-0 z-10 overflow-y-auto">
@@ -90,9 +101,9 @@ export const CardItem = ({ data, index }: CardItemProps) => {
                 leaveFrom="opacity-100 translate-y-0 sm:scale-100"
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
-                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                <Dialog.Panel className="relative rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6">
                   <div>
-                    <div className="flex">
+                    <div className="flex gap-y-2">
                       <div className="flex grow items-center text-2xl font-semibold">
                         <ClipboardList className="mr-2 h-10 w-10" />
                         Name
@@ -173,9 +184,15 @@ export const CardItem = ({ data, index }: CardItemProps) => {
                             </div>
                           </div>
 
-                          <div className="flex">
-                            <p className="float-left mr-3 mt-2">Date: </p>
-                            <div></div>
+                          <div className="mb-2 flex">
+                            <p className="float-left mr-3 mt-2 grow">Date: </p>
+                            <div className="w-full overflow-visible">
+                              <Datepicker
+                                value={value}
+                                onChange={handleValueChange}
+                                containerClassName="relative"
+                              />
+                            </div>
                           </div>
 
                           <div className="flex">
@@ -238,6 +255,23 @@ export const CardItem = ({ data, index }: CardItemProps) => {
                             >
                               View History
                             </button>
+                          </div>
+
+                          <div className="mt-5 flex">
+                            <p className="float-left mr-3">Comment </p>
+                          </div>
+                          <div className="flex w-full items-center gap-2">
+                            <img
+                              className="m-2 rounded-full border"
+                              width={40}
+                              alt="Avatar"
+                              src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
+                            />
+                            <input
+                              type="text"
+                              className="w-full rounded-full border px-3 py-1 focus:outline-none"
+                            />
+                            <SendHorizontal />
                           </div>
                         </div>
                         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
