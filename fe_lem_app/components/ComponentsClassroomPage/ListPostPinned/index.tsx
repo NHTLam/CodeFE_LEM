@@ -2,7 +2,15 @@
 
 import React, { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import { Card, CardHeader, CardBody, CardFooter, Divider, Link, Image } from "@nextui-org/react";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Divider,
+  Link,
+  Image,
+} from "@nextui-org/react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -25,7 +33,7 @@ const useFakeAuth = () => {
 
 export const ListPostPinned = () => {
   const { userId } = useFakeAuth();
-  if (userId == '0') {
+  if (userId == "0") {
     return redirect("/select-org");
   }
 
@@ -50,54 +58,53 @@ export const ListPostPinned = () => {
   //   }
   // }, []);
 
-  // console.log(classEvents);
-
   const classEvents = [
     {
-      "id": 8,
-      "classroomId": 1,
-      "code": "CE4",
-      "name": "Thông báo điểm",
-      "isNotification": false,
-      "description": "Thông báo điểm kiểm tra giữa kỳ",
-      "order": true,
-      "createdAt": "2024-02-26T14:22:40.267",
-      "endAt": "2024-02-26T14:22:40.267",
-      "updatedAt": "2024-02-26T14:22:40.267",
-      "deletedAt": null,
-      "comments": [],
-      "questions": []
+      id: 8,
+      classroomId: 1,
+      code: "CE4",
+      name: "Thông báo điểm",
+      isNotification: false,
+      description: "Thông báo điểm kiểm tra giữa kỳ",
+      order: true,
+      createdAt: "2024-02-26T14:22:40.267",
+      endAt: "2024-02-26T14:22:40.267",
+      updatedAt: "2024-02-26T14:22:40.267",
+      deletedAt: null,
+      comments: [],
+      questions: [],
     },
     {
-      "id": 10,
-      "classroomId": 1,
-      "code": "CE5",
-      "name": "Các sinh viên chú ý",
-      "isNotification": false,
-      "description": "Các bạn sinh viên chú ý hoàn thành bài tập đúng hạn",
-      "order": true,
-      "createdAt": "2024-02-26T14:22:40.267",
-      "endAt": "2024-02-26T14:22:40.267",
-      "updatedAt": "2024-02-26T14:22:40.267",
-      "deletedAt": null,
-      "comments": [],
-      "questions": []
-    }
-  ]
+      id: 10,
+      classroomId: 1,
+      code: "CE5",
+      name: "Các sinh viên chú ý",
+      isNotification: false,
+      description: "Các bạn sinh viên chú ý hoàn thành bài tập đúng hạn",
+      order: true,
+      createdAt: "2024-02-26T14:22:40.267",
+      endAt: "2024-02-26T14:22:40.267",
+      updatedAt: "2024-02-26T14:22:40.267",
+      deletedAt: null,
+      comments: [],
+      questions: [],
+    },
+  ];
 
   return (
-    <div className="flex-1 flex-col rounded-lg border border-slate-500 m-4 w-96">
+    <div className="m-4 w-96 flex-1 flex-col rounded-lg border border-slate-500">
       {classEvents?.map((classEvent, index) => (
         <Card key={index} className=" p-4">
           <CardHeader className="flex gap-3">
-            <img className="border rounded-full"
+            <img
+              className="rounded-full border"
               width={50}
               alt="Avatar"
               src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
             />
             <div className="flex flex-col">
               <p className="text-lg">User</p>
-              <p className="text-sm text-default-500">Role</p>
+              <p className="text-default-500 text-sm">Role</p>
             </div>
             <div>
               <h1 className=" text-xl font-semibold">{classEvent.name}</h1>
@@ -105,9 +112,7 @@ export const ListPostPinned = () => {
           </CardHeader>
 
           <CardBody>
-            <p className=" relative text-base">
-              {classEvent.description}
-            </p>
+            <p className=" relative text-base">{classEvent.description}</p>
           </CardBody>
           <hr></hr>
         </Card>
@@ -118,7 +123,7 @@ export const ListPostPinned = () => {
 
 ListPostPinned.Skeleton = function SkeletonClassEventList() {
   return (
-    <div className="grid gird-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="gird-cols-2 grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
       <Skeleton className="aspect-video h-full w-full p-2" />
       <Skeleton className="aspect-video h-full w-full p-2" />
       <Skeleton className="aspect-video h-full w-full p-2" />

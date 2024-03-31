@@ -146,7 +146,6 @@ export const Calendar = () => {
     });
   }
 
-  console.log(allEvents);
   return (
     <>
       <main className="mb-10 w-full">

@@ -17,15 +17,12 @@ interface FormPickerProps {
   id: string;
   errors?: Record<string, string[] | undefined>;
   setUrlImg: any;
-};
+}
 
-export const FormPicker = ({
-  id,
-  errors,
-  setUrlImg
-}: FormPickerProps) => {
+export const FormPicker = ({ id, errors, setUrlImg }: FormPickerProps) => {
   const pending = false;
-  const [images, setImages] = useState<Array<Record<string, any>>>(defaultImages);
+  const [images, setImages] =
+    useState<Array<Record<string, any>>>(defaultImages);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImageId, setSelectedImageId] = useState(null);
 
@@ -41,10 +38,8 @@ export const FormPicker = ({
   //     //     const newImages = (result.response as Array<Record<string, any>>);
   //     //     setImages(newImages);
   //     //   } else {
-  //     //     console.error("Failed to get images from Unsplash");
   //     //   }
   //     // } catch (error) {
-  //     //   console.log(error);
   //     //   setImages(defaultImages);
   //     // } finally {
   //     //   setIsLoading(false);
@@ -56,21 +51,21 @@ export const FormPicker = ({
 
   if (isLoading) {
     return (
-      <div className="p-6 flex items-center justify-center">
-        <Loader2 className="h-6 w-6 text-sky-700 animate-spin" />
+      <div className="flex items-center justify-center p-6">
+        <Loader2 className="h-6 w-6 animate-spin text-sky-700" />
       </div>
     );
   }
 
   return (
     <div className="relative">
-      <div className="grid grid-cols-3 gap-2 mb-2">
+      <div className="mb-2 grid grid-cols-3 gap-2">
         {images.map((image) => (
-          <div 
+          <div
             key={image.id}
             className={cn(
-              "cursor-pointer relative aspect-video group hover:opacity-75 transition bg-muted",
-              pending && "opacity-50 hover:opacity-50 cursor-auto"
+              "bg-muted group relative aspect-video cursor-pointer transition hover:opacity-75",
+              pending && "cursor-auto opacity-50 hover:opacity-50",
             )}
             onClick={() => {
               if (pending) return;
@@ -78,7 +73,7 @@ export const FormPicker = ({
               setUrlImg(image.urls.full);
             }}
           >
-            <Input    
+            <Input
               id={id}
               type="radio"
               disabled={pending}
@@ -98,29 +93,26 @@ export const FormPicker = ({
             <Image
               src={image.urls.thumb}
               alt="Unsplash image"
-              className="object-cover rounded-sm"
-              fill  
+              className="rounded-sm object-cover"
+              fill
               sizes="(min-width: 768px) 50vw, (min-width: 375px) 33.3vw, 100vw"
             />
             {selectedImageId === image.id && (
-              <div className="absolute inset-y-0 h-full w-full bg-black/30 flex items-center justify-center">
+              <div className="absolute inset-y-0 flex h-full w-full items-center justify-center bg-black/30">
                 <Check className="h-4 w-4 text-white" />
               </div>
             )}
-            <Link 
+            <Link
               href={image.links.html}
               target="_blank"
-              className="opacity-0 group-hover:opacity-100 absolute bottom-0 w-full text-[10px] truncate text-white hover:underline p-1 bg-black/50"
+              className="absolute bottom-0 w-full truncate bg-black/50 p-1 text-[10px] text-white opacity-0 hover:underline group-hover:opacity-100"
             >
               {image.user.name}
             </Link>
           </div>
         ))}
       </div>
-      <FormErrors
-        id="imageUrl"
-        errors={errors}
-      />
+      <FormErrors id="imageUrl" errors={errors} />
     </div>
   );
 };

@@ -38,7 +38,6 @@ export const CardItem = ({ data, index }: CardItemProps) => {
   });
 
   const handleValueChange = (newValue) => {
-    console.log("newValue:", newValue);
     setValue(newValue);
   };
 
