@@ -18,7 +18,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      {" "}
       {/* suppressHydrationWarning được sử dụng để tắt cảnh báo hydrate*/}
       <body className={`dark:bg-black ${inter.className}`}>
         <ThemeProvider
@@ -29,7 +28,7 @@ export default function RootLayout({
           <ToasterContext />
           {children}
           <ScrollToTop />
-        </ThemeProvider>{" "}
+        </ThemeProvider>
         {/* được sử dụng để chủ động cấu hình việc thay đổi theme của ứng dụng - chính là chức năng đổi sáng tối của web*/}
       </body>
     </html>

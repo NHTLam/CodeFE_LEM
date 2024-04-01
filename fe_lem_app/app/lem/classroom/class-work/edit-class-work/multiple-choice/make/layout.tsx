@@ -7,11 +7,11 @@ export default function EditClassWorkLayout({
 }) {
   return (
     <>
-      <div className="flex gap-x-7">
-        <div className="border-r">
+      <div className="flex w-full">
+        <div className="w-1/3">
           <SidebarEditClassWork />
         </div>
-        {children}
+        <section className="grow">{children}</section>
       </div>
     </>
   );

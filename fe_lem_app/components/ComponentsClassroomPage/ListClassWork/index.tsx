@@ -119,7 +119,7 @@ export const ListClassWork = () => {
         <button className="w-50 rounded-full border border-slate-500 p-1 font-semibold hover:bg-slate-200">
           View my work
         </button>
-        <Link href="/lem/classroom/class-work/edit-class-work/multiple-choice">
+        <Link href="/lem/classroom/class-work/edit-class-work/multiple-choice/make">
           <button className="ml-2 w-50 rounded-full border border-slate-500 p-1 font-semibold hover:bg-slate-200">
             Add class work
           </button>
