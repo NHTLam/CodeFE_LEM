@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/board/";
 
-export async function FetchData() {
+export async function ListBoard() {
   try {
     const res = await fetch(DATA_SOURCE_URL + "list", {
       method: "POST",
@@ -19,7 +19,7 @@ export async function FetchData() {
   }
 }
 
-export async function GetData(id: number) {
+export async function GetBoard(id: number) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "get", {
       method: "POST",
@@ -36,7 +36,7 @@ export async function GetData(id: number) {
   }
 }
 
-export async function Create(board: any) {
+export async function CreateBoard(board: any) {
   try {
     debugger;
     const res = await fetch(DATA_SOURCE_URL + "create", {
@@ -59,7 +59,7 @@ export async function Create(board: any) {
   }
 }
 
-export async function Update(request: Request) {
+export async function UpdateBoard(request: Request) {
   const {
     id,
     code,
@@ -94,7 +94,7 @@ export async function Update(request: Request) {
   return newBoard;
 }
 
-export async function Delete(request: Request) {
+export async function DeleteBoard(request: Request) {
   const { id }: Partial<Board> = await request.json();
 
   if (!id) return NextResponse.json({ message: "Board id required" });

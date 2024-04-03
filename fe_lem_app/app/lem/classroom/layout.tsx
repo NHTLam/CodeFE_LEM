@@ -11,9 +11,7 @@ export default function ClassroomLayout({
     <>
       <Navbar />
       <Toaster />
-      <main className="h-auto px-4 pt-20 md:pt-20 2xl:max-w-screen-xl">
-        {children}
-      </main>
+      <main className="h-auto px-4 pt-20">{children}</main>
     </>
   );
 }

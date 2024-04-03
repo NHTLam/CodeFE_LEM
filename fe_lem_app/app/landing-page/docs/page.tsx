@@ -2,8 +2,7 @@ import SidebarLink from "@/components/ComponentsLandingPage/Docs/SidebarLink";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Docs Page - Solid SaaS Boilerplate",
-  description: "This is Docs page for Solid Pro",
+  title: "Docs",
   // other metadata
 };
 
@@ -33,9 +32,7 @@ export default function DocsPage() {
                 <p className="text-body-color dark:text-body-color-dark text-base">
                   Please visit:{" "}
                   <b>
-                    <a href="">
-                      lem@org.com
-                    </a>
+                    <a href="">lem@org.com</a>
                   </b>{" "}
                   to check out the real docs, setup guide and even video
                   instructions

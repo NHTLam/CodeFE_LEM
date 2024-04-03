@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { School } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { FetchData } from "@/services/board-service";
+import { ListBoard } from "@/services/board-service";
 import { ListBox } from "@/components/ListBox";
 
 const useFakeAuth = () => {
@@ -28,7 +28,7 @@ export const ClassList = async () => {
     return redirect("/select-org");
   }
 
-  const boards = await FetchData();
+  const boards = await ListBoard();
 
   // const availableCount = await getAvailableCount();
   return (

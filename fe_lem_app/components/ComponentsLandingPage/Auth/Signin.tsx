@@ -1,20 +1,50 @@
 "use client";
+import { Login } from "@/services/auth-service";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 const Signin = () => {
   const [data, setData] = useState({
-    email: "",
+    userName: "",
     password: "",
   });
+  const [canRedirect, setCanRedirect] = useState(false);
+
+  async function CallLogin() {
+    const userData = {
+      userName: data.userName,
+      password: data.password,
+    };
+    const isSuccess = await Login(userData);
+    if (isSuccess != null) {
+      toast.success("Login success", {
+        style: {
+          color: "green",
+        },
+      });
+      setCanRedirect(true);
+    } else {
+      toast.error("Login fail", {
+        style: {
+          color: "red",
+        },
+      });
+    }
+  }
+
+  if (canRedirect) {
+    redirect("/lem/home/user/user-home-page");
+  }
 
   return (
     <>
       {/* <!-- ===== SignIn Form Start ===== --> */}
-      <section>
-        <div className="relative z-1 mx-auto max-w-c-1016 px-7.5 pb-7.5 pt-10 lg:px-15 lg:pt-15 xl:px-20 xl:pt-20">
+      <section className="mt-10">
+        <div className="relative z-1 mx-auto max-w-c-1016 px-7.5 pb-7.5 pt-10">
           <div className="absolute left-0 top-0 -z-1 h-2/3 w-full rounded-lg bg-gradient-to-t from-transparent to-[#dee7ff47] dark:bg-gradient-to-t dark:to-[#252A42]"></div>
           <div className="absolute bottom-17.5 left-0 -z-1 h-1/3 w-full">
             <Image
@@ -111,9 +141,9 @@ const Signin = () => {
                       <g
                         id="Icons"
                         stroke="none"
-                        stroke-width="1"
+                        strokeWidth="1"
                         fill="none"
-                        fill-rule="evenodd"
+                        fillRule="evenodd"
                       >
                         <g
                           id="Color-"
@@ -140,14 +170,16 @@ const Signin = () => {
               <span className="dark:bg-stroke-dark hidden h-[1px] w-full max-w-[200px] bg-stroke dark:bg-strokedark sm:block"></span>
             </div>
 
-            <form>
+            <form method="post">
               <div className="mb-7.5 flex flex-col gap-7.5 lg:mb-12.5 lg:flex-row lg:justify-between lg:gap-14">
                 <input
                   type="text"
                   placeholder="User Name"
-                  name="email"
-                  value={data.email}
-                  onChange={(e) => setData({ ...data, email: e.target.value })}
+                  name="userName"
+                  value={data.userName}
+                  onChange={(e) =>
+                    setData({ ...data, userName: e.target.value })
+                  }
                   className="w-full border-b border-stroke !bg-white pb-3.5 focus:border-waterloo focus:placeholder:text-black focus-visible:outline-none dark:border-strokedark dark:!bg-black dark:focus:border-manatee dark:focus:placeholder:text-white lg:w-1/2"
                 />
 
@@ -166,7 +198,7 @@ const Signin = () => {
               <div className="flex flex-wrap items-center gap-10 md:justify-between xl:gap-15">
                 <div className="flex flex-wrap gap-4 md:gap-10">
                   <div className="mb-4 flex items-center">
-                    <input
+                    {/* <input
                       id="default-checkbox"
                       type="checkbox"
                       className="peer sr-only"
@@ -193,7 +225,7 @@ const Signin = () => {
                       className="flex max-w-[425px] cursor-pointer select-none pl-3"
                     >
                       Keep me signed in
-                    </label>
+                    </label> */}
                   </div>
 
                   <a href="#" className="hover:text-primary">
@@ -201,32 +233,32 @@ const Signin = () => {
                   </a>
                 </div>
 
-                <Link href="/lem/home/user/user-home-page">
-                  <button
-                    aria-label="login with email and password"
-                    className="inline-flex items-center gap-2.5 rounded-full bg-black px-6 py-3 font-medium text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
+                <button
+                  onClick={CallLogin}
+                  type="button"
+                  aria-label="login with email and password"
+                  className="inline-flex items-center gap-2.5 rounded-full bg-black px-6 py-3 font-medium text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
+                >
+                  Log in
+                  <svg
+                    className="fill-white"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    Log in
-                    <svg
-                      className="fill-white"
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M10.4767 6.16664L6.00668 1.69664L7.18501 0.518311L13.6667 6.99998L7.18501 13.4816L6.00668 12.3033L10.4767 7.83331H0.333344V6.16664H10.4767Z"
-                        fill=""
-                      />
-                    </svg>
-                  </button>
-                </Link>
+                    <path
+                      d="M10.4767 6.16664L6.00668 1.69664L7.18501 0.518311L13.6667 6.99998L7.18501 13.4816L6.00668 12.3033L10.4767 7.83331H0.333344V6.16664H10.4767Z"
+                      fill=""
+                    />
+                  </svg>
+                </button>
               </div>
 
               <div className="mt-12.5 border-t border-stroke py-5 text-center dark:border-strokedark">
                 <p>
-                  Don't have an account?{" "}
+                  Don't have an account?
                   <Link
                     className="text-black hover:text-primary dark:text-white hover:dark:text-primary"
                     href="/auth/signup"

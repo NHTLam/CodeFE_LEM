@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import { FormInput } from "./form-input";
 import { FormSubmit } from "./form-submit";
 import { FormPicker } from "./form-picker";
-import { Create } from "@/services/board-service";
+import { CreateBoard } from "@/services/board-service";
 import { useAction } from "@/hooks/useAction";
 import { Board } from "@/models/board";
 
@@ -46,7 +46,7 @@ export const FormPopover = ({
   } = useForm();
   const [urlImg, setUrlImg] = useState("");
 
-  const { execute } = useAction(Create, {
+  const { execute } = useAction(CreateBoard, {
     onSuccess: () => {
       toast.success("Board created!");
       closeRef.current?.click();
