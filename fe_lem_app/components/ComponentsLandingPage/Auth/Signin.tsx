@@ -19,20 +19,22 @@ const Signin = () => {
       userName: data.userName,
       password: data.password,
     };
-    const isSuccess = await Login(userData);
-    if (isSuccess != null) {
+    const message = await Login(userData);
+    console.log("Status: " + message);
+
+    if (message === 400) {
+      toast.error("Login fail", {
+        style: {
+          color: "red",
+        },
+      });
+    } else {
       toast.success("Login success", {
         style: {
           color: "green",
         },
       });
       setCanRedirect(true);
-    } else {
-      toast.error("Login fail", {
-        style: {
-          color: "red",
-        },
-      });
     }
   }
 

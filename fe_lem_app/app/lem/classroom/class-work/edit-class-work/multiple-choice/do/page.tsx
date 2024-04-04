@@ -52,19 +52,19 @@ const DoMultipleChoicePage = () => {
           <div className="mt-5 flex w-full justify-around">
             <div className="flex">
               <Circle className="mr-1 mt-1 h-4 w-4" />
-              <p>Answer 1</p>
+              <p>Answer 1 Answer 1 Answer 1 Answer 1 Answer 1Answer 1</p>
             </div>
             <div className="flex">
               <Circle className="mr-1 mt-1 h-4 w-4" />
-              <p>Answer 2</p>
+              <p>Answer 1 Answer 1 Answer 1 Answer 1 Answer 1Answer 1</p>
             </div>
             <div className="flex">
               <Circle className="mr-1 mt-1 h-4 w-4" />
-              <p>Answer 3</p>
+              <p>Answer 1 Answer 1 Answer 1 Answer 1 Answer 1Answer 1</p>
             </div>
             <div className="flex">
               <Circle className="mr-1 mt-1 h-4 w-4" />
-              <p>Answer 4</p>
+              <p>Answer 1 Answer 1 Answer 1 Answer 1 Answer 1Answer 1</p>
             </div>
           </div>
         </div>

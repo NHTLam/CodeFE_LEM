@@ -78,6 +78,7 @@ export async function GetAppUser(id: number) {
 
 export async function Register(AppUser: any) {
   try {
+    debugger;
     const res = await fetch(DATA_SOURCE_URL + "register", {
       method: "POST",
       headers: {
@@ -96,16 +97,16 @@ export async function Register(AppUser: any) {
 
     const newAppUser = await res.json();
     console.log("Status: " + res.status);
-    return newAppUser; // Return the created AppUser if successful
+    return newAppUser;
   } catch (error) {
-    // Handle network errors or unexpected exceptions
     console.error("Error creating AppUser:", error);
-    return false; // Return a generic error message
+    return false;
   }
 }
 
 export async function Login(AppUser: any) {
   try {
+    debugger;
     const res = await fetch(DATA_SOURCE_URL + "login", {
       method: "POST",
       headers: {
@@ -117,7 +118,7 @@ export async function Login(AppUser: any) {
       }),
     });
 
-    return res; // Return the created AppUser if successful
+    return res.status; // Return the created AppUser if successful
   } catch (error) {
     // Handle network errors or unexpected exceptions
     console.error("Error creating AppUser:", error);
