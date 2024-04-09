@@ -1,33 +1,15 @@
 "use client";
 
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useCallback, useEffect, useState } from "react";
 import { redirect } from "next/navigation";
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
-  Divider,
-  Link,
-  Image,
-  useDisclosure,
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Input,
-  Textarea,
-} from "@nextui-org/react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { any } from "zod";
-import { CheckIcon, ChevronDown, Menu, SendHorizontal, UsersRound } from "lucide-react";
+import { CheckCircle, CheckIcon, ChevronDown, Menu, SendHorizontal, UsersRound } from "lucide-react";
 import { FilterData } from "@/models/filter";
-import { CreateClassEvent, FetchDataClassEvent } from "@/services/classevent-service";
+import { CreateClassEvent, FetchDataClassEvent, UpdateClassEvent } from "@/services/classevent-service";
 import { ClassEvent } from "@/models/classevent";
-import { Listbox, Transition } from "@headlessui/react";
+import { Dialog, Listbox, Transition } from "@headlessui/react";
 
 const useFakeAuth = () => {
   const user = {
@@ -71,64 +53,6 @@ export const ListPost = () => {
       setFirst(false);
     }
   }, []);
-  // const classEvents = [
-  //   {
-  //     id: 1,
-  //     classroomId: 1,
-  //     code: "CE1",
-  //     name: "Thông báo quan trọng",
-  //     isNotification: false,
-  //     description: "Chuẩn bị có bài kiểm tra giữa kỳ",
-  //     order: false,
-  //     createdAt: "2024-02-26T14:22:40.267",
-  //     endAt: "2024-02-26T07:20:22.36",
-  //     updatedAt: "2024-02-26T14:22:40.267",
-  //     deletedAt: null,
-  //     comments: [
-  //       {
-  //         id: 1,
-  //         classEventId: 1,
-  //         description: "Mọi người nhớ làm bài đúng hạn",
-  //       },
-  //       {
-  //         id: 2,
-  //         classEventId: 1,
-  //         description: "Đã hết hạn làm bài kiểm tra",
-  //       },
-  //     ],
-  //     questions: [],
-  //   },
-  //   {
-  //     id: 8,
-  //     classroomId: 1,
-  //     code: "CE4",
-  //     name: "Thông báo điểm",
-  //     isNotification: false,
-  //     description: "Thông báo điểm kiểm tra giữa kỳ",
-  //     order: true,
-  //     createdAt: "2024-02-26T14:22:40.267",
-  //     endAt: "2024-02-26T14:22:40.267",
-  //     updatedAt: "2024-02-26T14:22:40.267",
-  //     deletedAt: null,
-  //     comments: [],
-  //     questions: [],
-  //   },
-  //   {
-  //     id: 10,
-  //     classroomId: 1,
-  //     code: "CE5",
-  //     name: "Các sinh viên chú ý",
-  //     isNotification: false,
-  //     description: "Các bạn sinh viên chú ý hoàn thành bài tập đúng hạn",
-  //     order: true,
-  //     createdAt: "2024-02-26T14:22:40.267",
-  //     endAt: "2024-02-26T14:22:40.267",
-  //     updatedAt: "2024-02-26T14:22:40.267",
-  //     deletedAt: null,
-  //     comments: [],
-  //     questions: [],
-  //   },
-  // ];
 
   const PostAction = [
     {
@@ -141,37 +65,57 @@ export const ListPost = () => {
 
   const [post, setPost] = useState<any>(false);
   const [showComment, setShowComment] = useState<any>(false);
+  const [showModal, setShowModal] = useState<any>(false);
   const [selected, setSelected] = useState(PostAction[0]);
 
-  const [id, setId] = useState<number>(0);
-  const [classroomId, setClassroomId] = useState<number>(1);
-  const [code, setCode] = useState<string>("");
-  const [name, setName] = useState<string>("");
-  const [isClassWork, setIsClassWork] = useState<boolean>(false);
-  const [description, setDescription] = useState<string>("");
-  const [instruction, setInstruction] = useState<string>("");
-  const [pinned, setPinned] = useState<boolean>(false);
-  const [createdAt, setCreatedAt] = useState<Date>(new Date());
-  const [endAt, setEndAt] = useState<Date>();
-  const [updatedAt, setUpdatedAt] = useState<Date>(new Date());
-  const [deletedAt, setDeletedAt] = useState<Date>();
-  const [classroom, setClassroom] = useState<any>();
+  const [createComment, setCreateComment] = useState({
+    id: 0,
+    classEventId: 0,
+    description: "",
+  });
 
-  const CreatePost: ClassEvent = {
-    id: id,
-    classroomId: classroomId,
-    code: code,
-    name: name,
-    isClassWork: isClassWork,
-    description: description,
-    instruction: instruction,
-    pinned: pinned,
-    createdAt: createdAt,
-    endAt: endAt,
-    updatedAt: updatedAt,
-    deletedAt: deletedAt,
-    classroom: classroom,
+  const [createPost, setCreatePost] = useState({
+    id: 0,
+    classroomId: 1,
+    code: "",
+    name: "",
+    isClassWork: false,
+    description: "",
+    instruction: "",
+    pinned: false,
+    createdAt: new Date(),
+    endAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: new Date(),
+    comment: createComment,
+  });
+
+  
+  const showUpdateModal = (index, classEvent) => {
+    if (index == 1) {
+      setShowModal(true);
+    }
+    else {
+      const data = {
+        id: classEvent.id,
+        classroomId: classEvent.classroomId,
+        code: classEvent.code,
+        name: classEvent.name,
+        isClassWork: classEvent.isClassWork,
+        description: classEvent.description,
+        instruction: classEvent.instruction,
+        comment: createComment,
+        pinned: true,
+        createdAt: new Date(),
+        endAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: new Date(),
+      };
+      setCreatePost(data);
+      UpdateClassEvent(data);
+    }
   }
+
 
   return (
     <div className="col-span-2 m-4 flex flex-col items-center space-y-4">
@@ -197,19 +141,21 @@ export const ListPost = () => {
         ) : (
           <div className="p-5 flex flex-col gap-3">
             <input
-              onChange={e => setName(e.target.value)}
+              value={createPost.name}
+              onChange={e => setCreatePost({ ...createPost, [e.target.name]: e.target.value })}
               type="text"
               placeholder="Title"
               className="rounded-sm border border-cyan-600 px-2 focus:border-blue-400 focus:outline-none"
             />
             <textarea
-              onChange={e => setDescription(e.target.value)}
+              value={createPost.description}
+              onChange={e => setCreatePost({ ...createPost, [e.target.name]: e.target.value })}
               placeholder="Description"
               className="h-30 rounded-sm border border-cyan-600 px-2 focus:outline-none" />
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => {
-                  CreateClassEvent(CreatePost);
+                  CreateClassEvent(createPost);
                 }}
                 className="h-8 w-20 rounded-full border bg-primary text-white">
                 Send
@@ -224,9 +170,9 @@ export const ListPost = () => {
           </div>
         )}
       </div>
-      {classEvents?.map((classEvent, index) => (
+      {classEvents?.map((classEvent) => (
         <div
-          key={index}
+          key={classEvent.id}
           className="ml-25 w-4/5 rounded-lg border border-slate-500 p-2"
         >
           <div className="flex gap-3 justify-between items-center p-2">
@@ -266,6 +212,7 @@ export const ListPost = () => {
                             }`
                           }
                           value={action}
+                          onClick={() => showUpdateModal(actionId, classEvent)}
                         >
                           {action.name}
                         </Listbox.Option>
@@ -282,38 +229,35 @@ export const ListPost = () => {
           </div>
           <hr></hr>
           <div className="flex flex-col items-start gap-3 p-2">
-            <button
-              onClick={() => {
-                setShowComment(!showComment);
-              }}
-              className="flex items-center gap-1 rounded-full p-2 hover:bg-slate-100"
-            >
-              <UsersRound size={20} />
-              <p className="text-sm">Show all comment</p>
-            </button>
-            {showComment == true ? (
-              <div>
-                {classEvent.comments?.map((comment, index) => (
-                  <div key={index} className="flex items-center gap-1 ">
-                    <img
-                      className="m-2 rounded-full border"
-                      width={40}
-                      alt="Avatar"
-                      src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
-                    />
-                    <div className="flex flex-col gap-1">
-                      <div className="flex items-center gap-3">
-                        <p className="text-base">User</p>
-                        <p className="text-xs">Time</p>
+
+            <section className="grid place-items-center">
+              <label>
+                <input className="peer/showLabel absolute scale-0" type="checkbox" />
+                <span className="block max-h-14 overflow-hidden px-4 py-0 transition-all duration-300 peer-checked/showLabel:max-h-52">
+                  <h3 className="flex h-14 cursor-pointer items-center font-semibold"><UsersRound size={20} />Show all comment</h3>
+                  <div>
+                    {classEvent.comments?.map((comment, index) => (
+                      <div key={index} className="flex items-center gap-1 ">
+                        <img
+                          className="m-2 rounded-full border"
+                          width={40}
+                          alt="Avatar"
+                          src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
+                        />
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-3">
+                            <p className="text-base">User</p>
+                            <p className="text-xs">Time</p>
+                          </div>
+                          <h1 className=" text-sm">{comment.description}</h1>
+                        </div>
                       </div>
-                      <h1 className=" text-sm">{comment.description}</h1>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            ) : (
-              <></>
-            )}
+                </span>
+              </label>
+            </section>
+
             <div className="flex pr-5 w-full items-center gap-2">
               <img
                 className="m-2 rounded-full border"
@@ -332,6 +276,96 @@ export const ListPost = () => {
           </div>
         </div>
       ))}
+
+      <Transition.Root show={showModal} as={Fragment}>
+        <Dialog as="div" className="relative z-10" onClose={setShowModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
+                  <div>
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                      <CheckCircle
+                        className="h-6 w-6 text-green-600"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="mt-3 text-center sm:mt-5">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-base font-semibold leading-6 text-gray-900"
+                      >
+                        Update Post
+                      </Dialog.Title>
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          name="title"
+                          className="block w-full rounded-md border-0 py-1.5 pl-3 
+                                text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 
+                                placeholder:text-gray-400 
+                                focus:ring-2 focus:ring-inset 
+                                focus:ring-violet-600 sm:text-sm sm:leading-6"
+                          value={createPost.name}
+                          onChange={e => setCreatePost({ ...createPost, [e.target.name]: e.target.value })}
+                          placeholder="Title"
+                        />
+                        <textarea
+                          name="title"
+                          className="mt-5 block w-full rounded-md border-0 py-1.5 pl-3 
+                                text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 
+                                placeholder:text-gray-400 
+                                focus:ring-2 focus:ring-inset 
+                                focus:ring-violet-600 sm:text-sm sm:leading-6"
+                          value={createPost.description}
+                          onChange={e => setCreatePost({ ...createPost, [e.target.name]: e.target.value })}
+                          placeholder="Description"
+                        />
+                      </div>
+                      <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
+                        <button
+                          type="submit"
+                          className="inline-flex w-full justify-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-2"
+                        >
+                          Update
+                        </button>
+                        <button
+                          type="button"
+                          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                          onClick={() => setShowModal(false)}
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
+
     </div>
   );
 };
