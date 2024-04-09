@@ -4,39 +4,20 @@ import { School } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ListBoard } from "@/services/board-service";
 import { ListBox } from "@/components/ListBox";
+import { Classroom } from "@/models/classroom";
 
-const useFakeAuth = () => {
-  const user = {
-    userId: "1234567890",
-    username: "John Doe",
-    email: "johndoe@example.com",
-  };
-
-  return {
-    userId: user.userId,
-    username: user.username,
-    email: user.email,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  };
-};
-
-export const ClassList = async () => {
-  const { userId } = useFakeAuth();
-  if (userId == "0") {
-    return redirect("/select-org");
-  }
-
-  const boards = await ListBoard();
-
+interface ClassListPros {
+  data: Classroom[] | null;
+}
+export const ClassList = async ({ data }: ClassListPros) => {
   // const availableCount = await getAvailableCount();
+  console.log("Classroom data: " + data);
   return (
     <>
       <div className="flex items-center text-lg font-semibold text-neutral-700">
         <School className="mr-3" /> My classes
       </div>
-      <ListBox isRecently={false} dataBoards={boards} dataClasses={null} />
+      <ListBox isRecently={false} dataBoards={null} dataClasses={data} />
     </>
   );
 };

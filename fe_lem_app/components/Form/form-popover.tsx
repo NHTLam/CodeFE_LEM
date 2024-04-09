@@ -3,7 +3,6 @@
 import { ElementRef, useRef, useState } from "react";
 import { toast } from "sonner";
 import { X } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { PopoverClose } from "@radix-ui/react-popover";
 
 import {
@@ -20,14 +19,19 @@ import { FormInput } from "./form-input";
 import { FormSubmit } from "./form-submit";
 import { FormPicker } from "./form-picker";
 import { CreateBoard } from "@/services/board-service";
-import { useAction } from "@/hooks/useAction";
 import { Board } from "@/models/board";
+import { CreateClass } from "@/services/class-service";
+import { Classroom } from "@/models/classroom";
+import { AppUserClassroomMapping } from "@/models/appUserClassroomMapping";
 
 interface FormPopoverProps {
   children: React.ReactNode;
   side?: "left" | "right" | "top" | "bottom";
   align?: "start" | "center" | "end";
   sideOffset?: number;
+  isForBoard: boolean;
+  classroomData: Classroom[] | null;
+  boardData: Board[] | null;
 }
 
 export const FormPopover = ({
@@ -35,8 +39,15 @@ export const FormPopover = ({
   side = "bottom",
   align,
   sideOffset = 0,
+  isForBoard,
+  classroomData,
+  boardData,
 }: FormPopoverProps) => {
   //const proModal = useProModal();
+  var currentUserId = "";
+  if (typeof window !== "undefined") {
+    currentUserId = localStorage.getItem("userId") ?? "";
+  }
   const closeRef = useRef<ElementRef<"button">>(null);
   const {
     register,
@@ -46,22 +57,41 @@ export const FormPopover = ({
   } = useForm();
   const [urlImg, setUrlImg] = useState("");
 
-  const { execute } = useAction(CreateBoard, {
-    onSuccess: () => {
-      toast.success("Board created!");
-      closeRef.current?.click();
-      // router.push(`/board/${data.id}`);
-    },
-    onError: (error) => {
-      toast.error(error);
-    },
-  });
-
   const onSubmit = async () => {
     const name = getValues("name");
     const imageUrl = urlImg;
-    const board = { name: name, imageUrl: imageUrl };
-    await execute(board);
+
+    var appUserClassroomMappings: AppUserClassroomMapping[] = [];
+    if (classroomData !== null) {
+      const classroomIds = classroomData.map((x) => x.id);
+      for (let i = 0; i < classroomIds.length; i++) {
+        var appUserClassroomMapping: AppUserClassroomMapping = {
+          id: 0,
+          appUserId: Number(currentUserId),
+          classroomId: classroomIds[i],
+        };
+        appUserClassroomMappings.push(appUserClassroomMapping);
+      }
+    }
+    var appUserClassroomMapping: AppUserClassroomMapping = {
+      id: 0,
+      appUserId: Number(currentUserId),
+      classroomId: 0,
+    };
+    appUserClassroomMappings.push(appUserClassroomMapping);
+
+    const newData = { name: name, imageUrl: imageUrl };
+    const newClassData = {
+      name: name,
+      imageUrl: imageUrl,
+      appUserClassroomMappings: appUserClassroomMappings,
+    };
+
+    if (isForBoard) {
+      await CreateBoard(newData);
+    } else {
+      await CreateClass(newClassData);
+    }
   };
 
   return (
@@ -74,7 +104,7 @@ export const FormPopover = ({
         sideOffset={sideOffset}
       >
         <div className="pb-4 text-center text-sm font-medium text-neutral-600">
-          Create board
+          {isForBoard === true ? <>Create Board</> : <>Create Class</>}
         </div>
         <PopoverClose ref={closeRef} asChild>
           <Button

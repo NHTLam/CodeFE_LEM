@@ -52,6 +52,7 @@ const Signin = () => {
     const CurrentUserId = await GetUserId(token);
     if (CurrentUserId !== 0) {
       setUserId(CurrentUserId);
+      localStorage.setItem("userId", CurrentUserId);
     }
   };
 

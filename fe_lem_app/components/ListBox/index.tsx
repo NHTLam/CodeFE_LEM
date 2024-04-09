@@ -15,6 +15,7 @@ export const ListBox = async ({
   dataClasses,
 }: ListBox) => {
   const datas = dataBoards != null ? dataBoards : dataClasses;
+  const isForBoard = dataBoards != null;
   return (
     <div className="mt-5 space-y-4">
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -39,12 +40,24 @@ export const ListBox = async ({
         {isRecently === true ? (
           <></>
         ) : (
-          <FormPopover sideOffset={10} side="right">
+          <FormPopover
+            sideOffset={10}
+            side="right"
+            isForBoard={isForBoard}
+            classroomData={dataClasses}
+            boardData={dataBoards}
+          >
             <div
               role="button"
               className="bg-muted relative flex aspect-video h-35 w-60 flex-col items-center justify-center gap-y-1 rounded-sm border transition hover:opacity-75"
             >
-              <p className="text-sm">Create new class</p>
+              <p className="text-sm">
+                {isForBoard === true ? (
+                  <>Create new board</>
+                ) : (
+                  <>Create new class</>
+                )}
+              </p>
             </div>
           </FormPopover>
         )}

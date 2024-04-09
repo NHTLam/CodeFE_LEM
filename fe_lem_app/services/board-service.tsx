@@ -38,7 +38,6 @@ export async function GetBoard(id: number) {
 
 export async function CreateBoard(board: any) {
   try {
-    debugger;
     const res = await fetch(DATA_SOURCE_URL + "create", {
       method: "POST",
       headers: {

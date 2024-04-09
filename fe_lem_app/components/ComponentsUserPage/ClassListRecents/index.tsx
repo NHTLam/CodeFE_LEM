@@ -1,11 +1,14 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { FetchData } from "@/services/board-service";
 import { ListBox } from "@/components/ListBox";
 import { Clock9 } from "lucide-react";
+import { Classroom } from "@/models/classroom";
 
-export const ClassListRecents = async () => {
-  // const classRecents = await FetchData();
-  const classRecents = null;
+interface ClassListRecentsPros {
+  classRecents: Classroom[] | null;
+}
+export const ClassListRecents = async ({
+  classRecents,
+}: ClassListRecentsPros) => {
   return (
     <>
       <div className="flex items-center text-lg font-semibold text-neutral-700">

@@ -1,8 +1,7 @@
 "use client";
 import { useLocalStorage } from "usehooks-ts";
-import { Button, Input } from "@nextui-org/react";
 import { Accordion } from "@/components/ui/accordion";
-import { NavItem, Organization } from "./sideItem";
+import { NavItem } from "./sideItem";
 import Link from "next/link";
 import {
   Plus,
@@ -10,20 +9,26 @@ import {
   ClipboardList,
   Settings,
   Presentation,
-  Search,
   Home,
 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ListOwn } from "@/services/class-service";
+import { Classroom } from "@/models/classroom";
 
 interface SidebarProps {
   storageKey?: string;
 }
 
 export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
+  var currentUserId = "";
+  if (typeof window !== "undefined") {
+    currentUserId = localStorage.getItem("userId") ?? "";
+  }
   const [expanded, setExpanded] = useLocalStorage<Record<string, any>>(
     storageKey,
     {},
   );
-
+  const [listClass, setlistClass] = useState<Classroom[] | null>(null);
   const defaultAccordionValue: string[] = Object.keys(expanded).reduce(
     (acc: string[], key: string) => {
       if (expanded[key]) {
@@ -42,40 +47,21 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
     }));
   };
 
-  const fakeActiveOrganization = {
-    id: "1",
-    slug: "a",
-    imageUrl: "",
-    name: "a",
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      if (currentUserId !== "") {
+        const data = await ListOwn(currentUserId);
+        if (data !== null) {
+          setlistClass(data);
+        }
+      }
+    };
+    fetchData();
+  }, []);
 
-  const fakeUserMemberships = [
-    {
-      id: "1",
-      slug: "",
-      imageUrl: "",
-      name: "Lớp 5A",
-    },
-    {
-      id: "2",
-      slug: "",
-      imageUrl: "",
-      name: "Không gian làm việc của tôi",
-    },
-    {
-      id: "3",
-      slug: "",
-      imageUrl: "",
-      name: "Bảng công việc nhóm",
-    },
-  ];
-
-  const mappedData = fakeUserMemberships.map((membership) => ({
-    organization: membership,
-  }));
-
-  const isLoadedOrg = true;
-  const isLoadedOrgList = true;
+  // const mappedData = fakeUserMemberships.map((membership) => ({
+  //   organization: membership,
+  // }));
 
   // if (!isLoadedOrg || !isLoadedOrgList || userMemberships.isLoading) {
   //   return (
@@ -133,33 +119,24 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
           Settings
         </button>
       </div>
-      <hr className="mb-1 mt-5" />
-      <div className="mb-2 flex">
-        <input
-          type="text"
-          placeholder="Search"
-          className="mb-2 ml-1 w-full grow border-b-2 border-solid !bg-white focus:border-waterloo focus:placeholder:text-black focus-visible:outline-none dark:border-strokedark dark:!bg-black dark:focus:border-manatee dark:focus:placeholder:text-white"
-        />
-        <button className="my-1 ml-2 flex w-10 justify-center rounded-sm border border-stroke px-3 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
-          <Link href="">
-            <Plus className="w-4" />
-          </Link>
-        </button>
-      </div>
+      <hr className="mb-5 mt-5" />
       <Accordion
         type="multiple"
         defaultValue={defaultAccordionValue}
         className="space-y-2"
       >
-        {mappedData.map(({ organization }) => (
-          <NavItem
-            key={organization.id}
-            isActive={fakeActiveOrganization?.id === organization.id}
-            isExpanded={expanded[organization.id]}
-            organization={organization as Organization}
-            onExpand={onExpand}
-          />
-        ))}
+        {listClass === null ? (
+          <></>
+        ) : (
+          listClass!.map((classData) => (
+            <NavItem
+              key={classData.id}
+              isExpanded={expanded[classData.id]}
+              classroom={classData as Classroom}
+              onExpand={onExpand}
+            />
+          ))
+        )}
       </Accordion>
     </div>
   );
