@@ -1,14 +1,37 @@
+"use client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ListBox } from "@/components/ListBox";
 import { Clock9 } from "lucide-react";
 import { Classroom } from "@/models/classroom";
+import { useEffect, useState } from "react";
+import { ListOwn } from "@/services/class-service";
 
-interface ClassListRecentsPros {
-  classRecents: Classroom[] | null;
-}
-export const ClassListRecents = async ({
-  classRecents,
-}: ClassListRecentsPros) => {
+export const ClassListRecents = () => {
+  var currentUserId = "";
+  if (typeof window !== "undefined") {
+    currentUserId = localStorage.getItem("userId") ?? "";
+  }
+  const [classRecents, setclassRecents] = useState<Classroom[] | null>(null);
+  var assignData: Classroom[] | null = [];
+  useEffect(() => {
+    const fetchData = async () => {
+      if (currentUserId !== "") {
+        const data = await ListOwn(currentUserId);
+        if (data !== null) {
+          var currentClassRecents = data;
+          assignData = data;
+          currentClassRecents = currentClassRecents.sort((a, b) => {
+            return (
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+            );
+          });
+          currentClassRecents = currentClassRecents.slice(0, 5);
+          setclassRecents(currentClassRecents);
+        }
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <>
       <div className="flex items-center text-lg font-semibold text-neutral-700">

@@ -9,13 +9,10 @@ interface ListBox {
   dataClasses: Classroom[] | null;
 }
 
-export const ListBox = async ({
-  isRecently,
-  dataBoards,
-  dataClasses,
-}: ListBox) => {
+export const ListBox = ({ isRecently, dataBoards, dataClasses }: ListBox) => {
   const datas = dataBoards != null ? dataBoards : dataClasses;
   const isForBoard = dataBoards != null;
+  console.log(datas);
   return (
     <div className="mt-5 space-y-4">
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -28,7 +25,11 @@ export const ListBox = async ({
                 key={data.id}
                 href={`/lem/classroom/posts`}
                 className="group relative aspect-video h-35 w-60 overflow-hidden rounded-sm bg-sky-700 bg-cover bg-center bg-no-repeat p-2"
-                style={{ backgroundImage: `url(${data.imageUrl})` }}
+                style={{
+                  backgroundImage: `url(${
+                    isForBoard ? data.imageUrl : data.homeImg
+                  })`,
+                }}
               >
                 <div className="absolute inset-0 bg-black/30 transition group-hover:bg-black/40" />
                 <p className="relative font-semibold text-white">{data.name}</p>
