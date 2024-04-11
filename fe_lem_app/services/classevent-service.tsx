@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/tel/classroom/"
 
-export async function FetchDataClassEvent(filter: FilterData) {
+export async function ListClassEvent(filter: FilterData) {
     try {
         const res = await fetch(DATA_SOURCE_URL + "list-class-event", {
             method: 'POST',
@@ -24,6 +24,27 @@ export async function FetchDataClassEvent(filter: FilterData) {
             })
         })
         const Classevents: ClassEvent[] = await res.json()
+        return Classevents;
+    } catch (error) {
+        console.error('Error parsing JSON:', error);
+        return null;
+    }
+}
+
+export async function GetClassEvent(filter: FilterData) {
+    try {
+        const res = await fetch(DATA_SOURCE_URL + "get-class-event", {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                id: filter.id,
+                code: filter.code,
+                name: filter.name
+            })
+        })
+        const Classevents: ClassEvent = await res.json()
         return Classevents;
     } catch (error) {
         console.error('Error parsing JSON:', error);
@@ -68,7 +89,7 @@ export async function CreateClassEvent(classevent: any) {
 
 export async function UpdateClassEvent(classevent: any) {
 
-    const res = await fetch(DATA_SOURCE_URL + "update-class-event", {
+    const res = await fetch(DATA_SOURCE_URL + "update-class-en", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

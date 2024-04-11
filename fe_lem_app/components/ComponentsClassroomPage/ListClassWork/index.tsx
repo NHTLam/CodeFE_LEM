@@ -7,6 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CheckIcon, ChevronDown } from "lucide-react";
 import { Listbox, Transition } from "@headlessui/react";
 import Link from "next/link";
+import { FilterData } from "@/models/filter";
+import { ListClassEvent } from "@/services/classevent-service";
 
 const useFakeAuth = () => {
   const user = {
@@ -31,68 +33,26 @@ export const ListClassWork = () => {
     return redirect("/select-org");
   }
 
-  // const filter: FilterData = {
-  //   skip: 0,
-  //   take: 10,
-  //   isNotification: true
-  // };
+  const filter: FilterData = {
+    skip: 0,
+    take: 10,
+    isClassWork: true
+  };
 
-  // const [classEvents, setClassEvents] = useState<any>();
-  // const [first, setFirst] = useState<any>(true);
+  const [classEvents, setClassEvents] = useState<any>();
+  const [first, setFirst] = useState<any>(true);
 
-  // useEffect(() => {
-  //   if (first == true) {
-  //     const fetchData = async () => {
-  //       const data = await FetchDataClassEvent(filter);
-  //       setClassEvents(data);
-  //     };
-  //     fetchData();
-  //     setFirst(false);
-  //   }
-  // }, []);
-  const classEvents = [
-    {
-      id: 1,
-      classroomId: 1,
-      code: "CE2",
-      name: "Bài kiểm tra giữa kỳ",
-      isNotification: true,
-      description: "Cả lớp làm bài kiểm tra giữa kỳ",
-      order: false,
-      createdAt: "2024-02-26T14:22:40.267",
-      endAt: "2024-02-26T07:20:22.36",
-      updatedAt: "2024-02-26T14:22:40.267",
-      deletedAt: null,
-      comments: [
-        {
-          id: 1,
-          classEventId: 1,
-          description: "Mọi người nhớ làm bài đúng hạn",
-        },
-        {
-          id: 2,
-          classEventId: 1,
-          description: "Đã hết hạn làm bài kiểm tra",
-        },
-      ],
-      questions: [],
-    },
-    {
-      id: 8,
-      classroomId: 1,
-      code: "CE4",
-      name: "Bài kiểm tra cuối kỳ",
-      isNotification: true,
-      description: "Cả lớp làm bài kiểm tra cuối kỳ",
-      order: true,
-      createdAt: "2024-02-26T14:22:40.267",
-      endAt: "2024-02-26T14:22:40.267",
-      updatedAt: "2024-02-26T14:22:40.267",
-      deletedAt: null,
-      comments: [],
-      questions: [],
-    },
-  ];
+  useEffect(() => {
+    if (first == true) {
+      const fetchData = async () => {
+        const data = await ListClassEvent(filter);
+        setClassEvents(data);
+      };
+      fetchData();
+      setFirst(false);
+    }
+  }, []);
+
   const classWorkTypes = [
     {
       name: "Essay",
@@ -129,8 +89,7 @@ export const ListClassWork = () => {
                   <Listbox.Option
                     key={personIdx}
                     className={({ active }) =>
-                      `relative w-full cursor-default select-none py-2 pr-4 ${
-                        active ? "bg-amber-100 text-amber-900" : ""
+                      `relative w-full cursor-default select-none py-2 pr-4 ${active ? "bg-amber-100 text-amber-900" : ""
                       }`
                     }
                     value={person}
@@ -139,9 +98,8 @@ export const ListClassWork = () => {
                       <>
                         <Link href={`${person.link}`}>
                           <span
-                            className={`block truncate pl-5 ${
-                              selected ? "font-medium" : "font-normal"
-                            }`}
+                            className={`block truncate pl-5 ${selected ? "font-medium" : "font-normal"
+                              }`}
                           >
                             {person.name}
                           </span>
@@ -166,32 +124,37 @@ export const ListClassWork = () => {
           View my work
         </button>
       </div>
+
       <div className="col-span-2 m-4 flex flex-col items-center space-y-4">
         {classEvents?.map((classEvent, index) => (
           <div
             key={index}
             className="w-3/4 rounded-lg border border-slate-500 p-6"
           >
-            <div className="flex gap-3">
-              <img
-                className="rounded-full border"
-                width={50}
-                alt="Avatar"
-                src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
-              />
-              <div className="flex flex-col">
-                <p className="text-base">User</p>
-                <p className="text-xs">Time</p>
+            <div className="flex items-center gap-3 justify-between">
+              <div className="flex items-center gap-3">
+                <img
+                  className="rounded-full border"
+                  width={50}
+                  alt="Avatar"
+                  src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
+                />
+                <div className="flex flex-col">
+                  <p className="text-base">User</p>
+                  <p className="text-xs">Time</p>
+                </div>
+                <div>
+                  <h1 className="ml-25 text-xl font-semibold">
+                    {classEvent.name}
+                  </h1>
+                </div>
               </div>
-              <div>
-                <h1 className="ml-25 text-xl font-semibold">
-                  {classEvent.name}
-                </h1>
-              </div>
-            </div>
-            <hr className="my-5" />
-            <div>
-              <p className=" relative text-base">{classEvent.description}</p>
+              <Link href={`/lem/classroom/class-work/edit-class-work/essay/do/${classEvent.id}`} >
+                <button
+                 className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                  Làm bài
+                </button>
+              </Link>
             </div>
           </div>
         ))}

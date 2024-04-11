@@ -12,6 +12,8 @@ export const SidebarEditClassWork = () => {
     { name: "Member C" },
   ];
   const [selected, setSelected] = useState(member[0]);
+  const [name, setName] = useState<any>();
+
   const [value, setValue] = useState({
     startDate: new Date(),
     endDate: new Date("11-03-2024"),
@@ -25,6 +27,7 @@ export const SidebarEditClassWork = () => {
       <div className="flex gap-x-3">
         <p className="mt-0.5">Title: </p>
         <input
+          onChange={e => setName(e.target.value)}
           type="text"
           className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
         />
@@ -50,8 +53,7 @@ export const SidebarEditClassWork = () => {
                   <Listbox.Option
                     key={personIdx}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pr-4 ${
-                        active ? "bg-amber-100 text-amber-900" : ""
+                      `relative cursor-default select-none py-2 pr-4 ${active ? "bg-amber-100 text-amber-900" : ""
                       }`
                     }
                     value={person}
@@ -59,9 +61,8 @@ export const SidebarEditClassWork = () => {
                     {({ selected }) => (
                       <>
                         <span
-                          className={`block truncate pl-5 ${
-                            selected ? "font-medium" : "font-normal"
-                          }`}
+                          className={`block truncate pl-5 ${selected ? "font-medium" : "font-normal"
+                            }`}
                         >
                           {person.name}
                         </span>
