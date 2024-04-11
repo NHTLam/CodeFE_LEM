@@ -30,6 +30,7 @@ const Signup = () => {
       statusId: 1,
     };
     const isSuccess = await Register(userData);
+    console.log("Register status:" + isSuccess);
     if (isSuccess) {
       toast.success("Account created!", {
         style: {

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
+import { GetUserId } from "@/services/current-data-service";
 
 const Signin = () => {
   const [data, setData] = useState({
@@ -13,31 +14,51 @@ const Signin = () => {
     password: "",
   });
   const [canRedirect, setCanRedirect] = useState(false);
+  const [userId, setUserId] = useState(0);
 
   async function CallLogin() {
     const userData = {
       userName: data.userName,
       password: data.password,
     };
-    const isSuccess = await Login(userData);
-    if (isSuccess != null) {
+    const message = await Login(userData);
+    console.log("Status: " + message);
+
+    if (message?.status === 400) {
+      toast.error("Login fail", {
+        style: {
+          color: "red",
+        },
+      });
+    } else if (message === null) {
+      toast.error("Login fail", {
+        style: {
+          color: "red",
+        },
+      });
+    } else {
       toast.success("Login success", {
         style: {
           color: "green",
         },
       });
       setCanRedirect(true);
-    } else {
-      toast.error("Login fail", {
-        style: {
-          color: "red",
-        },
-      });
+      await getCurrentUserId();
     }
   }
 
-  if (canRedirect) {
-    redirect("/lem/home/user/user-home-page");
+  const getCurrentUserId = async () => {
+    const token = localStorage.getItem("token") ?? "";
+    const CurrentUserId = await GetUserId(token);
+    if (CurrentUserId !== 0) {
+      setUserId(CurrentUserId);
+      localStorage.setItem("userId", CurrentUserId);
+    }
+  };
+
+  if (canRedirect && userId !== 0 && userId !== undefined && userId !== null) {
+    const url = `/lem/home/user/${userId}/user-home-page`;
+    redirect(url);
   }
 
   return (

@@ -33,7 +33,7 @@ export async function generateMetadata({
     };
   }
 
-  const board = await GetData(Number(params.boardId));
+  const board = await GetBoard(Number(params.boardId));
 
   return {
     title: board?.name || "Board",

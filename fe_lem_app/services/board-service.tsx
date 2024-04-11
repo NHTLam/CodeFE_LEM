@@ -36,9 +36,25 @@ export async function GetBoard(id: number) {
   }
 }
 
+export async function GetOwnBoard(userId: number) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "get-own", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId }),
+    });
+    const Boards: Board = await res.json();
+    return Boards;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
 export async function CreateBoard(board: any) {
   try {
-    debugger;
     const res = await fetch(DATA_SOURCE_URL + "create", {
       method: "POST",
       headers: {

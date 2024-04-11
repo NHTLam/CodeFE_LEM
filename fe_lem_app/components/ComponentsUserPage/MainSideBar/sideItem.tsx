@@ -6,20 +6,21 @@ import {
   CreditCard,
   Layout,
   Settings,
-  LibraryBig
+  LibraryBig,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { 
+import {
   AccordionContent,
-  AccordionItem, 
-  AccordionTrigger
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@nextui-org/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
+import { Classroom } from "@/models/classroom";
 
-export type Organization = {
+export type classroom = {
   id: string;
   slug: string;
   imageUrl: string;
@@ -28,17 +29,11 @@ export type Organization = {
 
 interface NavItemProps {
   isExpanded: boolean;
-  isActive: boolean;
-  organization: Organization;
+  classroom: Classroom;
   onExpand: (id: string) => void;
-};
+}
 
-export const NavItem = ({
-  isExpanded,
-  isActive,
-  organization,
-  onExpand,
-}: NavItemProps) => {
+export const NavItem = ({ isExpanded, classroom, onExpand }: NavItemProps) => {
   const router = useRouter();
   const pathname = usePathname();
   const [rendered, setRendered] = useState(false);
@@ -50,23 +45,23 @@ export const NavItem = ({
   const routes = [
     {
       label: "Boards",
-      icon: <Layout className="h-4 w-4 mr-2" />,
-      href: `/organization/${organization.id}`,
+      icon: <Layout className="mr-2 h-4 w-4" />,
+      href: `/classroom/${classroom.id}`,
     },
     {
       label: "Activity",
-      icon: <Activity className="h-4 w-4 mr-2" />,
-      href: `/organization/${organization.id}/activity`,
+      icon: <Activity className="mr-2 h-4 w-4" />,
+      href: `/classroom/${classroom.id}/activity`,
     },
     {
       label: "Settings",
-      icon: <Settings className="h-4 w-4 mr-2" />,
-      href: `/organization/${organization.id}/settings`,
+      icon: <Settings className="mr-2 h-4 w-4" />,
+      href: `/classroom/${classroom.id}/settings`,
     },
     {
       label: "Billing",
-      icon: <CreditCard className="h-4 w-4 mr-2" />,
-      href: `/organization/${organization.id}/billing`,
+      icon: <CreditCard className="mr-2 h-4 w-4" />,
+      href: `/classroom/${classroom.id}/billing`,
     },
   ];
 
@@ -75,25 +70,19 @@ export const NavItem = ({
   };
 
   return (
-    <AccordionItem
-      value={organization.id}
-      className="border-none"
-    >
+    <AccordionItem value={classroom.id.toString()} className="border-none">
       <AccordionTrigger
-        onClick={() => onExpand(organization.id)}
-        className={cn(
-          "flex items-center gap-x-2 p-1.5 text-neutral-700 rounded-md hover:bg-neutral-500/10 transition text-start no-underline hover:no-underline",
-          isActive && !isExpanded && "bg-sky-500/10 text-sky-700"
-        )}
+        onClick={() => onExpand(classroom.id.toString())}
+        className={
+          "flex items-center gap-x-2 rounded-md p-1.5 text-start text-neutral-700 no-underline transition hover:bg-sky-500/10 hover:text-sky-700 hover:no-underline"
+        }
       >
-        <div className="flex items-center gap-x-2 h-9">
+        <div className="flex h-9 items-center gap-x-2">
           <div className="relative">
             {/* <Avatar isBordered radius="lg" name='Jane' /> */}
-            <LibraryBig/>
+            <LibraryBig />
           </div>
-          <span className="font-medium text-sm">
-            {organization.name}
-          </span>
+          <span className="text-sm font-medium">{classroom.name}</span>
         </div>
       </AccordionTrigger>
       {rendered && (
@@ -103,10 +92,9 @@ export const NavItem = ({
               key={route.href}
               size="sm"
               //onClick={() => onClick(route.href)}
-              className={cn(
-                "w-full font-normal justify-start pl-10 pt-3 pb-3",
-                pathname === route.href && "bg-sky-500/10 text-sky-700"
-              )}
+              className={
+                "w-full justify-start pb-3 pl-10 pt-3 font-normal hover:bg-sky-500/10 hover:text-sky-700"
+              }
               variant="ghost"
             >
               {route.icon}

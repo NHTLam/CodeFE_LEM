@@ -1,12 +1,12 @@
 import Navbar from "@/components/ComponentsUserPage/Navbar";
 import { Sidebar } from "@/components/ComponentsUserPage/MainSideBar";
-import { Toaster } from "sonner";
 
-export default function HomeLayout({
+const UserIdLayout = async ({
   children,
 }: {
   children: React.ReactNode;
-}) {
+  params: { userId: number };
+}) => {
   return (
     <>
       <Navbar />
@@ -20,4 +20,6 @@ export default function HomeLayout({
       </main>
     </>
   );
-}
+};
+
+export default UserIdLayout;

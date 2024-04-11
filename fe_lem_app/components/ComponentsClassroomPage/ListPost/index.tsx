@@ -5,9 +5,20 @@ import { redirect } from "next/navigation";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { any } from "zod";
-import { CheckCircle, CheckIcon, ChevronDown, Menu, SendHorizontal, UsersRound } from "lucide-react";
+import {
+  CheckCircle,
+  CheckIcon,
+  ChevronDown,
+  Menu,
+  SendHorizontal,
+  UsersRound,
+} from "lucide-react";
 import { FilterData } from "@/models/filter";
-import { CreateClassEvent, ListClassEvent, UpdateClassEvent } from "@/services/classevent-service";
+import {
+  CreateClassEvent,
+  ListClassEvent,
+  UpdateClassEvent,
+} from "@/services/class-event-service";
 import { ClassEvent } from "@/models/classevent";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 
@@ -37,7 +48,7 @@ export const ListPost = () => {
   const filter: FilterData = {
     skip: 0,
     take: 10,
-    isClassWork: false
+    isClassWork: false,
   };
 
   const [classEvents, setClassEvents] = useState<any>();
@@ -70,13 +81,13 @@ export const ListPost = () => {
   const [showModal, setShowModal] = useState<any>(false);
   const [selected, setSelected] = useState(PostAction[0]);
 
-  const [createComment, setCreateComment] = useState([{
-    id: 0,
-    classEventId: 0,
-    description: "",
-  }
-  ]
-  );
+  const [createComment, setCreateComment] = useState([
+    {
+      id: 0,
+      classEventId: 0,
+      description: "",
+    },
+  ]);
 
   const [createPost, setCreatePost] = useState({
     id: 0,
@@ -111,22 +122,24 @@ export const ListPost = () => {
       deletedAt: new Date(),
     };
     UpdateClassEvent(data);
-  }
+  };
 
   const actionComment = (classEvent, descriptionComment) => {
     console.log(descriptionComment);
-    
+
     if (classEvent.comment != null) {
       setCreateComment(classEvent.comment);
-    }
-    else {
+    } else {
       setCreateComment([]);
     }
-    setCreateComment([...createComment, {
-      id: 0,
-      classEventId: classEvent.id,
-      description: descriptionComment,
-    }])
+    setCreateComment([
+      ...createComment,
+      {
+        id: 0,
+        classEventId: classEvent.id,
+        description: descriptionComment,
+      },
+    ]);
     const data = {
       id: classEvent.id,
       classroomId: classEvent.classroomId,
@@ -143,7 +156,7 @@ export const ListPost = () => {
       deletedAt: new Date(),
     };
     UpdateClassEvent(data);
-  }
+  };
 
   const showUpdateModal = (index, classEvent) => {
     if (index == 1) {
@@ -164,9 +177,7 @@ export const ListPost = () => {
         deletedAt: new Date(),
       };
       setCreatePost(data);
-
-    }
-    else {
+    } else {
       const data = {
         id: classEvent.id,
         classroomId: classEvent.classroomId,
@@ -184,13 +195,13 @@ export const ListPost = () => {
       };
       UpdateClassEvent(data);
     }
-  }
+  };
   return (
     <div className="col-span-2 m-4 flex flex-col items-center space-y-4">
       <div className="ml-25 w-4/5 rounded-lg border border-slate-500 p-2 shadow-lg shadow-slate-400">
         {post == false ? (
           <button onClick={() => setPost(true)} className="w-full">
-            <div className="p-5 flex flex-row gap-3">
+            <div className="flex flex-row gap-3 p-5">
               <img
                 className="rounded-full border"
                 width={60}
@@ -207,11 +218,16 @@ export const ListPost = () => {
             </div>
           </button>
         ) : (
-          <div className="p-5 flex flex-col gap-3">
+          <div className="flex flex-col gap-3 p-5">
             <input
               name="name"
               value={createPost.name}
-              onChange={e => setCreatePost({ ...createPost, [e.target.name]: e.target.value })}
+              onChange={(e) =>
+                setCreatePost({
+                  ...createPost,
+                  [e.target.name]: e.target.value,
+                })
+              }
               type="text"
               placeholder="Title"
               className="rounded-sm border border-cyan-600 px-2 focus:border-blue-400 focus:outline-none"
@@ -219,15 +235,22 @@ export const ListPost = () => {
             <textarea
               name="description"
               value={createPost.description}
-              onChange={e => setCreatePost({ ...createPost, [e.target.name]: e.target.value })}
+              onChange={(e) =>
+                setCreatePost({
+                  ...createPost,
+                  [e.target.name]: e.target.value,
+                })
+              }
               placeholder="Description"
-              className="h-30 rounded-sm border border-cyan-600 px-2 focus:outline-none" />
+              className="h-30 rounded-sm border border-cyan-600 px-2 focus:outline-none"
+            />
             <div className="flex justify-end gap-3">
               <button
                 onClick={() => {
                   CreateClassEvent(createPost);
                 }}
-                className="h-8 w-20 rounded-full border bg-primary text-white">
+                className="h-8 w-20 rounded-full border bg-primary text-white"
+              >
                 Send
               </button>
               <button
@@ -245,8 +268,8 @@ export const ListPost = () => {
           key={classEvent.id}
           className="ml-25 w-4/5 rounded-lg border border-slate-500 p-2"
         >
-          <div className="flex gap-3 justify-between items-center p-2">
-            <div className="flex gap-3 items-center">
+          <div className="flex items-center justify-between gap-3 p-2">
+            <div className="flex items-center gap-3">
               <img
                 className="rounded-full border"
                 width={60}
@@ -264,7 +287,7 @@ export const ListPost = () => {
             <div>
               <Listbox value={selected} onChange={setSelected}>
                 <div className="relative z-10 pl-15">
-                  <Listbox.Button >
+                  <Listbox.Button>
                     <Menu className="text-gray-400" />
                   </Listbox.Button>
                   <Transition
@@ -278,7 +301,8 @@ export const ListPost = () => {
                         <Listbox.Option
                           key={actionId}
                           className={({ active }) =>
-                            `relative w-full cursor-default select-none py-2 p-4 ${active ? "bg-amber-100 text-amber-900" : ""
+                            `relative w-full cursor-default select-none p-4 py-2 ${
+                              active ? "bg-amber-100 text-amber-900" : ""
                             }`
                           }
                           value={action}
@@ -292,19 +316,23 @@ export const ListPost = () => {
                 </div>
               </Listbox>
             </div>
-
           </div>
           <div>
-            <p className="p-2 relative text-base">{classEvent.description}</p>
+            <p className="relative p-2 text-base">{classEvent.description}</p>
           </div>
           <hr></hr>
           <div className="flex flex-col items-start gap-3 p-2">
-
             <section className="grid place-items-center">
               <label>
-                <input className="peer/showLabel absolute scale-0" type="checkbox" />
+                <input
+                  className="peer/showLabel absolute scale-0"
+                  type="checkbox"
+                />
                 <span className="block max-h-14 overflow-hidden px-4 py-0 transition-all duration-300 peer-checked/showLabel:max-h-52">
-                  <h3 className="flex h-14 cursor-pointer items-center font-semibold"><UsersRound size={20} />Show all comment</h3>
+                  <h3 className="flex h-14 cursor-pointer items-center font-semibold">
+                    <UsersRound size={20} />
+                    Show all comment
+                  </h3>
                   <div>
                     {classEvent.comments?.map((comment, index) => (
                       <div key={index} className="flex items-center gap-1 ">
@@ -328,7 +356,7 @@ export const ListPost = () => {
               </label>
             </section>
 
-            <div className="flex pr-5 w-full items-center gap-2">
+            <div className="flex w-full items-center gap-2 pr-5">
               <img
                 className="m-2 rounded-full border"
                 width={40}
@@ -339,7 +367,7 @@ export const ListPost = () => {
                 name="description"
                 type="text"
                 className="w-full rounded-full border border-slate-600 px-3 py-1 focus:outline-none"
-                onChange={e => setDescriptionComment(e.target.value) }
+                onChange={(e) => setDescriptionComment(e.target.value)}
               />
               <button
                 onClick={() => actionComment(classEvent, descriptionComment)}
@@ -400,7 +428,7 @@ export const ListPost = () => {
                                 placeholder:text-gray-400 
                                 focus:ring-2 focus:ring-inset 
                                 focus:ring-violet-600 sm:text-sm sm:leading-6"
-                          onChange={e => setName(e.target.value)}
+                          onChange={(e) => setName(e.target.value)}
                           placeholder="Title"
                         />
                         <textarea
@@ -410,7 +438,7 @@ export const ListPost = () => {
                                 placeholder:text-gray-400 
                                 focus:ring-2 focus:ring-inset 
                                 focus:ring-violet-600 sm:text-sm sm:leading-6"
-                          onChange={e => setDescription(e.target.value)}
+                          onChange={(e) => setDescription(e.target.value)}
                           placeholder="Description"
                         />
                       </div>
@@ -440,7 +468,6 @@ export const ListPost = () => {
           </div>
         </Dialog>
       </Transition.Root>
-
     </div>
   );
 };

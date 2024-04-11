@@ -1,42 +1,43 @@
+"use client";
 import { redirect } from "next/navigation";
 import { School } from "lucide-react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { ListBoard } from "@/services/board-service";
 import { ListBox } from "@/components/ListBox";
+import { Classroom } from "@/models/classroom";
+import { useEffect, useState } from "react";
+import { ListOwn } from "@/services/class-service";
 
-const useFakeAuth = () => {
-  const user = {
-    userId: "1234567890",
-    username: "John Doe",
-    email: "johndoe@example.com",
-  };
-
-  return {
-    userId: user.userId,
-    username: user.username,
-    email: user.email,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  };
-};
-
-export const ClassList = async () => {
-  const { userId } = useFakeAuth();
-  if (userId == "0") {
-    return redirect("/select-org");
+export const ClassList = () => {
+  var currentUserId = "";
+  if (typeof window !== "undefined") {
+    currentUserId = localStorage.getItem("userId") ?? "";
   }
-
-  const boards = await ListBoard();
-
-  // const availableCount = await getAvailableCount();
+  const [classRoomData, setclassRoomData] = useState<Classroom[] | null>(null);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (currentUserId !== "") {
+        try {
+          const data = await ListOwn(currentUserId);
+          setclassRoomData(data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      }
+    };
+    fetchData();
+  }, [currentUserId]);
   return (
     <>
       <div className="flex items-center text-lg font-semibold text-neutral-700">
         <School className="mr-3" /> My classes
       </div>
-      <ListBox isRecently={false} dataBoards={boards} dataClasses={null} />
+      <ListBox
+        isRecently={false}
+        dataBoards={null}
+        dataClasses={classRoomData}
+      />
     </>
   );
 };
