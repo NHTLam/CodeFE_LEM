@@ -16,7 +16,7 @@ import {
 import { FilterData } from "@/models/filter";
 import {
   CreateClassEvent,
-  FetchDataClassEvent,
+  ListClassEvent,
   UpdateClassEvent,
 } from "@/services/class-event-service";
 import { ClassEvent } from "@/models/classevent";
@@ -48,7 +48,7 @@ export const ListPost = () => {
   const filter: FilterData = {
     skip: 0,
     take: 10,
-    isClassWork: true,
+    isClassWork: false,
   };
 
   const [classEvents, setClassEvents] = useState<any>();
@@ -57,7 +57,7 @@ export const ListPost = () => {
   useEffect(() => {
     if (first == true) {
       const fetchData = async () => {
-        const data = await FetchDataClassEvent(filter);
+        const data = await ListClassEvent(filter);
         setClassEvents(data);
       };
       fetchData();
@@ -75,15 +75,19 @@ export const ListPost = () => {
   ];
 
   const [post, setPost] = useState<any>(false);
-  const [showComment, setShowComment] = useState<any>(false);
+  const [description, setDescription] = useState<any>("");
+  const [descriptionComment, setDescriptionComment] = useState<any>("");
+  const [name, setName] = useState<any>("");
   const [showModal, setShowModal] = useState<any>(false);
   const [selected, setSelected] = useState(PostAction[0]);
 
-  const [createComment, setCreateComment] = useState({
-    id: 0,
-    classEventId: 0,
-    description: "",
-  });
+  const [createComment, setCreateComment] = useState([
+    {
+      id: 0,
+      classEventId: 0,
+      description: "",
+    },
+  ]);
 
   const [createPost, setCreatePost] = useState({
     id: 0,
@@ -101,9 +105,78 @@ export const ListPost = () => {
     comment: createComment,
   });
 
+  const UpdateClassEventFunc = (createPost, name, description) => {
+    const data = {
+      id: createPost.id,
+      classroomId: createPost.classroomId,
+      code: createPost.code,
+      name: name,
+      isClassWork: createPost.isClassWork,
+      description: description,
+      instruction: createPost.instruction,
+      comment: [createPost.comment, createComment],
+      pinned: createPost.pinned,
+      createdAt: new Date(),
+      endAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: new Date(),
+    };
+    UpdateClassEvent(data);
+  };
+
+  const actionComment = (classEvent, descriptionComment) => {
+    console.log(descriptionComment);
+
+    if (classEvent.comment != null) {
+      setCreateComment(classEvent.comment);
+    } else {
+      setCreateComment([]);
+    }
+    setCreateComment([
+      ...createComment,
+      {
+        id: 0,
+        classEventId: classEvent.id,
+        description: descriptionComment,
+      },
+    ]);
+    const data = {
+      id: classEvent.id,
+      classroomId: classEvent.classroomId,
+      code: classEvent.code,
+      name: classEvent.name,
+      isClassWork: classEvent.isClassWork,
+      description: classEvent.description,
+      instruction: classEvent.instruction,
+      comment: createComment,
+      pinned: classEvent.pinned,
+      createdAt: new Date(),
+      endAt: new Date(),
+      updatedAt: new Date(),
+      deletedAt: new Date(),
+    };
+    UpdateClassEvent(data);
+  };
+
   const showUpdateModal = (index, classEvent) => {
     if (index == 1) {
       setShowModal(true);
+      const data = {
+        id: classEvent.id,
+        classroomId: classEvent.classroomId,
+        code: classEvent.code,
+        name: classEvent.name,
+        isClassWork: classEvent.isClassWork,
+        description: classEvent.description,
+        instruction: classEvent.instruction,
+        comment: [classEvent.comment],
+        pinned: classEvent.pinned,
+        createdAt: new Date(),
+        endAt: new Date(),
+        updatedAt: new Date(),
+        deletedAt: new Date(),
+      };
+      setCreatePost(data);
     } else {
       const data = {
         id: classEvent.id,
@@ -113,18 +186,16 @@ export const ListPost = () => {
         isClassWork: classEvent.isClassWork,
         description: classEvent.description,
         instruction: classEvent.instruction,
-        comment: createComment,
+        comment: [classEvent.comment],
         pinned: true,
         createdAt: new Date(),
         endAt: new Date(),
         updatedAt: new Date(),
         deletedAt: new Date(),
       };
-      setCreatePost(data);
       UpdateClassEvent(data);
     }
   };
-
   return (
     <div className="col-span-2 m-4 flex flex-col items-center space-y-4">
       <div className="ml-25 w-4/5 rounded-lg border border-slate-500 p-2 shadow-lg shadow-slate-400">
@@ -149,6 +220,7 @@ export const ListPost = () => {
         ) : (
           <div className="flex flex-col gap-3 p-5">
             <input
+              name="name"
               value={createPost.name}
               onChange={(e) =>
                 setCreatePost({
@@ -161,6 +233,7 @@ export const ListPost = () => {
               className="rounded-sm border border-cyan-600 px-2 focus:border-blue-400 focus:outline-none"
             />
             <textarea
+              name="description"
               value={createPost.description}
               onChange={(e) =>
                 setCreatePost({
@@ -291,10 +364,14 @@ export const ListPost = () => {
                 src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
               />
               <input
+                name="description"
                 type="text"
                 className="w-full rounded-full border border-slate-600 px-3 py-1 focus:outline-none"
+                onChange={(e) => setDescriptionComment(e.target.value)}
               />
-              <button>
+              <button
+                onClick={() => actionComment(classEvent, descriptionComment)}
+              >
                 <SendHorizontal />
               </button>
             </div>
@@ -344,36 +421,24 @@ export const ListPost = () => {
                       </Dialog.Title>
                       <div className="mt-2">
                         <input
-                          type="text"
+                          type="name"
                           name="title"
                           className="block w-full rounded-md border-0 py-1.5 pl-3 
                                 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 
                                 placeholder:text-gray-400 
                                 focus:ring-2 focus:ring-inset 
                                 focus:ring-violet-600 sm:text-sm sm:leading-6"
-                          value={createPost.name}
-                          onChange={(e) =>
-                            setCreatePost({
-                              ...createPost,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
+                          onChange={(e) => setName(e.target.value)}
                           placeholder="Title"
                         />
                         <textarea
-                          name="title"
+                          name="description"
                           className="mt-5 block w-full rounded-md border-0 py-1.5 pl-3 
                                 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 
                                 placeholder:text-gray-400 
                                 focus:ring-2 focus:ring-inset 
                                 focus:ring-violet-600 sm:text-sm sm:leading-6"
-                          value={createPost.description}
-                          onChange={(e) =>
-                            setCreatePost({
-                              ...createPost,
-                              [e.target.name]: e.target.value,
-                            })
-                          }
+                          onChange={(e) => setDescription(e.target.value)}
                           placeholder="Description"
                         />
                       </div>
@@ -381,6 +446,9 @@ export const ListPost = () => {
                         <button
                           type="submit"
                           className="inline-flex w-full justify-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-2"
+                          onClick={() =>
+                            UpdateClassEventFunc(createPost, name, description)
+                          }
                         >
                           Update
                         </button>
