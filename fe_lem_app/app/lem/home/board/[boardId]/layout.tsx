@@ -1,38 +1,14 @@
 import { notFound, redirect } from "next/navigation";
 
 import Navbar from "@/components/ComponentsUserPage/Navbar";
+import { defaultImages } from "@/public/defaultImages/images";
 import { GetBoard } from "@/services/board-service";
-
-const useFakeAuth = () => {
-  const user = {
-    userId: "1234567890",
-    username: "John Doe",
-    email: "johndoe@example.com",
-  };
-
-  return {
-    userId: user.userId,
-    username: user.username,
-    email: user.email,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  };
-};
 
 export async function generateMetadata({
   params,
 }: {
   params: { boardId: string };
 }) {
-  const { userId } = useFakeAuth();
-
-  if (!userId) {
-    return {
-      title: "Board",
-    };
-  }
-
   const board = await GetBoard(Number(params.boardId));
 
   return {
@@ -47,26 +23,37 @@ const BoardIdLayout = async ({
   children: React.ReactNode;
   params: { boardId: string };
 }) => {
-  const { userId } = useFakeAuth();
+  // const { userId } = useFakeAuth();
 
-  if (!userId) {
-    redirect("/select-org");
-  }
+  // if (!userId) {
+  //   redirect("/");
+  // }
 
   const board = await GetBoard(Number(params.boardId));
-
   if (!board) {
     notFound();
   }
 
   return (
-    <div
-      className="h-screen bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${board.imageUrl})` }}
-    >
-      <Navbar />
-      {children}
-    </div>
+    <>
+      {board.imageUrl === null || board.imageUrl === "" ? (
+        <div
+          className="h-screen bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${defaultImages[5].urls.full})` }}
+        >
+          <Navbar />
+          {children}
+        </div>
+      ) : (
+        <div
+          className="h-screen bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${board.imageUrl})` }}
+        >
+          <Navbar />
+          {children}
+        </div>
+      )}
+    </>
   );
 };
 

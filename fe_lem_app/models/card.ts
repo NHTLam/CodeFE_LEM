@@ -2,13 +2,13 @@ import { Board } from "./board";
 import { Job } from "./job";
 
 export interface Card {
-  id: number;
-  boardId: number;
+  id?: number;
+  boardId?: number;
   name: string;
   order?: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
   deletedAt?: Date;
-  board: Board;
+  board?: Board;
   jobs?: Job[];
 }

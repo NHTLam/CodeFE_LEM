@@ -9,27 +9,13 @@ import { DragDropContext, Droppable } from "@hello-pangea/dnd";
 // import { updateListOrder } from "@/actions/update-list-order";
 // import { updateCardOrder } from "@/actions/update-card-order";
 
-import { ListForm } from "@/components/ComponentsBoard/ListForm";
-import { ListItem } from "@/components/ComponentsBoard/ListItem";
+import { CardInput } from "@/components/ComponentsBoard/CardInput";
+import { ListJob } from "@/components/ComponentsBoard/ListJob";
+import { GetBoard } from "@/services/board-service";
+import { Card } from "@/models/card";
+import { Board } from "@/models/board";
 
-interface ListContainerProps {
-  data: {
-    id: string;
-    title: string;
-    order: number;
-    boardId: string;
-    createdAt: Date;
-    updatedAt: Date;
-    cards: {
-      id: string;
-      title: string;
-      order: number;
-      description: string | null;
-      listId: string;
-      createdAt: Date;
-      updatedAt: Date;
-    }[];
-  }[];
+interface ListCardProps {
   boardId: string;
 }
 
@@ -41,8 +27,9 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
   return result;
 }
 
-export const ListContainer = ({ data, boardId }: ListContainerProps) => {
-  const [orderedData, setOrderedData] = useState(data);
+export const ListCard = ({ boardId }: ListCardProps) => {
+  const [orderedCard, setOrderedCard] = useState<Card[] | null>(null);
+  const [board, setBoard] = useState<Board | null>(null);
 
   // const { execute: executeUpdateListOrder } = useAction(updateListOrder, {
   //   onSuccess: () => {
@@ -63,8 +50,13 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
   // });
 
   useEffect(() => {
-    setOrderedData(data);
-  }, [data]);
+    const fecthData = async () => {
+      const board = await GetBoard(Number(boardId));
+      setOrderedCard(board?.cards ?? null);
+      setBoard(board);
+    };
+    fecthData();
+  }, []);
 
   const onDragEnd = (result: any) => {
     const { destination, source, type } = result;
@@ -83,23 +75,23 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
 
     // User moves a list
     if (type === "list") {
-      const items = reorder(orderedData, source.index, destination.index).map(
+      const items = reorder(orderedCard!, source.index, destination.index).map(
         (item, index) => ({ ...item, order: index }),
       );
 
-      setOrderedData(items);
+      setOrderedCard(items);
       //executeUpdateListOrder({ items, boardId });
     }
 
     // User moves a card
     if (type === "card") {
-      let newOrderedData = [...orderedData];
+      let neworderedCard = [...orderedCard!];
 
       // Source and destination list
-      const sourceList = newOrderedData.find(
+      const sourceList = neworderedCard.find(
         (list) => list.id === source.droppableId,
       );
-      const destList = newOrderedData.find(
+      const destList = neworderedCard.find(
         (list) => list.id === destination.droppableId,
       );
 
@@ -107,20 +99,20 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
         return;
       }
 
-      // Check if cards exists on the sourceList
-      if (!sourceList.cards) {
-        sourceList.cards = [];
+      // Check if jobs exists on the sourceList
+      if (!sourceList.jobs) {
+        sourceList.jobs = [];
       }
 
-      // Check if cards exists on the destList
-      if (!destList.cards) {
-        destList.cards = [];
+      // Check if jobs exists on the destList
+      if (!destList.jobs) {
+        destList.jobs = [];
       }
 
-      // Moving the card in the same list
+      // Moving the job in the same list
       if (source.droppableId === destination.droppableId) {
         const reorderedCards = reorder(
-          sourceList.cards,
+          sourceList.jobs,
           source.index,
           destination.index,
         );
@@ -129,9 +121,9 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
           card.order = idx;
         });
 
-        sourceList.cards = reorderedCards;
+        sourceList.jobs = reorderedCards;
 
-        setOrderedData(newOrderedData);
+        setOrderedCard(neworderedCard);
         // executeUpdateCardOrder({
         //   boardId: boardId,
         //   items: reorderedCards,
@@ -140,24 +132,24 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
         // User moves the card to another list
       } else {
         // Remove card from the source list
-        const [movedCard] = sourceList.cards.splice(source.index, 1);
+        const [movedCard] = sourceList.jobs.splice(source.index, 1);
 
         // Assign the new listId to the moved card
-        movedCard.listId = destination.droppableId;
+        movedCard.id = destination.droppableId;
 
         // Add card to the destination list
-        destList.cards.splice(destination.index, 0, movedCard);
+        destList.jobs.splice(destination.index, 0, movedCard);
 
-        sourceList.cards.forEach((card, idx) => {
+        sourceList.jobs.forEach((card, idx) => {
           card.order = idx;
         });
 
         // Update the order for each card in the destination list
-        destList.cards.forEach((card, idx) => {
+        destList.jobs.forEach((card, idx) => {
           card.order = idx;
         });
 
-        setOrderedData(newOrderedData);
+        setOrderedCard(neworderedCard);
         // executeUpdateCardOrder({
         //   boardId: boardId,
         //   items: destList.cards,
@@ -175,11 +167,13 @@ export const ListContainer = ({ data, boardId }: ListContainerProps) => {
             ref={provided.innerRef}
             className="flex h-full gap-x-3"
           >
-            {orderedData.map((list, index) => {
-              return <ListItem key={list.id} index={index} data={list} />;
-            })}
+            {orderedCard &&
+              orderedCard.length > 0 &&
+              orderedCard!.map((list, index) => {
+                return <ListJob key={list.id} index={index} data={list} />;
+              })}
             {provided.placeholder}
-            <ListForm />
+            <CardInput boardData={board!} />
             <div className="w-1 flex-shrink-0" />
           </ol>
         )}

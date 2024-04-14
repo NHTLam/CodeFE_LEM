@@ -14,6 +14,8 @@ import {
 import { useEffect, useState } from "react";
 import { ListOwn } from "@/services/class-service";
 import { Classroom } from "@/models/classroom";
+import { GetOwnBoard } from "@/services/board-service";
+import { Board } from "@/models/board";
 
 interface SidebarProps {
   storageKey?: string;
@@ -29,6 +31,7 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
     {},
   );
   const [listClass, setlistClass] = useState<Classroom[] | null>(null);
+  const [boardOwn, setboardOwn] = useState<Board | null>(null);
   const defaultAccordionValue: string[] = Object.keys(expanded).reduce(
     (acc: string[], key: string) => {
       if (expanded[key]) {
@@ -50,9 +53,13 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
   useEffect(() => {
     const fetchData = async () => {
       if (currentUserId !== "") {
-        const data = await ListOwn(currentUserId);
-        if (data !== null) {
-          setlistClass(data);
+        const classesOwn = await ListOwn(currentUserId);
+        const boardOwn = await GetOwnBoard(Number(currentUserId));
+        if (classesOwn !== null) {
+          setlistClass(classesOwn);
+        }
+        if (boardOwn !== null) {
+          setboardOwn(boardOwn);
         }
       }
     };
@@ -90,7 +97,11 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
             Home
           </button>
         </Link>
-        <Link href="/lem/home/board/7">
+        <Link
+          href={
+            boardOwn === null ? `/error` : `/lem/home/board/${boardOwn?.id}`
+          }
+        >
           <button className="text-body-color dark:text-body-color-dark dark:shadow-two mt-5 flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
             <span className="mr-3">
               <ClipboardList />
