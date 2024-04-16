@@ -35,7 +35,6 @@ export const ListClassWork = () => {
 
   const filter: FilterData = {
     skip: 0,
-    take: 10,
     isClassWork: true,
   };
 

@@ -1,3 +1,4 @@
+import { Answer } from "./answer";
 import { ClassEvent } from "./classevent";
 
 export interface Question {
@@ -8,4 +9,5 @@ export interface Question {
     studentAnswer?: string;
     description?: string;
     classEvent: ClassEvent;
+    answer?: Answer[]; 
 }

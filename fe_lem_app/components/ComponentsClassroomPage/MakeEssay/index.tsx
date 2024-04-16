@@ -8,12 +8,15 @@ import { CheckIcon, ChevronDown, Circle, Upload } from "lucide-react";
 import { Listbox, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { FilterData } from "@/models/filter";
-import { ListClassEvent } from "@/services/classevent-service";
+import { ListClassEvent } from "@/services/class-event-service";
 import { FileTable } from "../FileTable";
 
-export const MakeClassWork = () => {
+export const MakeEssay = ({ParentCallBack}) => {
 
-      const [instruction, setInstruction] = useState<any>();
+      const handlerProp = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+        ParentCallBack(event.target.value);
+        
+      }
 
   return (
     <>
@@ -21,7 +24,7 @@ export const MakeClassWork = () => {
         <p>Instruction: </p>
         <textarea
           rows={7}
-          onChange={e => setInstruction(e.target.value)}
+          onChange={handlerProp}
           className="flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5"
         ></textarea>
 

@@ -21,6 +21,7 @@ import {
 } from "@/services/class-event-service";
 import { ClassEvent } from "@/models/classevent";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
+import { CreateComment } from "@/services/comment-service";
 
 const useFakeAuth = () => {
   const user = {
@@ -81,14 +82,6 @@ export const ListPost = () => {
   const [showModal, setShowModal] = useState<any>(false);
   const [selected, setSelected] = useState(PostAction[0]);
 
-  const [createComment, setCreateComment] = useState([
-    {
-      id: 0,
-      classEventId: 0,
-      description: "",
-    },
-  ]);
-
   const [createPost, setCreatePost] = useState({
     id: 0,
     classroomId: 1,
@@ -102,7 +95,6 @@ export const ListPost = () => {
     endAt: new Date(),
     updatedAt: new Date(),
     deletedAt: new Date(),
-    comment: createComment,
   });
 
   const UpdateClassEventFunc = (createPost, name, description) => {
@@ -114,7 +106,6 @@ export const ListPost = () => {
       isClassWork: createPost.isClassWork,
       description: description,
       instruction: createPost.instruction,
-      comment: [createPost.comment, createComment],
       pinned: createPost.pinned,
       createdAt: new Date(),
       endAt: new Date(),
@@ -124,38 +115,16 @@ export const ListPost = () => {
     UpdateClassEvent(data);
   };
 
-  const actionComment = (classEvent, descriptionComment) => {
-    console.log(descriptionComment);
+  const actionComment = (classEventId, descriptionComment) => {
 
-    if (classEvent.comment != null) {
-      setCreateComment(classEvent.comment);
-    } else {
-      setCreateComment([]);
-    }
-    setCreateComment([
-      ...createComment,
-      {
-        id: 0,
-        classEventId: classEvent.id,
-        description: descriptionComment,
-      },
-    ]);
     const data = {
-      id: classEvent.id,
-      classroomId: classEvent.classroomId,
-      code: classEvent.code,
-      name: classEvent.name,
-      isClassWork: classEvent.isClassWork,
-      description: classEvent.description,
-      instruction: classEvent.instruction,
-      comment: createComment,
-      pinned: classEvent.pinned,
-      createdAt: new Date(),
-      endAt: new Date(),
-      updatedAt: new Date(),
-      deletedAt: new Date(),
+      id: 0,
+      classEventId: classEventId,
+      description: descriptionComment,
     };
-    UpdateClassEvent(data);
+    console.log(data);
+    
+    CreateComment(data);
   };
 
   const showUpdateModal = (index, classEvent) => {
@@ -201,7 +170,7 @@ export const ListPost = () => {
       <div className="ml-25 w-4/5 rounded-lg border border-slate-500 p-2 shadow-lg shadow-slate-400">
         {post == false ? (
           <button onClick={() => setPost(true)} className="w-full">
-            <div className="flex flex-row gap-3 p-5">
+            <div className="flex flex-row gap-3 p-5 items-center">
               <img
                 className="rounded-full border"
                 width={60}
@@ -212,7 +181,7 @@ export const ListPost = () => {
                 <p className="text-lg">User</p>
                 <p className="text-default-500 text-sm">Role</p>
               </div>
-              <h1 className="ml-40 items-center text-xl font-semibold">
+              <h1 className="ml-60 items-center text-xl font-semibold">
                 Create Post
               </h1>
             </div>
@@ -370,7 +339,7 @@ export const ListPost = () => {
                 onChange={(e) => setDescriptionComment(e.target.value)}
               />
               <button
-                onClick={() => actionComment(classEvent, descriptionComment)}
+                onClick={() => actionComment(classEvent.id, descriptionComment)}
               >
                 <SendHorizontal />
               </button>
