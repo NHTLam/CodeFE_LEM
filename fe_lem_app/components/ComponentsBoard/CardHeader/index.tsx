@@ -10,30 +10,15 @@ import { useState, useRef, ElementRef } from "react";
 import { useForm } from "react-hook-form";
 import { FormInput } from "@/components/Form/form-input";
 import { ListOption } from "@/components/ComponentsBoard/ListOption";
+import { Card } from "@/models/card";
 
-interface ListHeaderProps {
-  data: {
-    id: string;
-    title: string;
-    order: number;
-    boardId: string;
-    createdAt: Date;
-    updatedAt: Date;
-    cards: {
-      id: string;
-      title: string;
-      order: number;
-      description: string | null;
-      listId: string;
-      createdAt: Date;
-      updatedAt: Date;
-    }[];
-  };
+interface CardHeaderProps {
+  data: Card;
   onAddCard: () => void;
 }
 
-export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
-  const [title, setTitle] = useState(data.title);
+export const CardHeader = ({ data, onAddCard }: CardHeaderProps) => {
+  const [title, setTitle] = useState(data.name);
   const [isEditing, setIsEditing] = useState(false);
   const {
     register,
@@ -82,10 +67,6 @@ export const ListHeader = ({ data, onAddCard }: ListHeaderProps) => {
   //   //   boardId,
   //   // });
   // };
-
-  const onBlur = () => {
-    formRef.current?.requestSubmit();
-  };
 
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {

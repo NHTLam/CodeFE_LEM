@@ -3,13 +3,19 @@ import { FormPopover } from "@/components/Form/form-popover";
 import { Board } from "@/models/board";
 import { Classroom } from "@/models/classroom";
 
-interface ListBox {
+interface ListBoxPros {
   isRecently: boolean;
+  classroomIdForBoard: number;
   dataBoards: Board[] | null;
   dataClasses: Classroom[] | null;
 }
 
-export const ListBox = ({ isRecently, dataBoards, dataClasses }: ListBox) => {
+export const ListBox = ({
+  classroomIdForBoard,
+  isRecently,
+  dataBoards,
+  dataClasses,
+}: ListBoxPros) => {
   const datas = dataBoards != null ? dataBoards : dataClasses;
   const isForBoard = dataBoards != null;
   console.log(datas);
@@ -23,7 +29,11 @@ export const ListBox = ({ isRecently, dataBoards, dataClasses }: ListBox) => {
             {datas?.map((data) => (
               <Link
                 key={data.id}
-                href={`/lem/classroom/posts`}
+                href={
+                  isForBoard
+                    ? `/lem/home/board/${data?.id}`
+                    : `/lem/classroom/${data?.id}/posts`
+                }
                 className="group relative aspect-video h-35 w-60 overflow-hidden rounded-sm bg-sky-700 bg-cover bg-center bg-no-repeat p-2"
                 style={{
                   backgroundImage: `url(${
@@ -47,6 +57,7 @@ export const ListBox = ({ isRecently, dataBoards, dataClasses }: ListBox) => {
             isForBoard={isForBoard}
             classroomData={dataClasses}
             boardData={dataBoards}
+            classroomIdForBoard={classroomIdForBoard}
           >
             <div
               role="button"

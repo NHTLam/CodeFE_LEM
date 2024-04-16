@@ -15,7 +15,6 @@ interface WorkIdPageProps {
 }
 
 const DoEssayPage = ({ params }: WorkIdPageProps) => {
-
   const [classWork, setClassWork] = useState<any>();
   const [first, setFirst] = useState<any>(true);
   const [studentAnswer, setStudentAnswer] = useState<any>("");
@@ -23,7 +22,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
   const filter: any = {
     id: parseInt(params.doId),
     code: "",
-    name: ""
+    name: "",
   };
 
   useEffect(() => {
@@ -71,9 +70,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
           </div>
         </div>
         <p className="mx-2 mt-5 font-bold">Description:</p>
-        <p className="mx-2">
-          {classWork?.questions[0].description}
-        </p>
+        <p className="mx-2">{classWork?.questions[0].description}</p>
       </div>
       <hr className="mx-7 my-4" />
       <div className="mx-5">

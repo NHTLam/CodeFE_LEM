@@ -1,14 +1,17 @@
 import { Card } from "./card";
+import { AppUserBoardMapping } from "./appUserBoardMapping";
 
 export type Board = {
-  id: number;
-  code: string;
-  name: string;
+  id?: number;
+  code?: string;
+  name?: string;
   description?: string;
-  imageUrl?: string;
   isFavourite?: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  imageUrl?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   deletedAt?: Date;
-  card?: Card[];
+  classroomId?: number;
+  appUserBoardMappings?: AppUserBoardMapping[];
+  cards?: Card[];
 };

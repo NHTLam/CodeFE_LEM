@@ -1,3 +1,5 @@
+import { AppUserRoleMapping } from "./appUserRoleMapping";
+
 export type AppUser = {
     id?: number;
     fullName: string;
@@ -7,4 +9,5 @@ export type AppUser = {
     gender?: string;
     password: string;
     statusId: number;
+    appUserRoleMappings?: AppUserRoleMapping[];
 };

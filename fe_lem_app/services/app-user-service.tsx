@@ -19,6 +19,23 @@ export async function ListAppUser() {
   }
 }
 
+export async function ListAppUserByClassroom(classroomId: number) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "list-by-classroom", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ classroomId }),
+    });
+    const appUsers: AppUser[] = await res.json();
+    return appUsers;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
 export async function GetAppUser(id: number) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "get", {
