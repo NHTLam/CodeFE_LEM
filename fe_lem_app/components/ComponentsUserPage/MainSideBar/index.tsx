@@ -7,7 +7,7 @@ import {
   Plus,
   CalendarDays,
   ClipboardList,
-  Settings,
+  DoorOpen,
   Presentation,
   Home,
 } from "lucide-react";
@@ -66,6 +66,10 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
     fetchData();
   }, []);
 
+  const handleMeetingClick = () => {
+    window.open("http://meet.google.com/new", "_blank", "noopener,noreferrer");
+  };
+
   // const mappedData = fakeUserMemberships.map((membership) => ({
   //   organization: membership,
   // }));
@@ -109,7 +113,7 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
             My board
           </button>
         </Link>
-        <Link href="/lem/home/user/calendar">
+        <Link href={`/lem/home/user/${currentUserId}/calendar`}>
           <button className="text-body-color dark:text-body-color-dark dark:shadow-two mt-5 flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
             <span className="mr-3">
               <CalendarDays />
@@ -117,7 +121,10 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
             Calendar
           </button>
         </Link>
-        <button className="text-body-color dark:text-body-color-dark dark:shadow-two mt-5 flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
+        <button
+          onClick={handleMeetingClick}
+          className="text-body-color dark:text-body-color-dark dark:shadow-two mt-5 flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+        >
           <span className="mr-3">
             <Presentation />
           </span>
@@ -125,9 +132,9 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
         </button>
         <button className="text-body-color dark:text-body-color-dark dark:shadow-two mt-5 flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
           <span className="mr-3">
-            <Settings />
+            <DoorOpen />
           </span>
-          Settings
+          Join Class
         </button>
       </div>
       <hr className="mb-5 mt-5" />

@@ -11,6 +11,7 @@ export type Board = {
   createdAt?: Date;
   updatedAt?: Date;
   deletedAt?: Date;
+  classroomId?: number;
   appUserBoardMappings?: AppUserBoardMapping[];
   cards?: Card[];
 };

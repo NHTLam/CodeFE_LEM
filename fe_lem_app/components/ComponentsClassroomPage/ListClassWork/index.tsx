@@ -8,7 +8,7 @@ import { CheckIcon, ChevronDown } from "lucide-react";
 import { Listbox, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { FilterData } from "@/models/filter";
-import { ListClassEvent } from "@/services/classevent-service";
+import { ListClassEvent } from "@/services/class-event-service";
 
 const useFakeAuth = () => {
   const user = {
@@ -36,7 +36,7 @@ export const ListClassWork = () => {
   const filter: FilterData = {
     skip: 0,
     take: 10,
-    isClassWork: true
+    isClassWork: true,
   };
 
   const [classEvents, setClassEvents] = useState<any>();
@@ -89,7 +89,8 @@ export const ListClassWork = () => {
                   <Listbox.Option
                     key={personIdx}
                     className={({ active }) =>
-                      `relative w-full cursor-default select-none py-2 pr-4 ${active ? "bg-amber-100 text-amber-900" : ""
+                      `relative w-full cursor-default select-none py-2 pr-4 ${
+                        active ? "bg-amber-100 text-amber-900" : ""
                       }`
                     }
                     value={person}
@@ -98,8 +99,9 @@ export const ListClassWork = () => {
                       <>
                         <Link href={`${person.link}`}>
                           <span
-                            className={`block truncate pl-5 ${selected ? "font-medium" : "font-normal"
-                              }`}
+                            className={`block truncate pl-5 ${
+                              selected ? "font-medium" : "font-normal"
+                            }`}
                           >
                             {person.name}
                           </span>
@@ -131,7 +133,7 @@ export const ListClassWork = () => {
             key={index}
             className="w-3/4 rounded-lg border border-slate-500 p-6"
           >
-            <div className="flex items-center gap-3 justify-between">
+            <div className="flex items-center justify-between gap-3">
               <div className="flex items-center gap-3">
                 <img
                   className="rounded-full border"
@@ -149,9 +151,10 @@ export const ListClassWork = () => {
                   </h1>
                 </div>
               </div>
-              <Link href={`/lem/classroom/class-work/edit-class-work/essay/do/${classEvent.id}`} >
-                <button
-                 className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+              <Link
+                href={`/lem/classroom/class-work/edit-class-work/essay/do/${classEvent.id}`}
+              >
+                <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
                   Làm bài
                 </button>
               </Link>

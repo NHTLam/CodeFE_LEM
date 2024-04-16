@@ -7,7 +7,8 @@ export interface Job {
     name?: string;
     description?: string;
     order?: number;
-    planTime?: string;
+    startAt?: Date;
+    endAt?: Date;
     color?: string;
     noTodoDone?: number;
     card?: Card;

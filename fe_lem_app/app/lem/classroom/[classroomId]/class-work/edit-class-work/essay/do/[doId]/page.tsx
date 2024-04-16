@@ -4,7 +4,7 @@ import { Circle, ClipboardPen, Upload } from "lucide-react";
 import Link from "next/link";
 import { FeedBackTable } from "@/components/ComponentsClassroomPage/FeedbackTable";
 import { FileTable } from "@/components/ComponentsClassroomPage/FileTable";
-import { GetClassEvent } from "@/services/classevent-service";
+import { GetClassEvent } from "@/services/class-event-service";
 import { FilterData } from "@/models/filter";
 
 interface WorkIdPageProps {
@@ -14,14 +14,13 @@ interface WorkIdPageProps {
 }
 
 const DoEssayPage = ({ params }: WorkIdPageProps) => {
-
   const [classWork, setClassWork] = useState<any>();
   const [first, setFirst] = useState<any>(true);
 
   const filter: any = {
     id: parseInt(params.doId),
     code: "",
-    name: ""
+    name: "",
   };
 
   useEffect(() => {
@@ -55,9 +54,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
           </div>
         </div>
         <p className="mx-2 mt-5 font-bold">Description:</p>
-        <p className="mx-2">
-          {classWork?.questions[0].description}
-        </p>
+        <p className="mx-2">{classWork?.questions[0].description}</p>
       </div>
       <hr className="mx-7 my-4" />
       <div className="mx-5">

@@ -1,3 +1,5 @@
+"use client";
+import { Dialog, Transition } from "@headlessui/react";
 import { Avatar } from "@nextui-org/react";
 import {
   Users,
@@ -5,13 +7,17 @@ import {
   UserCog,
   UserRoundX,
   MessageCircleMore,
+  Code,
+  X,
 } from "lucide-react";
 import Link from "next/link";
+import { Fragment, useState } from "react";
 
-export const ListUser = async () => {
+export const ListUser = () => {
+  const [showGetCodeModal, setShowGetCodeModal] = useState(false);
   const users = [
     {
-      Id: 1,
+      Id: 3,
       FullName: "John Doe",
       UserName: "john.doe",
       Email: "john.doe@example.com",
@@ -53,7 +59,7 @@ export const ListUser = async () => {
       ],
     },
     {
-      Id: 3,
+      Id: 1,
       FullName: "Mike Lee",
       UserName: "mike.lee",
       Email: "mike.lee@example.com",
@@ -117,7 +123,10 @@ export const ListUser = async () => {
     },
   ];
 
-  const currentUserId = 1;
+  var currentUserId = "";
+  if (typeof window !== "undefined") {
+    currentUserId = localStorage.getItem("userId") ?? "";
+  }
 
   const roles = [
     {
@@ -146,9 +155,21 @@ export const ListUser = async () => {
               )}
               {role.Name}
             </div>
-            <button className="absolute right-45 my-1 flex w-40 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
-              Add Member
-            </button>
+            <div className="absolute right-45 flex">
+              {role.Name == "Teacher" ? (
+                <button
+                  onClick={() => setShowGetCodeModal(true)}
+                  className="my-1 mr-3 flex w-40 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+                >
+                  Get Code of Class
+                </button>
+              ) : (
+                <></>
+              )}
+              <button className="my-1 flex w-40 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
+                Add Member
+              </button>
+            </div>
           </div>
           <hr className="mx-40 my-2" />
           {users?.map((user) => (
@@ -173,7 +194,7 @@ export const ListUser = async () => {
                         <UserCog className="w-full" />
                       </Link>
                     </button>
-                    {user.Id === currentUserId ? (
+                    {user.Id === Number(currentUserId) ? (
                       <></>
                     ) : (
                       <button className="my-1 flex w-20 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none">
@@ -196,6 +217,119 @@ export const ListUser = async () => {
           ))}
         </>
       ))}
+
+      {/* <Transition.Root show={showModal} as={Fragment}>
+        <Dialog as="div" className="relative z-50" onClose={setShowModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6">
+                  <div>
+                    <div className="flex gap-y-2">
+                      <div className="flex grow items-center text-2xl font-semibold">
+                        <ClipboardList className="mr-2 h-10 w-10" />
+                        {data.name}
+                      </div>
+                      <button
+                        type="button"
+                        className="float-right flex w-10 justify-center rounded-sm text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
+                        onClick={handleCloseModal}
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root> */}
+
+      <Transition.Root show={showGetCodeModal} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-50"
+          onClose={setShowGetCodeModal}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-xl sm:p-6">
+                  <div>
+                    <div className="flex gap-y-2">
+                      <div className="flex grow items-center text-2xl font-semibold">
+                        <Code className="mr-2 h-10 w-10" />
+                        Class Code
+                      </div>
+                      <button
+                        type="button"
+                        className="float-right flex w-10 justify-center rounded-sm text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
+                        onClick={() => setShowGetCodeModal(false)}
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                    </div>
+                    <hr className="my-2" />
+                    <div className="text-2sm flex grow items-center font-semibold">
+                      Classroom code for teacher:
+                      <p className="ml-3 text-cyan-700">slakjh-asdk-3 c</p>
+                    </div>
+                    <div className="text-2sm flex grow items-center font-semibold">
+                      Classroom code for student:
+                      <p className="ml-3 text-cyan-700">slakjh-asdk-3 s</p>
+                    </div>
+                    <div className="text-2sm flex grow items-center font-semibold">
+                      Classroom code for other:
+                      <p className="ml-3 text-cyan-700">slakjh-asdk-3 o</p>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
     </>
   );
 };

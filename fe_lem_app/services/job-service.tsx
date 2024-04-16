@@ -46,7 +46,8 @@ export async function CreateJob(job: Job) {
         cardId: job.cardId,
         name: job.name,
         decription: job.description,
-        plantime: job.planTime,
+        startAt: job.startAt,
+        endAt: job.endAt,
         todos: job.todos,
       }),
     });
@@ -71,7 +72,8 @@ export async function UpdateJob(job: Job) {
       cardId: job.cardId,
       name: job.name,
       description: job.description,
-      plantime: job.planTime,
+      startAt: job.startAt,
+      endAt: job.endAt,
       todos: job.todos,
     }),
   });

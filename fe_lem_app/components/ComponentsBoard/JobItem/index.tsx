@@ -34,13 +34,18 @@ export const JobItem = ({ data, index }: CardItemProps) => {
   const [isEditTodo, setIsEditTodo] = useState(false);
   const [updateTodoCheckBox, setUpdateTodoCheckBox] = useState("");
   const [value, setValue] = useState({
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: data.startAt ?? new Date(),
+    endDate: data.endAt ?? new Date(),
   });
   const [job, setJob] = useState<Job>(data);
 
   const handleValueChange = (newValue) => {
     setValue(newValue);
+    setJob({
+      ...job,
+      startAt: newValue.startDate,
+      endAt: newValue.endDate,
+    });
   };
 
   const member = [
@@ -50,11 +55,11 @@ export const JobItem = ({ data, index }: CardItemProps) => {
   ];
   const [selected, setSelected] = useState(member[0]);
 
-  function handleClick(e) {
+  function handleClick() {
     setShowModal(true);
   }
 
-  function handleCloseModal(e) {
+  function handleCloseModal() {
     setShowModal(false);
   }
 
@@ -117,7 +122,7 @@ export const JobItem = ({ data, index }: CardItemProps) => {
       </Draggable>
 
       <Transition.Root show={showModal} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={setShowModal}>
+        <Dialog as="div" className="relative z-50" onClose={setShowModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -149,6 +154,7 @@ export const JobItem = ({ data, index }: CardItemProps) => {
                         {data.name}
                       </div>
                       <button
+                        type="button"
                         className="float-right flex w-10 justify-center rounded-sm text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
                         onClick={handleCloseModal}
                       >
@@ -300,6 +306,7 @@ export const JobItem = ({ data, index }: CardItemProps) => {
                                       </>
                                     )}
                                     <button
+                                      type="button"
                                       className="flex w-10 justify-center rounded-sm text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
                                       onClick={() => handleRemoveTodo(index)}
                                     >

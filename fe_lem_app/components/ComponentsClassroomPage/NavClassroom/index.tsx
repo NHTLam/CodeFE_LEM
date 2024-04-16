@@ -1,8 +1,12 @@
 "use client";
 import { Home } from "lucide-react";
 import { usePathname } from "next/navigation";
-export const NavClassroom = () => {
+export const NavClassroom = (params) => {
   const pathname = usePathname();
+  const classroomId = Number(params.classroomId);
+  if (typeof window !== "undefined") {
+    localStorage.setItem("classroomId", classroomId.toString());
+  }
 
   return (
     <div className="mx-25 my-5">
@@ -13,11 +17,11 @@ export const NavClassroom = () => {
             <p className="my-1.5 ml-2 text-xs text-blue-700">Role: Teacher</p>
           </div>
         </div>
-        {pathname === "/lem/classroom/posts" ? (
+        {pathname === `/lem/classroom/${classroomId}/posts` ? (
           <li className="-mb-px mr-1">
             <a
               className="inline-block rounded-t border-l border-r border-t bg-white px-4 py-2 font-semibold text-blue-700"
-              href="/lem/classroom/posts"
+              href={`/lem/classroom/${classroomId}/posts`}
             >
               Posts
             </a>
@@ -26,17 +30,17 @@ export const NavClassroom = () => {
           <li className="mr-1">
             <a
               className="inline-block bg-white px-4 py-2 font-semibold hover:text-blue-800"
-              href="/lem/classroom/posts"
+              href={`/lem/classroom/${classroomId}/posts`}
             >
               Posts
             </a>
           </li>
         )}
-        {pathname === "/lem/classroom/class-work" ? (
+        {pathname === `/lem/classroom/${classroomId}/class-work` ? (
           <li className="-mb-px mr-1">
             <a
               className="inline-block rounded-t border-l border-r border-t bg-white px-4 py-2 font-semibold text-blue-700"
-              href="/lem/classroom/class-work"
+              href={`/lem/classroom/${classroomId}/class-work`}
             >
               Class Works
             </a>
@@ -45,51 +49,47 @@ export const NavClassroom = () => {
           <li className="mr-1">
             <a
               className="inline-block bg-white px-4 py-2 font-semibold hover:text-blue-800"
-              href="/lem/classroom/class-work"
+              href={`/lem/classroom/${classroomId}/class-work`}
             >
               Class Works
             </a>
           </li>
         )}
 
-        {pathname === "/lem/classroom/groups" ? (
+        {pathname === `/lem/classroom/${classroomId}/groups` ? (
           <li className="-mb-px mr-1">
-            {" "}
             <a
               className="inline-block rounded-t border-l border-r border-t bg-white px-4 py-2 font-semibold text-blue-700"
-              href="/lem/classroom/groups"
+              href={`/lem/classroom/${classroomId}/groups`}
             >
               Groups
-            </a>{" "}
+            </a>
           </li>
         ) : (
           <li className="mr-1">
-            {" "}
             <a
               className="inline-block bg-white px-4 py-2 font-semibold hover:text-blue-800"
-              href="/lem/classroom/groups"
+              href={`/lem/classroom/${classroomId}/groups`}
             >
               Groups
             </a>
           </li>
         )}
 
-        {pathname === "/lem/classroom/people" ? (
+        {pathname === `/lem/classroom/${classroomId}/people` ? (
           <li className="-mb-px mr-1">
-            {" "}
             <a
               className="inline-block rounded-t border-l border-r border-t bg-white px-4 py-2 font-semibold text-blue-700"
-              href="/lem/classroom/people"
+              href={`/lem/classroom/${classroomId}/people`}
             >
               People
             </a>
           </li>
         ) : (
           <li className="mr-1">
-            {" "}
             <a
               className="inline-block bg-white px-4 py-2 font-semibold hover:text-blue-800"
-              href="/lem/classroom/people"
+              href={`/lem/classroom/${classroomId}/people`}
             >
               People
             </a>
