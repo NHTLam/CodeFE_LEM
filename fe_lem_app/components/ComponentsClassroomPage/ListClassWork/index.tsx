@@ -8,7 +8,7 @@ import { CheckIcon, ChevronDown } from "lucide-react";
 import { Listbox, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { FilterData } from "@/models/filter";
-import { ListClassEvent } from "@/services/classevent-service";
+import { ListClassEvent } from "@/services/class-event-service";
 
 const useFakeAuth = () => {
   const user = {
@@ -35,7 +35,6 @@ export const ListClassWork = () => {
 
   const filter: FilterData = {
     skip: 0,
-    take: 10,
     isClassWork: true
   };
 

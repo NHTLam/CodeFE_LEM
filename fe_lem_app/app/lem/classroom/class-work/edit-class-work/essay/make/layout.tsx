@@ -7,12 +7,8 @@ export default function EditClassWorkLayout({
 }) {
   return (
     <>
-      <div className="flex w-full">
-        <div className="w-1/3">
-          <SidebarEditClassWork />
-        </div>
-        <section className="grow">{children}</section>
-      </div>
+
+      <section className="grow">{children}</section>
     </>
   );
 }

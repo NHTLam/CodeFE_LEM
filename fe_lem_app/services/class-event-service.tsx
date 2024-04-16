@@ -54,7 +54,6 @@ export async function GetClassEvent(filter: FilterData) {
 
 export async function CreateClassEvent(classevent: any) {
     try {
-        debugger;
         const res = await fetch(DATA_SOURCE_URL + "create-class-event", {
             method: 'POST',
             headers: {
@@ -67,10 +66,10 @@ export async function CreateClassEvent(classevent: any) {
                 name: classevent.name,
                 isClassWork: classevent.isClassWork,
                 description: classevent.description,
-                instruction: classevent.instruction,
                 pinned: classevent.pinned,
                 createdAt: classevent.createdAt,
                 endAt: classevent.endAt,
+                startAt: classevent.startAt,
                 updatedAt: classevent.updatedAt,
                 deletedAt: classevent.deletedAt,
                 comment: classevent.comment,
@@ -89,7 +88,7 @@ export async function CreateClassEvent(classevent: any) {
 
 export async function UpdateClassEvent(classevent: any) {
 
-    const res = await fetch(DATA_SOURCE_URL + "update-class-en", {
+    const res = await fetch(DATA_SOURCE_URL + "update-class-event", {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -101,9 +100,9 @@ export async function UpdateClassEvent(classevent: any) {
             name: classevent.name,
             isClassWork: classevent.isClassWork,
             description: classevent.description,
-            instruction: classevent.instruction,
             pinned: classevent.pinned,
             createdAt: classevent.createdAt,
+            startAt: classevent.startAt,
             endAt: classevent.endAt,
             updatedAt: classevent.updatedAt,
             deletedAt: classevent.deletedAt,

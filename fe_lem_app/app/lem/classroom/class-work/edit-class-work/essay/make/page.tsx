@@ -2,6 +2,10 @@
 import { useState } from "react";
 import { Circle, Upload } from "lucide-react";
 import { FileTable } from "@/components/ComponentsClassroomPage/FileTable";
+import { MakeEssay } from "@/components/ComponentsClassroomPage/MakeEssay";
+import { SidebarEditClassWork } from "@/components/ComponentsClassroomPage/SidebarEditClassWork";
+import { CreateClassEvent } from "@/services/class-event-service";
+import { CreateQuestion } from "@/services/question-service";
 
 const MakeEssayPage = () => {
   const DefautAnswer = {
@@ -17,26 +21,40 @@ const MakeEssayPage = () => {
     console.log("Upload File");
   }
 
-  const [CurrentAnswers, setCurrentAnswers] = useState([]);
+  const [instruction, setInstruction] = useState("");
+  const dataChildren = (childData) => {
+    setInstruction(childData);
+  }
+
+  const actionChildren = async (childData) => {
+
+    const data = await CreateClassEvent({
+      ...childData,
+      isClassWork: true,
+      classroomId: 1,
+      code: "",
+    });
+
+    if ('id' in data) {
+      CreateQuestion({
+        classEventId: data.id,
+        instruction: instruction,
+        correctAnswer: "",
+        name: "",
+      });
+    } else {
+      // Xử lý trường hợp có lỗi từ server
+      console.error("Error creating class event:", data.error);
+    }
+  }
+
   return (
     <>
-      <div className="w-full border-l pl-4">
-        <p>Instruction: </p>
-        <textarea
-          rows={7}
-          className="flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5"
-        ></textarea>
-
-        <p className="mt-5">Scoring criteria: </p>
-        <textarea
-          rows={7}
-          className="flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5"
-        ></textarea>
-
-        <p className="mt-5">Attached files: </p>
-        <div className="mb-20">
-          <FileTable />
+      <div className="flex w-full">
+        <div className="w-1/3">
+          <SidebarEditClassWork ParentCallBack={actionChildren} />
         </div>
+        <MakeEssay ParentCallBack={dataChildren} />
       </div>
     </>
   );

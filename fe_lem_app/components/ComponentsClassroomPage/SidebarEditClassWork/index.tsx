@@ -5,7 +5,7 @@ import { CheckIcon, ChevronDown } from "lucide-react";
 import { Fragment, useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 
-export const SidebarEditClassWork = () => {
+export const SidebarEditClassWork = ({ ParentCallBack }) => {
   const member = [
     { name: "Member A" },
     { name: "Member B" },
@@ -21,6 +21,16 @@ export const SidebarEditClassWork = () => {
   const handleValueChange = (newValue) => {
     setValue(newValue);
   };
+
+  const handlerProp = () => {
+
+    ParentCallBack({
+      name: name,
+      startAt: value.startDate,
+      endAt: value.endDate,
+    });
+
+  }
 
   return (
     <div className="pr-2">
@@ -139,7 +149,9 @@ export const SidebarEditClassWork = () => {
         />
       </div>
       <div className="mt-5 flex justify-end">
-        <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+        <button
+          onClick={handlerProp}
+          className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
           Create
         </button>
       </div>

@@ -4,8 +4,9 @@ import { Circle, ClipboardPen, Upload } from "lucide-react";
 import Link from "next/link";
 import { FeedBackTable } from "@/components/ComponentsClassroomPage/FeedbackTable";
 import { FileTable } from "@/components/ComponentsClassroomPage/FileTable";
-import { GetClassEvent } from "@/services/classevent-service";
+import { GetClassEvent } from "@/services/class-event-service";
 import { FilterData } from "@/models/filter";
+import { UpdateQuestion } from "@/services/question-service";
 
 interface WorkIdPageProps {
   params: {
@@ -17,6 +18,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
 
   const [classWork, setClassWork] = useState<any>();
   const [first, setFirst] = useState<any>(true);
+  const [studentAnswer, setStudentAnswer] = useState<any>("");
 
   const filter: any = {
     id: parseInt(params.doId),
@@ -35,6 +37,18 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
     }
   }, []);
 
+  const submitAnswer = () => {
+    const data = {
+      ...classWork.questions[0],
+    }
+    UpdateQuestion({
+      ...data,
+      studentAnswer: studentAnswer,
+    });
+    console.log(studentAnswer);
+
+  }
+
   return (
     <>
       <div className="mx-5">
@@ -49,7 +63,9 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
                 Cancel
               </button>
             </Link>
-            <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+            <button
+              onClick={submitAnswer}
+              className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
               Submit
             </button>
           </div>
@@ -63,20 +79,14 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
       <div className="mx-5">
         <p className="mx-2 mt-5 font-bold">Instruction:</p>
         <p className="mx-2">
-          Dawn broke, dyeing the sky pink. The car rolled away, taking me away
-          from the noisy city to the wild mountainous region. Along the road,
-          rows of green trees whisper in the wind as if welcoming visitors. The
-          terraced fields are softly winding, with silhouettes of people
-          diligently cultivating rice. The sound of a gurgling stream echoed
-          among the mountains and forests. Each morning ray of sunlight crept
-          through the tree canopy, creating shimmering patches of light on the
-          ground. The cool breeze gently passed by, dispelling all worries.
+          {classWork?.questions[0].instruction}
         </p>
       </div>
       <div className="mx-7 my-5 rounded-md">
         <textarea
           rows={20}
           placeholder="Answer"
+          onChange={e => setStudentAnswer(e.target.value)}
           className="flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5"
         ></textarea>
       </div>
