@@ -23,27 +23,10 @@ import { ClassEvent } from "@/models/classevent";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { CreateComment } from "@/services/comment-service";
 
-const useFakeAuth = () => {
-  const user = {
-    userId: "1234567890",
-    username: "John Doe",
-    email: "johndoe@example.com",
-  };
-
-  return {
-    userId: user.userId,
-    username: user.username,
-    email: user.email,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  };
-};
-
 export const ListPost = () => {
-  const { userId } = useFakeAuth();
-  if (userId == "0") {
-    return redirect("/select-org");
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
   }
 
   const filter: FilterData = {
@@ -84,7 +67,7 @@ export const ListPost = () => {
 
   const [createPost, setCreatePost] = useState({
     id: 0,
-    classroomId: 1,
+    classroomId: classroomId,
     code: "",
     name: "",
     isClassWork: false,
@@ -116,14 +99,13 @@ export const ListPost = () => {
   };
 
   const actionComment = (classEventId, descriptionComment) => {
-
     const data = {
       id: 0,
       classEventId: classEventId,
       description: descriptionComment,
     };
     console.log(data);
-    
+
     CreateComment(data);
   };
 
@@ -170,7 +152,7 @@ export const ListPost = () => {
       <div className="ml-25 w-4/5 rounded-lg border border-slate-500 p-2 shadow-lg shadow-slate-400">
         {post == false ? (
           <button onClick={() => setPost(true)} className="w-full">
-            <div className="flex flex-row gap-3 p-5 items-center">
+            <div className="flex flex-row items-center gap-3 p-5">
               <img
                 className="rounded-full border"
                 width={60}

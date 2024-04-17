@@ -8,6 +8,11 @@ import { CreateClassEvent } from "@/services/class-event-service";
 import { CreateQuestion } from "@/services/question-service";
 
 const MakeEssayPage = () => {
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
+  }
+
   const DefautAnswer = {
     name: "A",
     answer: "Answer 1",
@@ -24,18 +29,17 @@ const MakeEssayPage = () => {
   const [instruction, setInstruction] = useState("");
   const dataChildren = (childData) => {
     setInstruction(childData);
-  }
+  };
 
   const actionChildren = async (childData) => {
-
     const data = await CreateClassEvent({
       ...childData,
       isClassWork: true,
-      classroomId: 1,
+      classroomId: classroomId,
       code: "",
     });
 
-    if ('id' in data) {
+    if ("id" in data) {
       CreateQuestion({
         classEventId: data.id,
         instruction: instruction,
@@ -46,7 +50,7 @@ const MakeEssayPage = () => {
       // Xử lý trường hợp có lỗi từ server
       console.error("Error creating class event:", data.error);
     }
-  }
+  };
 
   return (
     <>

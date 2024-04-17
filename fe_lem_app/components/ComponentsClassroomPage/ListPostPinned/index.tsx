@@ -14,27 +14,10 @@ import {
 
 import { Skeleton } from "@/components/ui/skeleton";
 
-const useFakeAuth = () => {
-  const user = {
-    userId: "1234567890",
-    username: "John Doe",
-    email: "johndoe@example.com",
-  };
-
-  return {
-    userId: user.userId,
-    username: user.username,
-    email: user.email,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  };
-};
-
 export const ListPostPinned = () => {
-  const { userId } = useFakeAuth();
-  if (userId == "0") {
-    return redirect("/select-org");
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
   }
 
   // const filter: FilterData = {
@@ -61,7 +44,7 @@ export const ListPostPinned = () => {
   const classEvents = [
     {
       id: 8,
-      classroomId: 1,
+      classroomId: classroomId,
       code: "CE4",
       name: "Thông báo điểm",
       isNotification: false,
@@ -76,7 +59,7 @@ export const ListPostPinned = () => {
     },
     {
       id: 10,
-      classroomId: 1,
+      classroomId: classroomId,
       code: "CE5",
       name: "Các sinh viên chú ý",
       isNotification: false,
@@ -92,7 +75,7 @@ export const ListPostPinned = () => {
   ];
 
   return (
-    <div className="m-4 w-96 flex-1 flex-col rounded-lg border border-slate-500 h-screen">
+    <div className="m-4 h-screen w-96 flex-1 flex-col rounded-lg border border-slate-500">
       {classEvents?.map((classEvent, index) => (
         <Card key={index} className=" p-4">
           <CardHeader className="flex gap-3">
