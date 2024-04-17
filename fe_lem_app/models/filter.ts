@@ -8,4 +8,5 @@ export type FilterData = {
     take?: number;
     pinned?: boolean;
     isClassWork?: boolean;
+    classroomId?: number;
   };

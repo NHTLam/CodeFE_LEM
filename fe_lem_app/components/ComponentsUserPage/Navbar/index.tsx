@@ -1,7 +1,13 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 
-const Navbar = () => {
+const Navbar = (params) => {
+  const classroomId = Number(params.classroomId);
+  if (typeof window !== "undefined") {
+    localStorage.setItem("classroomId", classroomId.toString());
+  }
+
   return (
     <nav className="fixed top-0 z-50 flex h-14 w-full items-center border-b bg-white px-4 shadow-sm">
       <div className="flex items-center gap-x-4">

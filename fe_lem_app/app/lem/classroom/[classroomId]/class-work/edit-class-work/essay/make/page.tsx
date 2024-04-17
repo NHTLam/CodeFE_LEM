@@ -13,11 +13,6 @@ const MakeEssayPage = () => {
     classroomId = localStorage.getItem("classroomId") ?? "";
   }
 
-  const DefautAnswer = {
-    name: "A",
-    answer: "Answer 1",
-  };
-
   function upLoadFile() {
     console.log("Upload File");
   }

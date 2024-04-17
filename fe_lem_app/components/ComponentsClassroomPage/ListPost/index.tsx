@@ -32,6 +32,7 @@ export const ListPost = () => {
   const filter: FilterData = {
     skip: 0,
     take: 10,
+    classroomId: Number(classroomId),
     isClassWork: false,
   };
 
@@ -67,7 +68,7 @@ export const ListPost = () => {
 
   const [createPost, setCreatePost] = useState({
     id: 0,
-    classroomId: classroomId,
+    classroomId: Number(classroomId),
     code: "",
     name: "",
     isClassWork: false,
@@ -107,6 +108,7 @@ export const ListPost = () => {
     console.log(data);
 
     CreateComment(data);
+    window.location.reload();
   };
 
   const showUpdateModal = (index, classEvent) => {
@@ -145,6 +147,7 @@ export const ListPost = () => {
         deletedAt: new Date(),
       };
       UpdateClassEvent(data);
+      window.location.reload();
     }
   };
   return (
@@ -199,6 +202,7 @@ export const ListPost = () => {
               <button
                 onClick={() => {
                   CreateClassEvent(createPost);
+                  window.location.reload();
                 }}
                 className="h-8 w-20 rounded-full border bg-primary text-white"
               >

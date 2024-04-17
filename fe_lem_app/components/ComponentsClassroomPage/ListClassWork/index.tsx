@@ -10,29 +10,11 @@ import Link from "next/link";
 import { FilterData } from "@/models/filter";
 import { ListClassEvent } from "@/services/class-event-service";
 
-const useFakeAuth = () => {
-  const user = {
-    userId: "1234567890",
-    username: "John Doe",
-    email: "johndoe@example.com",
-  };
-
-  return {
-    userId: user.userId,
-    username: user.username,
-    email: user.email,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  };
-};
-
 export const ListClassWork = () => {
-  const { userId } = useFakeAuth();
-  if (userId == "0") {
-    return redirect("/select-org");
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
   }
-
   const filter: FilterData = {
     skip: 0,
     isClassWork: true,
@@ -55,11 +37,11 @@ export const ListClassWork = () => {
   const classWorkTypes = [
     {
       name: "Essay",
-      link: "/lem/classroom/class-work/edit-class-work/essay/make",
+      link: `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/make`,
     },
     {
       name: "Multiple choice",
-      link: "/lem/classroom/class-work/edit-class-work/multiple-choice/make",
+      link: `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/make`,
     },
   ];
   const [post, setPost] = useState<any>(false);
@@ -151,7 +133,7 @@ export const ListClassWork = () => {
                 </div>
               </div>
               <Link
-                href={`/lem/classroom/class-work/edit-class-work/essay/do/${classEvent.id}`}
+                href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do/${classEvent.id}`}
               >
                 <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
                   Làm bài

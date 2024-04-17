@@ -1,6 +1,7 @@
 import { NavClassroom } from "@/components/ComponentsClassroomPage/NavClassroom";
 import Footer from "@/components/ComponentsLandingPage/Footer";
 import Navbar from "@/components/ComponentsUserPage/Navbar";
+import { NoneUI } from "@/components/ComponentsClassroomPage/NoneUi";
 import { Toaster } from "sonner";
 
 export default function ClassroomLayout({
@@ -12,10 +13,10 @@ export default function ClassroomLayout({
 }) {
   return (
     <>
-      <Navbar />
+      <Navbar classroomId={params.classroomId} />
       <Toaster />
       <main className="h-auto px-4 pt-20">
-        <NavClassroom classroomId={params.classroomId} />
+        <NoneUI classroomId={params.classroomId} />
         {children}
       </main>
     </>

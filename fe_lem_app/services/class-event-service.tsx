@@ -21,6 +21,7 @@ export async function ListClassEvent(filter: FilterData) {
         take: filter.take,
         ordertype: filter.ordertype,
         orderby: filter.orderby,
+        classroomId: filter.classroomId,
       }),
     });
     const Classevents: ClassEvent[] = await res.json();

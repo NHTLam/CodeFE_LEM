@@ -1,11 +1,11 @@
 "use client";
 import { Home } from "lucide-react";
 import { usePathname } from "next/navigation";
-export const NavClassroom = (params) => {
+export const NavClassroom = () => {
   const pathname = usePathname();
-  const classroomId = Number(params.classroomId);
+  var classroomId = "";
   if (typeof window !== "undefined") {
-    localStorage.setItem("classroomId", classroomId.toString());
+    classroomId = localStorage.getItem("classroomId") ?? "";
   }
 
   return (

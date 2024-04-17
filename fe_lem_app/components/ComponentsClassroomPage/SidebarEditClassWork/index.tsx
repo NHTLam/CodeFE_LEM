@@ -4,14 +4,20 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronDown } from "lucide-react";
 import { Fragment, useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
+import { redirect } from "next/navigation";
 
 export const SidebarEditClassWork = ({ ParentCallBack }) => {
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
+  }
   const member = [
     { name: "Member A" },
     { name: "Member B" },
     { name: "Member C" },
   ];
   const [selected, setSelected] = useState(member[0]);
+  const [canRedirect, setCanRedirect] = useState(false);
   const [name, setName] = useState<any>();
 
   const [value, setValue] = useState({
@@ -23,13 +29,16 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
   };
 
   const handlerProp = () => {
-
     ParentCallBack({
       name: name,
       startAt: value.startDate,
       endAt: value.endDate,
     });
+    setCanRedirect(true);
+  };
 
+  if (canRedirect) {
+    redirect(`/lem/classroom/${classroomId}/class-work`);
   }
 
   return (
@@ -37,7 +46,7 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
       <div className="flex gap-x-3">
         <p className="mt-0.5">Title: </p>
         <input
-          onChange={e => setName(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           type="text"
           className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
         />
@@ -63,7 +72,8 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
                   <Listbox.Option
                     key={personIdx}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pr-4 ${active ? "bg-amber-100 text-amber-900" : ""
+                      `relative cursor-default select-none py-2 pr-4 ${
+                        active ? "bg-amber-100 text-amber-900" : ""
                       }`
                     }
                     value={person}
@@ -71,8 +81,9 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
                     {({ selected }) => (
                       <>
                         <span
-                          className={`block truncate pl-5 ${selected ? "font-medium" : "font-normal"
-                            }`}
+                          className={`block truncate pl-5 ${
+                            selected ? "font-medium" : "font-normal"
+                          }`}
                         >
                           {person.name}
                         </span>
@@ -151,7 +162,8 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
       <div className="mt-5 flex justify-end">
         <button
           onClick={handlerProp}
-          className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+          className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
+        >
           Create
         </button>
       </div>
