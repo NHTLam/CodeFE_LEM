@@ -1,4 +1,5 @@
 import { Board } from "@/models/board";
+import { Card } from "@/models/card";
 import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/board/";
@@ -13,6 +14,22 @@ export async function ListBoard() {
     });
     const Boards: Board[] = await res.json();
     return Boards;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
+export async function ListCard() {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "list-card-by-userId", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const Cards: Card[] = await res.json();
+    return Cards;
   } catch (error) {
     console.error("Error parsing JSON:", error);
     return null;
