@@ -2,7 +2,6 @@ import { Classroom } from "@/models/classroom";
 import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
-const token = localStorage.getItem("token");
 
 export async function ListClass() {
   try {
@@ -38,7 +37,7 @@ export async function ListOwn(userId) {
   }
 }
 
-export async function JoinClass(code) {
+export async function JoinClass(code, token) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "join", {
       method: "POST",
@@ -88,13 +87,14 @@ export async function UpdateClass(classroom) {
 }
 
 export async function DeleteClass(id) {
-  if (!id) return NextResponse.json({ message: "Class id required" });
-
   await fetch(DATA_SOURCE_URL + "delete", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      id,
+    }),
   });
 
   return id;

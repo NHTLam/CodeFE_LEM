@@ -25,8 +25,10 @@ interface SidebarProps {
 
 export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
   var currentUserId = "";
+  var token = "";
   if (typeof window !== "undefined") {
     currentUserId = localStorage.getItem("userId") ?? "";
+    token = localStorage.getItem("token") ?? "";
   }
   const [expanded, setExpanded] = useLocalStorage<Record<string, any>>(
     storageKey,
@@ -76,7 +78,7 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
   };
 
   async function handleJoinClass() {
-    const isSuccess = await JoinClass(classroomCode);
+    const isSuccess = await JoinClass(classroomCode, token);
     window.location.reload();
   }
 

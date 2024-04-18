@@ -131,6 +131,26 @@ export const NavClassroom = (params) => {
             </a>
           </li>
         )}
+
+        {pathname === `/lem/classroom/${classroomId}/setting` ? (
+          <li className="-mb-px mr-1">
+            <a
+              className="inline-block rounded-t border-l border-r border-t bg-white px-4 py-2 font-semibold text-blue-700"
+              href={`/lem/classroom/${classroomId}/setting`}
+            >
+              Setting
+            </a>
+          </li>
+        ) : (
+          <li className="mr-1">
+            <a
+              className="inline-block bg-white px-4 py-2 font-semibold hover:text-blue-800"
+              href={`/lem/classroom/${classroomId}/setting`}
+            >
+              Setting
+            </a>
+          </li>
+        )}
       </ul>
     </div>
   );

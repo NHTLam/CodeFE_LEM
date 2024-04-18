@@ -65,6 +65,27 @@ const Navbar = () => {
                       </span>
                     </Link>
                   </Listbox.Option>
+                  <Listbox.Option
+                    className={({ active }) =>
+                      `relative w-full cursor-default select-none py-2 pr-4 ${
+                        active ? "bg-amber-100 text-amber-900" : ""
+                      }`
+                    }
+                    value="Profile"
+                  >
+                    <Link
+                      href={`/lem/home/user/${currentUserId}/profile`}
+                      onClick={setLogout}
+                    >
+                      <span
+                        className={`block truncate pl-5 ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        Profile
+                      </span>
+                    </Link>
+                  </Listbox.Option>
                 </Listbox.Options>
               </Transition>
             </div>
