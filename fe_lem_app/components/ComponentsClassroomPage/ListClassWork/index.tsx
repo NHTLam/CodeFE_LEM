@@ -18,6 +18,7 @@ export const ListClassWork = () => {
   const filter: FilterData = {
     skip: 0,
     isClassWork: true,
+    classroomId: Number(classroomId),
   };
 
   const [classEvents, setClassEvents] = useState<any>();
@@ -136,7 +137,7 @@ export const ListClassWork = () => {
                 href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do/${classEvent.id}`}
               >
                 <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-                  Làm bài
+                  Do
                 </button>
               </Link>
             </div>

@@ -22,7 +22,6 @@ const Groups = () => {
 
   return (
     <>
-      <NavClassroom classroomId={classroomId} />
       <InforGroups />
       <hr className="mx-25 mt-5" />
       <div className="mx-25 mt-5">

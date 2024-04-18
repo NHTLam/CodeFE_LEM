@@ -13,10 +13,10 @@ export default function ClassroomLayout({
 }) {
   return (
     <>
-      <Navbar classroomId={params.classroomId} />
+      <Navbar />
       <Toaster />
       <main className="h-auto px-4 pt-20">
-        <NoneUI classroomId={params.classroomId} />
+        <NavClassroom classroomId={params.classroomId} />
         {children}
       </main>
     </>

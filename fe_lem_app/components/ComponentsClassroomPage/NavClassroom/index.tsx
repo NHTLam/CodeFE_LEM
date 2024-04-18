@@ -1,11 +1,21 @@
 "use client";
-import { Home } from "lucide-react";
 import { usePathname } from "next/navigation";
-export const NavClassroom = () => {
+export const NavClassroom = (params) => {
   const pathname = usePathname();
-  var classroomId = "";
+  const classroomId = Number(params.classroomId);
   if (typeof window !== "undefined") {
-    classroomId = localStorage.getItem("classroomId") ?? "";
+    localStorage.setItem("classroomId", classroomId.toString());
+  }
+
+  const unUsePath = [
+    `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/make`,
+    `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do`,
+    `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/make`,
+    `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/do`,
+  ];
+
+  if (unUsePath.some((p) => p === pathname)) {
+    return <></>;
   }
 
   return (
