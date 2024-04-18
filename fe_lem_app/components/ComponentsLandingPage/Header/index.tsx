@@ -50,7 +50,7 @@ const Header = () => {
               alt="logo"
               width={120}
               height={0}
-              className="dark:hidden h-auto"
+              className="h-auto dark:hidden"
             />
           </a>
 
@@ -59,9 +59,13 @@ const Header = () => {
             aria-label="hamburger Toggler"
             className="block xl:hidden"
             onClick={() => setNavigationOpen(!navigationOpen)}
-          > {/* set mặc định là btn này sẽ ẩn đi và chỉ hiển thị khi nào màn hình nhỏ khiến nav không đủ chỗ để hiện thị */}
+          >
+            {" "}
+            {/* set mặc định là btn này sẽ ẩn đi và chỉ hiển thị khi nào màn hình nhỏ khiến nav không đủ chỗ để hiện thị */}
             <span className="relative block h-5.5 w-5.5 cursor-pointer">
-              <span className="absolute right-0 block h-full w-full"> {/*3 kẻ ngang của btn, đoạn code trong span này chỉ đơn thuần là để xuất hiện biểu tượng detal của nút để người dùng click và sẽ hiện dropdown nav*/}
+              <span className="absolute right-0 block h-full w-full">
+                {" "}
+                {/*3 kẻ ngang của btn, đoạn code trong span này chỉ đơn thuần là để xuất hiện biểu tượng detal của nút để người dùng click và sẽ hiện dropdown nav*/}
                 <span
                   className={`relative left-0 top-0 my-1 block h-0.5 rounded-sm bg-black delay-[0] duration-200 ease-in-out dark:bg-white ${
                     !navigationOpen ? "!w-full delay-300" : "w-0"
@@ -78,7 +82,9 @@ const Header = () => {
                   }`}
                 ></span>
               </span>
-              <span className="du-block absolute right-0 h-full w-full rotate-45"> {/* hiển thị dấu X của btn */}
+              <span className="du-block absolute right-0 h-full w-full rotate-45">
+                {" "}
+                {/* hiển thị dấu X của btn */}
                 <span
                   className={`absolute left-2.5 top-0 block h-full w-0.5 rounded-sm bg-black delay-300 duration-200 ease-in-out dark:bg-white ${
                     !navigationOpen ? "!h-0 delay-[0]" : "h-full"
@@ -104,7 +110,7 @@ const Header = () => {
         >
           <nav>
             <ul className="flex flex-col gap-5 xl:flex-row xl:items-center xl:gap-10">
-            {/* Đoạn phía dưới hiểu nôm la là nó giống như viết LINQ + lambda trong C# vậy, nó sẽ list từng phần tử trong 
+              {/* Đoạn phía dưới hiểu nôm la là nó giống như viết LINQ + lambda trong C# vậy, nó sẽ list từng phần tử trong 
                 menuData(gán dữ liệu trong menuData vào kiểu map), mỗi phần tử sẽ có thẻ li, sau đó kiểm tra phần tử có submenu 
                 hay không, có thì list kiểu dropdown, không thì hiển thị title. */}
               {menuData.map((menuItem, key) => (
@@ -121,7 +127,9 @@ const Header = () => {
                             className="h-3 w-3 cursor-pointer fill-waterloo group-hover:fill-primary"
                             xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 512 512"
-                          > {/* chỉ đơn giản là dấu mũi tên chỉ xuống */}
+                          >
+                            {" "}
+                            {/* chỉ đơn giản là dấu mũi tên chỉ xuống */}
                             <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z" />
                           </svg>
                         </span>
@@ -157,7 +165,7 @@ const Header = () => {
           <div className="mt-7 flex items-center gap-6 xl:mt-0">
             <ThemeToggler />
             <Link
-              href="auth/signin"
+              href="/auth/signin"
               className="flex items-center justify-center rounded-full bg-primary px-7.5 py-2.5 text-regular text-white duration-300 ease-in-out hover:bg-primaryho"
             >
               Get Start

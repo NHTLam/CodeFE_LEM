@@ -2,7 +2,6 @@ const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/app-user/";
 
 export async function Register(AppUser: any) {
   try {
-    debugger;
     const res = await fetch(DATA_SOURCE_URL + "register", {
       method: "POST",
       headers: {

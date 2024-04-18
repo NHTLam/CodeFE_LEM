@@ -22,17 +22,13 @@ export const ListClassWork = () => {
   };
 
   const [classEvents, setClassEvents] = useState<any>();
-  const [first, setFirst] = useState<any>(true);
 
   useEffect(() => {
-    if (first == true) {
-      const fetchData = async () => {
-        const data = await ListClassEvent(filter);
-        setClassEvents(data);
-      };
-      fetchData();
-      setFirst(false);
-    }
+    const fetchData = async () => {
+      const data = await ListClassEvent(filter);
+      setClassEvents(data);
+    };
+    fetchData();
   }, []);
 
   const classWorkTypes = [

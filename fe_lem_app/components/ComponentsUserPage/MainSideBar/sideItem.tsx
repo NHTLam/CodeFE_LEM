@@ -1,13 +1,7 @@
 "use client";
 
 import { useRouter, usePathname } from "next/navigation";
-import {
-  Activity,
-  CreditCard,
-  Layout,
-  Settings,
-  LibraryBig,
-} from "lucide-react";
+import { Layout, LibraryBig, Users, NotebookPen, Boxes } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -19,6 +13,7 @@ import { Button } from "@nextui-org/react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useState, useEffect } from "react";
 import { Classroom } from "@/models/classroom";
+import Link from "next/link";
 
 export type classroom = {
   id: string;
@@ -34,7 +29,6 @@ interface NavItemProps {
 }
 
 export const NavItem = ({ isExpanded, classroom, onExpand }: NavItemProps) => {
-  const router = useRouter();
   const pathname = usePathname();
   const [rendered, setRendered] = useState(false);
 
@@ -44,30 +38,26 @@ export const NavItem = ({ isExpanded, classroom, onExpand }: NavItemProps) => {
 
   const routes = [
     {
-      label: "Boards",
+      label: "Post",
       icon: <Layout className="mr-2 h-4 w-4" />,
-      href: `/classroom/${classroom.id}`,
+      href: `/lem/classroom/${classroom.id}/posts`,
     },
     {
-      label: "Activity",
-      icon: <Activity className="mr-2 h-4 w-4" />,
-      href: `/classroom/${classroom.id}/activity`,
+      label: "Class Works",
+      icon: <NotebookPen className="mr-2 h-4 w-4" />,
+      href: `/lem/classroom/${classroom.id}/class-work`,
     },
     {
-      label: "Settings",
-      icon: <Settings className="mr-2 h-4 w-4" />,
-      href: `/classroom/${classroom.id}/settings`,
+      label: "Groups",
+      icon: <Boxes className="mr-2 h-4 w-4" />,
+      href: `/classroom/${classroom.id}/groups`,
     },
     {
-      label: "Billing",
-      icon: <CreditCard className="mr-2 h-4 w-4" />,
-      href: `/classroom/${classroom.id}/billing`,
+      label: "People",
+      icon: <Users className="mr-2 h-4 w-4" />,
+      href: `/classroom/${classroom.id}/people`,
     },
   ];
-
-  const onClick = (href: string) => {
-    router.push(href);
-  };
 
   return (
     <AccordionItem value={classroom.id.toString()} className="border-none">
@@ -88,18 +78,19 @@ export const NavItem = ({ isExpanded, classroom, onExpand }: NavItemProps) => {
       {rendered && (
         <AccordionContent className="pt-1 text-neutral-700">
           {routes.map((route) => (
-            <Button
-              key={route.href}
-              size="sm"
-              //onClick={() => onClick(route.href)}
-              className={
-                "w-full justify-start pb-3 pl-10 pt-3 font-normal hover:bg-sky-500/10 hover:text-sky-700"
-              }
-              variant="ghost"
-            >
-              {route.icon}
-              {route.label}
-            </Button>
+            <Link href={route.href}>
+              <Button
+                key={route.href}
+                size="sm"
+                className={
+                  "w-full justify-start pb-3 pl-10 pt-3 font-normal hover:bg-sky-500/10 hover:text-sky-700"
+                }
+                variant="ghost"
+              >
+                {route.icon}
+                {route.label}
+              </Button>
+            </Link>
           ))}
         </AccordionContent>
       )}

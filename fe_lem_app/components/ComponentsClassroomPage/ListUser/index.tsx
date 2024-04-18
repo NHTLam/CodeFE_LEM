@@ -1,6 +1,7 @@
 "use client";
 import { AppUser } from "@/models/app-user";
 import { ListAppUserByClassroom } from "@/services/app-user-service";
+import { GetClass } from "@/services/class-service";
 import { Dialog, Transition } from "@headlessui/react";
 import { Avatar } from "@nextui-org/react";
 import {
@@ -19,6 +20,7 @@ export const ListUser = () => {
   const [usersInClass, setUsersInClass] = useState<AppUser[] | null>(null);
   const [roles, setRoles] = useState<any>();
   const [showGetCodeModal, setShowGetCodeModal] = useState(false);
+  const [classroomCode, setClassroomCode] = useState("");
 
   var currentUserId = "";
   var classroomId = "";
@@ -40,16 +42,12 @@ export const ListUser = () => {
           const uniqueRoles = Array.from(uniqueSet).map((id) =>
             newRoles.find((role) => role!.id === id),
           ); //map lại
-          uniqueRoles.sort((a, b) => {
-            if (a!.name === "Teacher") {
-              return -1;
-            } else {
-              return a!.name.localeCompare(b!.name);
-            }
-          });
           setRoles(uniqueRoles);
         }
       }
+      const classroom = await GetClass(Number(classroomId));
+      console.log("Class Code: " + classroom?.code);
+      setClassroomCode(classroom?.code ?? "");
     };
     fetchData();
     console.log("usersInClass2: " + usersInClass);
@@ -182,15 +180,21 @@ export const ListUser = () => {
                         <hr className="my-2" />
                         <div className="text-2sm flex grow items-center font-semibold">
                           Classroom code for teacher:
-                          <p className="ml-3 text-cyan-700">slakjh-asdk-3 c</p>
+                          <p className="ml-3 text-cyan-700">
+                            {classroomCode} c
+                          </p>
                         </div>
                         <div className="text-2sm flex grow items-center font-semibold">
                           Classroom code for student:
-                          <p className="ml-3 text-cyan-700">slakjh-asdk-3 s</p>
+                          <p className="ml-3 text-cyan-700">
+                            {classroomCode} s
+                          </p>
                         </div>
                         <div className="text-2sm flex grow items-center font-semibold">
                           Classroom code for other:
-                          <p className="ml-3 text-cyan-700">slakjh-asdk-3 o</p>
+                          <p className="ml-3 text-cyan-700">
+                            {classroomCode} o
+                          </p>
                         </div>
                       </div>
                     </Dialog.Panel>

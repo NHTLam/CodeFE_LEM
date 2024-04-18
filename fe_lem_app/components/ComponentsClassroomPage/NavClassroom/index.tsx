@@ -1,18 +1,44 @@
 "use client";
+import { FilterData } from "@/models/filter";
+import { ListClassEvent } from "@/services/class-event-service";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 export const NavClassroom = (params) => {
   const pathname = usePathname();
   const classroomId = Number(params.classroomId);
   if (typeof window !== "undefined") {
     localStorage.setItem("classroomId", classroomId.toString());
   }
+  const [classEvents, setClassEvents] = useState<any>();
+  const filter: FilterData = {
+    skip: 0,
+    isClassWork: true,
+    classroomId: classroomId,
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await ListClassEvent(filter);
+      setClassEvents(data);
+    };
+    fetchData();
+  }, []);
+
+  var dynamicUnUsePath: string[] = [];
+  if (classEvents !== null && classEvents !== undefined) {
+    classEvents.forEach((e) => {
+      const path1 = `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do/${e.id}`;
+      const path2 = `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/do/${e.id}`;
+      dynamicUnUsePath.push(path1);
+      dynamicUnUsePath.push(path2);
+    });
+  }
 
   const unUsePath = [
     `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/make`,
-    `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do`,
     `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/make`,
-    `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/do`,
   ];
+  unUsePath.push(...dynamicUnUsePath);
 
   if (unUsePath.some((p) => p === pathname)) {
     return <></>;

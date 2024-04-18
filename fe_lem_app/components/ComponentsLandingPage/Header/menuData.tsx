@@ -37,7 +37,7 @@ const menuData: Menu[] = [
     id: 4,
     title: "Support",
     newTab: false,
-    path: "landing-page/support",
+    path: "/landing-page/support",
   },
 ];
 

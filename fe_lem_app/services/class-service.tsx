@@ -2,6 +2,7 @@ import { Classroom } from "@/models/classroom";
 import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
+const token = localStorage.getItem("token");
 
 export async function ListClass() {
   try {
@@ -14,7 +15,7 @@ export async function ListClass() {
     const Classes: Classroom[] = await res.json();
     return Classes;
   } catch (error) {
-    console.error("Error parsing JSON:", error);
+    console.error("Error:", error);
     return null;
   }
 }
@@ -32,7 +33,25 @@ export async function ListOwn(userId) {
     const classes: Classroom[] = await res.json();
     return classes;
   } catch (error) {
-    console.error("Error parsing JSON:", error);
+    console.error("Error:", error);
+    return null;
+  }
+}
+
+export async function JoinClass(code) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ code: code }),
+    });
+    const isSuccess = await res.json();
+    return isSuccess;
+  } catch (error) {
+    console.error("Error:", error);
     return null;
   }
 }
@@ -49,7 +68,7 @@ export async function GetClass(id: number) {
     const Classes: Classroom = await res.json();
     return Classes;
   } catch (error) {
-    console.error("Error parsing JSON:", error);
+    console.error("Error:", error);
     return null;
   }
 }
