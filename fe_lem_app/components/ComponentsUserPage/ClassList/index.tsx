@@ -37,6 +37,7 @@ export const ClassList = () => {
         isRecently={false}
         dataBoards={null}
         dataClasses={classRoomData}
+        classroomIdForBoard={0}
       />
     </>
   );

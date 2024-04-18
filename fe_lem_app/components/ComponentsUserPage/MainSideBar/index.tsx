@@ -93,7 +93,7 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
   return (
     <div className="border-r pr-2">
       <div>
-        <Link href="/lem/home/user/user-home-page">
+        <Link href={`/lem/home/user/${currentUserId}/user-home-page`}>
           <button className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full rounded-sm border border-stroke px-6 py-1 pl-15 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
             <span className="mr-3">
               <Home />
