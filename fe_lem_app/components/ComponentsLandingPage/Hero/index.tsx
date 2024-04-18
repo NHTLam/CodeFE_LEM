@@ -9,23 +9,27 @@ const Hero = () => {
           <div className="flex lg:items-center lg:gap-8 xl:gap-32.5">
             <div className=" md:w-1/2">
               <h4 className="mb-4.5 text-lg font-medium text-black dark:text-white">
-                A complete application for managing education-related issues for you and everyone
+                A complete application for managing education-related issues for
+                you and everyone
               </h4>
               <h1 className="mb-5 pr-16 text-3xl font-bold text-black dark:text-white xl:text-hero ">
                 L.E.M
               </h1>
               <p>
-                L.E.M is an application that provides many management methods for two main subjects: teachers and students. Therefore, it is equipped with many features such as: classroom management, group management, quiz creation, blogging, etc.
+                L.E.M is an application that provides many management methods
+                for two main subjects: teachers and students. Therefore, it is
+                equipped with many features such as: classroom management, group
+                management, quiz creation, blogging, etc.
               </p>
 
               <div className="mt-10">
                 <div className="flex flex-wrap gap-5">
-                    <button
-                      aria-label="get started button"
-                      className="flex rounded-full bg-black px-7.5 py-2.5 text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
-                    >
-                      Get Started
-                    </button>
+                  <button
+                    aria-label="get started button"
+                    className="flex rounded-full bg-black px-7.5 py-2.5 text-white duration-300 ease-in-out hover:bg-blackho dark:bg-btndark dark:hover:bg-blackho"
+                  >
+                    Get Started
+                  </button>
                 </div>
               </div>
             </div>
@@ -53,16 +57,10 @@ const Hero = () => {
                   height={21.66}
                   className="absolute -right-6.5 bottom-0 z-1"
                 />
-                <div className=" relative aspect-[700/444] w-full">
+                <div className=" relative aspect-[1000/450] w-full">
                   <Image
                     className="shadow-solid-l dark:hidden"
-                    src="/images/hero/hero-light.svg"
-                    alt="Hero"
-                    fill
-                  />
-                  <Image
-                    className="hidden shadow-solid-l dark:block"
-                    src="/images/hero/hero-dark.svg"
+                    src="/images/hero/home-page.png"
                     alt="Hero"
                     fill
                   />
