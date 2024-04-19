@@ -170,7 +170,14 @@ export const ListCard = ({ boardId }: ListCardProps) => {
             {orderedCard &&
               orderedCard.length > 0 &&
               orderedCard!.map((list, index) => {
-                return <ListJob key={list.id} index={index} data={list} />;
+                return (
+                  <ListJob
+                    key={list.id}
+                    index={index}
+                    data={list}
+                    boardData={board ?? {}}
+                  />
+                );
               })}
             {provided.placeholder}
             <CardInput boardData={board!} />

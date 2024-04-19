@@ -36,6 +36,52 @@ export async function ListCard() {
   }
 }
 
+export async function DuplicateCard(card: Card) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "duplicate-card", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: card.id,
+        boardId: card.boardId,
+        name: card.name,
+        order: card.order,
+        jobs: card.jobs,
+      }),
+    });
+    const isSuccess = await res.json();
+    return isSuccess;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
+export async function DeleteCard(card: Card) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "delete-card", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: card.id,
+        boardId: card.boardId,
+        name: card.name,
+        order: card.order,
+        jobs: card.jobs,
+      }),
+    });
+    const isSuccess = await res.json();
+    return isSuccess;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
 export async function GetBoard(id: number) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "get", {

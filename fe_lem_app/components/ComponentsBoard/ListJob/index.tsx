@@ -10,13 +10,15 @@ import { CardForm } from "@/components/ComponentsBoard/CardForm";
 import { JobItem } from "@/components/ComponentsBoard/JobItem";
 import { CardHeader } from "@/components/ComponentsBoard/CardHeader";
 import { Card } from "@/models/card";
+import { Board } from "@/models/board";
 
 interface ListJobProps {
   data: Card;
   index: number;
+  boardData: Board;
 }
 
-export const ListJob = ({ data, index }: ListJobProps) => {
+export const ListJob = ({ data, index, boardData }: ListJobProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const disableEditing = () => {
@@ -52,7 +54,12 @@ export const ListJob = ({ data, index }: ListJobProps) => {
                     )}
                   >
                     {data!.jobs!.map((job, index) => (
-                      <JobItem index={index} key={job.id} data={job} />
+                      <JobItem
+                        index={index}
+                        key={job.id}
+                        data={job}
+                        boardData={boardData}
+                      />
                     ))}
                     {provided.placeholder}
                   </ol>

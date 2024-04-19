@@ -16,17 +16,23 @@ import { title } from "process";
 import { Fragment, useEffect, useState } from "react";
 import { Job } from "@/models/job";
 import { Todo } from "@/models/todo";
-import { UpdateJob } from "@/services/job-service";
+import { DeleteJob, UpdateJob } from "@/services/job-service";
+import { Board } from "@/models/board";
 
 //import { useCardModal } from "@/hooks/use-card-modal";
 
 interface CardItemProps {
   data: Job;
   index: number;
+  boardData: Board;
 }
 
-export const JobItem = ({ data, index }: CardItemProps) => {
-  // const cardModal = useCardModal();
+export const JobItem = ({ data, index, boardData }: CardItemProps) => {
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
+  }
+
   const [showModal, setShowModal] = useState(false);
   const [todoCheckBoxes, setTodoCheckBoxes] = useState<Todo[]>(
     data.todos ?? [],
@@ -38,6 +44,8 @@ export const JobItem = ({ data, index }: CardItemProps) => {
     endDate: data.endAt ?? new Date(),
   });
   const [job, setJob] = useState<Job>(data);
+  const [todoPercent, setTodoPercent] = useState(todoCheckBoxes.length);
+  const [isDone, setIsDone] = useState(false);
 
   const handleValueChange = (newValue) => {
     setValue(newValue);
@@ -86,6 +94,7 @@ export const JobItem = ({ data, index }: CardItemProps) => {
       id: 0,
       jobId: data.id,
       description: updateTodoCheckBox,
+      isDone: isDone,
     };
     setTodoCheckBoxes((prevTodoCheckBoxes) => [...prevTodoCheckBoxes, todo]);
     setIsEditTodo(false);
@@ -99,6 +108,12 @@ export const JobItem = ({ data, index }: CardItemProps) => {
     updateJob!.todos = todoCheckBoxes;
     const result = await UpdateJob(updateJob);
     console.log("result: " + result);
+    window.location.reload();
+  };
+
+  const handleDeleteJob = async () => {
+    const deleteJob = job;
+    const result = await DeleteJob(deleteJob?.id ?? 0);
     window.location.reload();
   };
 
@@ -164,68 +179,75 @@ export const JobItem = ({ data, index }: CardItemProps) => {
                     <div className="mt-3 text-center sm:mt-5">
                       <form>
                         <div className="mt-2">
-                          <div className="flex">
-                            <p className="float-left mr-3 mt-2">Member: </p>
-                            <div className="z-10">
-                              {/* Drop Down */}
-                              <Listbox value={selected} onChange={setSelected}>
-                                <div className="relative">
-                                  <Listbox.Button className="relative my-1 flex w-full cursor-default justify-center rounded-lg border border-stroke bg-white py-2 pl-3 pr-10 text-left text-sm outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
-                                    <span className="block truncate">
-                                      {selected.name}
-                                    </span>
-                                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                                      <ChevronDown className="h-5 w-5 text-gray-400" />
-                                    </span>
-                                  </Listbox.Button>
-                                  <Transition
-                                    as={Fragment}
-                                    leave="transition ease-in duration-100"
-                                    leaveFrom="opacity-100"
-                                    leaveTo="opacity-0"
-                                  >
-                                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                                      {member.map((person, personIdx) => (
-                                        <Listbox.Option
-                                          key={personIdx}
-                                          className={({ active }) =>
-                                            `relative cursor-default select-none py-2 pr-4 ${
-                                              active
-                                                ? "bg-amber-100 text-amber-900"
-                                                : "text-gray-900"
-                                            }`
-                                          }
-                                          value={person}
-                                        >
-                                          {({ selected }) => (
-                                            <>
-                                              <span
-                                                className={`block truncate ${
-                                                  selected
-                                                    ? "font-medium"
-                                                    : "font-normal"
-                                                }`}
-                                              >
-                                                {person.name}
-                                              </span>
-                                              {selected ? (
-                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                                                  <CheckIcon
-                                                    className="h-5 w-5"
-                                                    aria-hidden="true"
-                                                  />
+                          {boardData.classroomId !== null ? (
+                            <div className="flex">
+                              <p className="float-left mr-3 mt-2">Member: </p>
+                              <div className="z-10">
+                                {/* Drop Down */}
+                                <Listbox
+                                  value={selected}
+                                  onChange={setSelected}
+                                >
+                                  <div className="relative">
+                                    <Listbox.Button className="relative my-1 flex w-full cursor-default justify-center rounded-lg border border-stroke bg-white py-2 pl-3 pr-10 text-left text-sm outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
+                                      <span className="block truncate">
+                                        {selected.name}
+                                      </span>
+                                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                        <ChevronDown className="h-5 w-5 text-gray-400" />
+                                      </span>
+                                    </Listbox.Button>
+                                    <Transition
+                                      as={Fragment}
+                                      leave="transition ease-in duration-100"
+                                      leaveFrom="opacity-100"
+                                      leaveTo="opacity-0"
+                                    >
+                                      <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                        {member.map((person, personIdx) => (
+                                          <Listbox.Option
+                                            key={personIdx}
+                                            className={({ active }) =>
+                                              `relative cursor-default select-none py-2 pr-4 ${
+                                                active
+                                                  ? "bg-amber-100 text-amber-900"
+                                                  : "text-gray-900"
+                                              }`
+                                            }
+                                            value={person}
+                                          >
+                                            {({ selected }) => (
+                                              <>
+                                                <span
+                                                  className={`block truncate ${
+                                                    selected
+                                                      ? "font-medium"
+                                                      : "font-normal"
+                                                  }`}
+                                                >
+                                                  {person.name}
                                                 </span>
-                                              ) : null}
-                                            </>
-                                          )}
-                                        </Listbox.Option>
-                                      ))}
-                                    </Listbox.Options>
-                                  </Transition>
-                                </div>
-                              </Listbox>
+                                                {selected ? (
+                                                  <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                                    <CheckIcon
+                                                      className="h-5 w-5"
+                                                      aria-hidden="true"
+                                                    />
+                                                  </span>
+                                                ) : null}
+                                              </>
+                                            )}
+                                          </Listbox.Option>
+                                        ))}
+                                      </Listbox.Options>
+                                    </Transition>
+                                  </div>
+                                </Listbox>
+                              </div>
                             </div>
-                          </div>
+                          ) : (
+                            <></>
+                          )}
 
                           <div className="mb-2 flex">
                             <p className="float-left mr-3 mt-2 grow">Date: </p>
@@ -273,7 +295,6 @@ export const JobItem = ({ data, index }: CardItemProps) => {
                                   <div className="mb-4 flex items-center">
                                     <input
                                       type="checkbox"
-                                      value=""
                                       className="h-4 w-4 rounded border-blue-300 bg-blue-100"
                                     />
                                     {isEditTodo === false ? (
@@ -361,6 +382,13 @@ export const JobItem = ({ data, index }: CardItemProps) => {
                             onClick={handleUpdateJob}
                           >
                             Create
+                          </button>
+                          <button
+                            type="button"
+                            className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-rose-500 shadow-sm ring-1 ring-inset ring-rose-500 hover:bg-gray-50 sm:col-start-1 sm:mt-0"
+                            onClick={handleDeleteJob}
+                          >
+                            Delete
                           </button>
                         </div>
                       </form>
