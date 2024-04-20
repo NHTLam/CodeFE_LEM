@@ -10,6 +10,7 @@ import {
   ChevronDown,
   ClipboardList,
   SendHorizontal,
+  UsersRound,
   X,
 } from "lucide-react";
 import { title } from "process";
@@ -18,6 +19,7 @@ import { Job } from "@/models/job";
 import { Todo } from "@/models/todo";
 import { DeleteJob, UpdateJob } from "@/services/job-service";
 import { Board } from "@/models/board";
+import { CreateComment } from "@/services/comment-service";
 
 //import { useCardModal } from "@/hooks/use-card-modal";
 
@@ -34,6 +36,7 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
   }
 
   const [showModal, setShowModal] = useState(false);
+  const [viewHistory, setViewHistory] = useState(false);
   const [todoCheckBoxes, setTodoCheckBoxes] = useState<Todo[]>(
     data.todos ?? [],
   );
@@ -44,8 +47,6 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
     endDate: data.endAt ?? new Date(),
   });
   const [job, setJob] = useState<Job>(data);
-  const [todoPercent, setTodoPercent] = useState(todoCheckBoxes.length);
-  const [isDone, setIsDone] = useState(false);
 
   const handleValueChange = (newValue) => {
     setValue(newValue);
@@ -94,10 +95,27 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
       id: 0,
       jobId: data.id,
       description: updateTodoCheckBox,
-      isDone: isDone,
+      isDone: false,
     };
     setTodoCheckBoxes((prevTodoCheckBoxes) => [...prevTodoCheckBoxes, todo]);
     setIsEditTodo(false);
+  };
+
+  const handleUpdateIsDoneTodo = (todo, index: number) => {
+    var isDone = false;
+    if (todo.isDone === true) {
+      isDone = false;
+    } else {
+      isDone = true;
+    }
+    handleRemoveTodo(index);
+    const newTodo: Todo = {
+      id: 0,
+      jobId: data.id,
+      description: todo.description,
+      isDone: isDone,
+    };
+    setTodoCheckBoxes((prevTodoCheckBoxes) => [...prevTodoCheckBoxes, newTodo]);
   };
 
   const handleUpdateJob = async () => {
@@ -115,6 +133,25 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
     const deleteJob = job;
     const result = await DeleteJob(deleteJob?.id ?? 0);
     window.location.reload();
+  };
+
+  const ConvertDateTime = (datetime) => {
+    const convert = new Date(datetime);
+    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${
+      convert.getMonth() + 1
+    }/${convert.getFullYear()}`;
+    return format;
+  };
+
+  const actionComment = async (classEventId, descriptionComment) => {
+    const data = {
+      id: 0,
+      classEventId: classEventId,
+      description: descriptionComment,
+    };
+    console.log(data);
+
+    await CreateComment(data);
   };
 
   return (
@@ -282,10 +319,15 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                             <p className="float-left mr-3 mt-2">Todo: </p>
                             <div className="mt-4 w-full grow">
                               <div className="h-2.5 w-full rounded-full bg-gray-200 dark:bg-gray-700">
-                                <div className="h-2.5 w-1/4 rounded-full bg-blue-600" />
+                                <div
+                                  className="h-2.5 rounded-full bg-blue-600"
+                                  style={{ width: `${job.noTodoDone}%` }}
+                                />
                               </div>
                             </div>
-                            <p className="float-left ml-3 mt-2">50%</p>
+                            <p className="float-left ml-3 mt-2">
+                              {job.noTodoDone}%
+                            </p>
                           </div>
 
                           <div className="ml-3 mt-2">
@@ -295,6 +337,10 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                                   <div className="mb-4 flex items-center">
                                     <input
                                       type="checkbox"
+                                      checked={todo.isDone}
+                                      onClick={() =>
+                                        handleUpdateIsDoneTodo(todo, index)
+                                      }
                                       className="h-4 w-4 rounded border-blue-300 bg-blue-100"
                                     />
                                     {isEditTodo === false ? (
@@ -352,11 +398,47 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                             <p className="float-left mr-3 mt-2">History: </p>
                             <button
                               type="button"
+                              onClick={() => {
+                                viewHistory === true
+                                  ? setViewHistory(false)
+                                  : setViewHistory(true);
+                              }}
                               className="float-right mt-3 flex w-50 grow justify-center rounded-sm border py-1 text-base outline-none transition-all duration-300 hover:border-blue-600 hover:bg-blue-200/5 hover:text-blue-600 dark:border-transparent dark:bg-red-200 dark:hover:border-blue-600 dark:hover:bg-red-200/5 dark:hover:text-blue-600 dark:hover:shadow-none"
                             >
                               View History
                             </button>
                           </div>
+                          {viewHistory === true ? (
+                            <>
+                              <div className="flex w-full items-center gap-2">
+                                <img
+                                  className="m-2 rounded-full border"
+                                  width={40}
+                                  alt="Avatar"
+                                  src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
+                                />
+                                <p>
+                                  User {job?.creator?.userName} tạo ngày:
+                                  {" " + ConvertDateTime(job.createAt)}
+                                </p>
+                              </div>
+                              <div className="flex w-full items-center gap-2">
+                                <img
+                                  className="m-2 rounded-full border"
+                                  width={40}
+                                  alt="Avatar"
+                                  src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
+                                />
+                                <p>
+                                  User {job?.creator?.userName} cập nhật mới
+                                  nhất vào ngày:
+                                  {" " + ConvertDateTime(job.updateAt)}
+                                </p>
+                              </div>
+                            </>
+                          ) : (
+                            <></>
+                          )}
 
                           <div className="mt-5 flex">
                             <p className="float-left mr-3">Comment </p>
@@ -374,6 +456,48 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                             />
                             <SendHorizontal />
                           </div>
+                          <section className="grid place-items-center">
+                            <label>
+                              <input
+                                className="peer/showLabel absolute scale-0"
+                                type="checkbox"
+                              />
+                              <span className="block max-h-14 overflow-hidden px-4 py-0 transition-all duration-300 peer-checked/showLabel:max-h-52">
+                                <h3 className="flex h-14 cursor-pointer items-center font-semibold">
+                                  <UsersRound size={20} />
+                                  Show all comment
+                                </h3>
+                                <div>
+                                  {/* {job.comments?.map((comment, index) => (
+                                    <div
+                                      key={index}
+                                      className="flex items-center gap-1 "
+                                    >
+                                      <img
+                                        className="m-2 rounded-full border"
+                                        width={40}
+                                        alt="Avatar"
+                                        src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
+                                      />
+                                      <div className="flex flex-col gap-1">
+                                        <div className="flex items-end gap-3">
+                                          <p className="text-base">
+                                            {comment.appUser.userName}
+                                          </p>
+                                          <p className="text-xs">
+                                            {ConvertDateTime(comment.createdAt)}
+                                          </p>
+                                        </div>
+                                        <h1 className=" text-sm">
+                                          {comment.description}
+                                        </h1>
+                                      </div>
+                                    </div>
+                                  ))} */}
+                                </div>
+                              </span>
+                            </label>
+                          </section>
                         </div>
                         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                           <button
@@ -381,7 +505,7 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                             className="inline-flex w-full justify-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-2"
                             onClick={handleUpdateJob}
                           >
-                            Create
+                            Save
                           </button>
                           <button
                             type="button"

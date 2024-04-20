@@ -8,7 +8,14 @@ export const InforGroups = () => {
       </div>
 
       <div className="border-l pl-10">
-        <p className="font-semibold">Number of groups in class: 2</p>
+        <div className="flex">
+          <p className="font-semibold">Number of groups in class:</p>
+          <input
+            // onChange={(e) => setName(e.target.value)}
+            type="number"
+            className="ml-5 flex grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+          />
+        </div>
         <div className="flex">
           <p className="mt-1 font-semibold">User: </p>
           <button className="ml-5 flex w-30 rounded-sm border border-stroke px-3 py-1 pl-4 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">

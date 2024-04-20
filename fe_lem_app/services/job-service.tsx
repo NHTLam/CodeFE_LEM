@@ -1,6 +1,7 @@
 import { Job } from "@/models/job";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/job/";
+const token = localStorage.getItem("token") ?? "";
 
 export async function ListJob() {
   try {
@@ -24,6 +25,7 @@ export async function ListOwnJob() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     const Jobs: Job[] = await res.json();
@@ -40,6 +42,7 @@ export async function GetJob(id: number) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ id }),
     });
@@ -57,6 +60,7 @@ export async function CreateJob(job: Job) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         cardId: job.cardId,
@@ -66,6 +70,7 @@ export async function CreateJob(job: Job) {
         endAt: job.endAt,
         todos: job.todos,
         isAllDay: job.isAllDay,
+        creatorId: job.creatorId,
         appUserJobMapping: job.appUserJobMaping,
       }),
     });
@@ -84,6 +89,7 @@ export async function UpdateJob(job: Job) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: job.id,
@@ -94,6 +100,7 @@ export async function UpdateJob(job: Job) {
       endAt: job.endAt,
       todos: job.todos,
       isAllDay: job.isAllDay,
+      creatorId: job.creatorId,
       appUserJobMapping: job.appUserJobMaping,
     }),
   });
@@ -106,6 +113,7 @@ export async function DeleteJob(jobId: number) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: jobId,
