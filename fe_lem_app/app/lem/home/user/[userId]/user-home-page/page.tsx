@@ -1,24 +1,28 @@
-import { Suspense, useEffect, useState } from "react";
+"use client";
 import { Info } from "@/components/ComponentsUserPage/Infor";
 import { ClassListRecents } from "@/components/ComponentsUserPage/ClassListRecents";
 import { ClassList } from "@/components/ComponentsUserPage/ClassList";
-import { Classroom } from "@/models/classroom";
-import { ListOwn } from "@/services/class-service";
+import { useEffect, useState } from "react";
 
-const HomePage = async () => {
+const HomePage = () => {
+  var searchKey = "";
+  const dataFromChild = (childrenData: string) => {
+    searchKey = childrenData;
+    setNewSearchKey(childrenData);
+  };
+  const [newSearchKey, setNewSearchKey] = useState(searchKey);
+
   return (
     <div className="mb-20 w-full">
-      <Info />
+      <Info parentCallback={dataFromChild} />
       <hr className="mr-4 py-2"></hr>
 
       <div className="px-2 md:px-4">
-        <ClassListRecents />
+        <ClassListRecents searchKey={newSearchKey} />
       </div>
 
       <div className="mt-5 px-2 md:px-4">
-        {/* <Suspense fallback={<ClassList.Skeleton />}> */}
-        <ClassList />
-        {/* </Suspense> */}
+        <ClassList searchKey={newSearchKey} />
       </div>
     </div>
   );
