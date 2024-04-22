@@ -20,7 +20,8 @@ export async function ListClassEvent(filter: FilterData) {
                 skip: filter.skip,
                 take: filter.take,
                 ordertype: filter.ordertype,
-                orderby: filter.orderby
+                orderby: filter.orderby,
+                appUserId: filter.appUserId
             })
         })
         const Classevents: ClassEvent[] = await res.json()
@@ -64,6 +65,7 @@ export async function CreateClassEvent(classevent: any) {
                 classroomId: classevent.classroomId,
                 code: classevent.code,
                 name: classevent.name,
+                appUserId: classevent.appUserId,
                 isClassWork: classevent.isClassWork,
                 description: classevent.description,
                 pinned: classevent.pinned,
@@ -72,8 +74,8 @@ export async function CreateClassEvent(classevent: any) {
                 startAt: classevent.startAt,
                 updatedAt: classevent.updatedAt,
                 deletedAt: classevent.deletedAt,
-                comment: classevent.comment,
-                question: classevent.question,
+                comments: classevent.comments,
+                questions: classevent.questions,
             })
         });
 
@@ -114,10 +116,7 @@ export async function UpdateClassEvent(classevent: any) {
     return newClassEvent
 }
 
-export async function DeleteClassEvent(request: Request) {
-    const { id }: Partial<ClassEvent> = await request.json()
-
-    if (!id) return NextResponse.json({ "message": "ClassEvent id required" })
+export async function DeleteClassEvent(id: any) {
 
     await fetch(DATA_SOURCE_URL + "delete-class-event", {
         method: 'POST',
@@ -125,10 +124,11 @@ export async function DeleteClassEvent(request: Request) {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            id
+            id,
+            name: "",
+            code: "",
         })
     })
-
-    return id;
+    return id
 }
 

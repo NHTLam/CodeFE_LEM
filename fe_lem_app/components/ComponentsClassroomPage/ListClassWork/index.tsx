@@ -35,6 +35,7 @@ export const ListClassWork = () => {
 
   const filter: FilterData = {
     skip: 0,
+    appUserId: 1,
     isClassWork: true
   };
 
@@ -65,6 +66,12 @@ export const ListClassWork = () => {
   const [post, setPost] = useState<any>(false);
   const [showComment, setShowComment] = useState<any>(false);
   const [selected, setSelected] = useState(classWorkTypes[0]);
+
+  const ConvertDateTime = (datetime) => {
+    const convert = new Date(datetime);
+    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${convert.getMonth() + 1}/${convert.getFullYear()}`;
+    return format;
+  }
 
   return (
     <div>
@@ -119,9 +126,6 @@ export const ListClassWork = () => {
             </Transition>
           </div>
         </Listbox>
-        <button className="my-1 ml-5 w-30 rounded-lg border border-stroke px-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-          View my work
-        </button>
       </div>
 
       <div className="col-span-2 m-4 flex flex-col items-center space-y-4">
@@ -131,29 +135,42 @@ export const ListClassWork = () => {
             className="w-3/4 rounded-lg border border-slate-500 p-6"
           >
             <div className="flex items-center gap-3 justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  className="rounded-full border"
-                  width={50}
-                  alt="Avatar"
-                  src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
-                />
-                <div className="flex flex-col">
-                  <p className="text-base">User</p>
-                  <p className="text-xs">Time</p>
+              <div className="sm:grid sm:grid-flow-row-dense sm:grid-cols-4 items-center justify-items-start w-full">
+                <div className="flex items-center gap-3">
+                  <img
+                    className="rounded-full border"
+                    width={50}
+                    alt="Avatar"
+                    src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
+                  />
+                  <div className="flex flex-col">
+                    <p className="text-base">{classEvent.appUser.userName}</p>
+                    <p className="text-xs">{ConvertDateTime(classEvent.createdAt)}</p>
+                  </div>
                 </div>
                 <div>
-                  <h1 className="ml-25 text-xl font-semibold">
+                  <h1 className="text-xl font-semibold">
                     {classEvent.name}
                   </h1>
                 </div>
               </div>
-              <Link href={`/lem/classroom/class-work/edit-class-work/essay/do/${classEvent.id}`} >
+              <Link href={`/lem/classroom/class-work/edit-class-work/essay/mark/${classEvent.id}`} >
                 <button
-                 className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-                  Làm bài
+                  className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                  Chấm bài
                 </button>
               </Link>
+              {classEvent.isSubmit == false ? (<Link href={`/lem/classroom/class-work/edit-class-work/essay/do/${classEvent.id}`} >
+                <button
+                  className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                  Làm bài
+                </button>
+              </Link>) : (<Link href={`/lem/classroom/class-work/edit-class-work/essay/detail/${classEvent.id}`} >
+                <button
+                  className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                  Xem bài làm
+                </button>
+              </Link>)}
             </div>
           </div>
         ))}

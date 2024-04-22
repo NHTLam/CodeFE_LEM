@@ -21,9 +21,12 @@ const MakeEssayPage = () => {
     console.log("Upload File");
   }
 
-  const [instruction, setInstruction] = useState("");
+  const [questionList, setQuestionList] = useState<any[]>([]);
+
   const dataChildren = (childData) => {
-    setInstruction(childData);
+    setQuestionList(childData);
+    console.log(childData);
+    
   }
 
   const actionChildren = async (childData) => {
@@ -33,21 +36,13 @@ const MakeEssayPage = () => {
       isClassWork: true,
       classroomId: 1,
       code: "",
+      appUserId: 1,
+      questions: questionList,
     });
 
-    if ('id' in data) {
-      CreateQuestion({
-        classEventId: data.id,
-        instruction: instruction,
-        correctAnswer: "",
-        name: "",
-      });
-    } else {
-      // Xử lý trường hợp có lỗi từ server
-      console.error("Error creating class event:", data.error);
-    }
+    window.location.href = '/lem/classroom/class-work';
   }
-
+ 
   return (
     <>
       <div className="flex w-full">
