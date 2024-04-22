@@ -1,5 +1,7 @@
 import { Card } from "./card";
 import { Todo } from "./todo";
+import { AppUserJobMapping } from "./appUserJobMapping";
+import { AppUser } from "./app-user";
 
 export interface Job {
     id?: number;
@@ -11,6 +13,12 @@ export interface Job {
     endAt?: Date;
     color?: string;
     noTodoDone?: number;
+    isAllDay?: boolean;
     card?: Card;
+    creatorId?: number;
+    createAt?: Date;
+    updateAt?: Date;
+    creator?: AppUser;
     todos?: Todo[];
+    appUserJobMaping?: AppUserJobMapping[];
 }

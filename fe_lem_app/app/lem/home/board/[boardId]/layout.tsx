@@ -23,12 +23,6 @@ const BoardIdLayout = async ({
   children: React.ReactNode;
   params: { boardId: string };
 }) => {
-  // const { userId } = useFakeAuth();
-
-  // if (!userId) {
-  //   redirect("/");
-  // }
-
   const board = await GetBoard(Number(params.boardId));
   if (!board) {
     notFound();

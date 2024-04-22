@@ -34,7 +34,7 @@ const Footer = () => {
                     height={0}
                     src="/images/logo/logo-dark.png"
                     alt="Logo"
-                    className="dark:hidden h-auto"
+                    className="h-auto dark:hidden"
                   />
                   <Image
                     width={110}
@@ -46,7 +46,8 @@ const Footer = () => {
                 </a>
 
                 <p className="mb-10 mt-5">
-                  Support providing optimal management methods for educational issues.
+                  Support providing optimal management methods for educational
+                  issues.
                 </p>
 
                 <p className="mb-1.5 text-sectiontitle uppercase tracking-[5px]">
@@ -97,7 +98,23 @@ const Footer = () => {
                         href="#"
                         className="mb-3 inline-block hover:text-primary"
                       >
-                        Blog
+                        Support
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="mb-3 inline-block hover:text-primary"
+                      >
+                        Sign-in
+                      </a>
+                    </li>
+                    <li>
+                      <a
+                        href="#"
+                        className="mb-3 inline-block hover:text-primary"
+                      >
+                        Sign-up
                       </a>
                     </li>
                     <li>
@@ -292,9 +309,7 @@ const Footer = () => {
               viewport={{ once: true }}
               className="animate_top"
             >
-              <p>
-                &copy; {new Date().getFullYear()} LEM. All rights reserved
-              </p>
+              <p>&copy; {new Date().getFullYear()} LEM. All rights reserved</p>
             </motion.div>
 
             <motion.div

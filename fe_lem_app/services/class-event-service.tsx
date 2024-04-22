@@ -5,31 +5,32 @@ import { NextResponse } from "next/server";
 const DATA_SOURCE_URL = process.env.BASE_URL + "/tel/classroom/";
 
 export async function ListClassEvent(filter: FilterData) {
-    try {
-        const res = await fetch(DATA_SOURCE_URL + "list-class-event", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: filter.id,
-                code: filter.code,
-                name: filter.name,
-                pinned: filter.pinned,
-                isClassWork: filter.isClassWork,
-                skip: filter.skip,
-                take: filter.take,
-                ordertype: filter.ordertype,
-                orderby: filter.orderby,
-                appUserId: filter.appUserId
-            })
-        })
-        const Classevents: ClassEvent[] = await res.json()
-        return Classevents;
-    } catch (error) {
-        console.error('Error parsing JSON:', error);
-        return null;
-    }
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "list-class-event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: filter.id,
+        code: filter.code,
+        name: filter.name,
+        pinned: filter.pinned,
+        isClassWork: filter.isClassWork,
+        skip: filter.skip,
+        take: filter.take,
+        ordertype: filter.ordertype,
+        orderby: filter.orderby,
+        appUserId: filter.appUserId,
+        classroomId: filter.classroomId,
+      }),
+    });
+    const Classevents: ClassEvent[] = await res.json();
+    return Classevents;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
 }
 
 export async function GetClassEvent(filter: FilterData) {
@@ -54,30 +55,30 @@ export async function GetClassEvent(filter: FilterData) {
 }
 
 export async function CreateClassEvent(classevent: any) {
-    try {
-        const res = await fetch(DATA_SOURCE_URL + "create-class-event", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id: classevent.id,
-                classroomId: classevent.classroomId,
-                code: classevent.code,
-                name: classevent.name,
-                appUserId: classevent.appUserId,
-                isClassWork: classevent.isClassWork,
-                description: classevent.description,
-                pinned: classevent.pinned,
-                createdAt: classevent.createdAt,
-                endAt: classevent.endAt,
-                startAt: classevent.startAt,
-                updatedAt: classevent.updatedAt,
-                deletedAt: classevent.deletedAt,
-                comments: classevent.comments,
-                questions: classevent.questions,
-            })
-        });
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "create-class-event", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: classevent.id,
+        classroomId: classevent.classroomId,
+        code: classevent.code,
+        name: classevent.name,
+        appUserId: classevent.appUserId,
+        isClassWork: classevent.isClassWork,
+        description: classevent.description,
+        pinned: classevent.pinned,
+        createdAt: classevent.createdAt,
+        endAt: classevent.endAt,
+        startAt: classevent.startAt,
+        updatedAt: classevent.updatedAt,
+        deletedAt: classevent.deletedAt,
+        comments: classevent.comments,
+        questions: classevent.questions,
+      }),
+    });
 
     const newClassEvent: ClassEvent = await res.json();
     return newClassEvent; // Return the created board if successful
@@ -116,17 +117,16 @@ export async function UpdateClassEvent(classevent: any) {
 }
 
 export async function DeleteClassEvent(id: any) {
-
-    await fetch(DATA_SOURCE_URL + "delete-class-event", {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            id,
-            name: "",
-            code: "",
-        })
-    })
-    return id
+  await fetch(DATA_SOURCE_URL + "delete-class-event", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id,
+      name: "",
+      code: "",
+    }),
+  });
+  return id;
 }

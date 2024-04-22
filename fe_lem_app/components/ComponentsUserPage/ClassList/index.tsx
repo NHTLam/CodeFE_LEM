@@ -9,7 +9,7 @@ import { Classroom } from "@/models/classroom";
 import { useEffect, useState } from "react";
 import { ListOwn } from "@/services/class-service";
 
-export const ClassList = () => {
+export const ClassList = ({ searchKey }) => {
   var currentUserId = "";
   if (typeof window !== "undefined") {
     currentUserId = localStorage.getItem("userId") ?? "";
@@ -20,14 +20,28 @@ export const ClassList = () => {
       if (currentUserId !== "") {
         try {
           const data = await ListOwn(currentUserId);
-          setclassRoomData(data);
+
+          if (
+            searchKey !== null &&
+            searchKey !== "" &&
+            searchKey !== undefined
+          ) {
+            const datas =
+              data?.filter(
+                (x) => x.name?.toLowerCase().includes(searchKey.toLowerCase()),
+              ) ?? [];
+
+            setclassRoomData(datas);
+          } else {
+            setclassRoomData(data);
+          }
         } catch (error) {
           console.error("Error fetching data:", error);
         }
       }
     };
     fetchData();
-  }, [currentUserId]);
+  }, [currentUserId, searchKey]);
   return (
     <>
       <div className="flex items-center text-lg font-semibold text-neutral-700">
@@ -37,6 +51,7 @@ export const ClassList = () => {
         isRecently={false}
         dataBoards={null}
         dataClasses={classRoomData}
+        classroomIdForBoard={0}
       />
     </>
   );

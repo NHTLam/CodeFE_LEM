@@ -6,7 +6,11 @@ import { Classroom } from "@/models/classroom";
 import { useEffect, useState } from "react";
 import { ListOwn } from "@/services/class-service";
 
-export const ClassListRecents = () => {
+interface ClassListRecentsPros {
+  searchKey: string;
+}
+
+export const ClassListRecents = ({ searchKey }: ClassListRecentsPros) => {
   var currentUserId = "";
   if (typeof window !== "undefined") {
     currentUserId = localStorage.getItem("userId") ?? "";
@@ -26,33 +30,38 @@ export const ClassListRecents = () => {
             );
           });
           currentClassRecents = currentClassRecents.slice(0, 5);
-          setclassRecents(currentClassRecents);
+
+          if (
+            searchKey !== null &&
+            searchKey !== "" &&
+            searchKey !== undefined
+          ) {
+            const datas =
+              currentClassRecents?.filter(
+                (x) => x.name?.toLowerCase().includes(searchKey.toLowerCase()),
+              ) ?? [];
+
+            setclassRecents(datas);
+          } else {
+            setclassRecents(currentClassRecents);
+          }
         }
       }
     };
     fetchData();
-  }, []);
+  }, [searchKey]);
+
   return (
     <>
       <div className="flex items-center text-lg font-semibold text-neutral-700">
         <Clock9 className="mr-3" /> Recently
       </div>
-      <ListBox isRecently={true} dataBoards={null} dataClasses={classRecents} />
+      <ListBox
+        isRecently={true}
+        dataBoards={null}
+        dataClasses={classRecents}
+        classroomIdForBoard={0}
+      />
     </>
-  );
-};
-
-ClassListRecents.Skeleton = function SkeletonBoardList() {
-  return (
-    <div className="gird-cols-2 grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-    </div>
   );
 };

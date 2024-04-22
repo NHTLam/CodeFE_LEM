@@ -32,14 +32,14 @@ const featuresData: Feature[] = [
   {
     id: 5,
     icon: "/images/icon/icon-05.svg",
-    title: "Create a quiz",
+    title: "Make and do work",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In convallis tortor.",
   },
   {
     id: 6,
     icon: "/images/icon/icon-06.svg",
-    title: "Read and participate in blogging",
+    title: "Create your own role in class",
     description:
       "Lorem ipsum dolor sit amet, consectetur adipiscing elit. In convallis tortor.",
   },

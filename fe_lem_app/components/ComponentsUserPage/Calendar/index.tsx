@@ -8,64 +8,67 @@ import interactionPlugin, {
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { Fragment, useEffect, useState } from "react";
 import { EventSourceInput } from "@fullcalendar/core/index.js";
-import { Transition, Dialog } from "@headlessui/react";
-import { AlertTriangle, CheckCircle } from "lucide-react";
-
-interface Event {
-  title: string;
-  start: Date | string;
-  allDay: boolean;
-  id: number;
-}
+import { Transition, Dialog, Listbox } from "@headlessui/react";
+import {
+  AlertTriangle,
+  CheckCircle,
+  CheckIcon,
+  ChevronDown,
+} from "lucide-react";
+import { ListOwnJob } from "@/services/job-service";
+import { Job } from "@/models/job";
+import { ListCard } from "@/services/board-service";
+import { Card } from "@/models/card";
 
 export const Calendar = () => {
-  const [unscheduled, setUnscheduled] = useState([
-    { title: "event 1", id: "1" },
-    { title: "event 2", id: "2" },
-    { title: "event 3", id: "3" },
-    { title: "event 4", id: "4" },
-    { title: "event 5", id: "5" },
-  ]);
-
-  const [allEvents, setAllEvents] = useState<Event[]>([]);
+  const [unscheduled, setUnscheduled] = useState<Job[]>([]);
+  const [allEvents, setAllEvents] = useState<Job[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [idToDelete, setIdToDelete] = useState<number | null>(null);
-  const [newEvent, setNewEvent] = useState<Event>({
-    title: "",
-    start: "",
-    allDay: false,
-    id: 0,
-  });
+  const [newEvent, setNewEvent] = useState<Job>();
+  const [cards, setCards] = useState<Card[]>([]);
+  const [selected, setSelected] = useState<Card | null>(null);
 
-  const FakeDataEvents: Event[] = [
-    {
-      id: 1,
-      title: "Meeting with Team A",
-      start: "2024-03-11 10:00",
-      allDay: true,
-    },
-    {
-      id: 2,
-      title: "Doctor Appointment",
-      start: "2024-03-12 14:30",
-      allDay: false,
-    },
-    {
-      id: 3,
-      title: "Birthday Party",
-      start: "2024-03-13",
-      allDay: true,
-    },
-    {
-      id: 4,
-      title: "Movie Night",
-      start: "2024-03-14 19:00", // String representing a valid date format
-      allDay: false,
-    },
-  ];
+  // const FakeDataEvents: Event[] = [
+  //   {
+  //     id: 1,
+  //     title: "Meeting with Team A",
+  //     start: "2024-03-11 10:00",
+  //     allDay: true,
+  //   },
+  //   {
+  //     id: 2,
+  //     title: "Doctor Appointment",
+  //     start: "2024-03-12 14:30",
+  //     allDay: false,
+  //   },
+  //   {
+  //     id: 3,
+  //     title: "Birthday Party",
+  //     start: "2024-03-13",
+  //     allDay: true,
+  //   },
+  //   {
+  //     id: 4,
+  //     title: "Movie Night",
+  //     start: "2024-03-14 19:00", // String representing a valid date format
+  //     allDay: false,
+  //   },
+  // ];
 
   useEffect(() => {
+    const fetchData = async () => {
+      const data = await ListOwnJob();
+      const scheduledData = data?.filter((d) => d.startAt !== null) ?? [];
+      const unScheduledData = data?.filter((d) => d.startAt === null) ?? [];
+      setAllEvents(scheduledData);
+      setUnscheduled(unScheduledData);
+      const cards = await ListCard();
+      setCards(cards ?? []);
+    };
+    fetchData();
+    //xử lý dữ liệu khi được kéo thả
     let draggableEl = document.getElementById("draggable-el");
     if (draggableEl) {
       new Draggable(draggableEl, {
@@ -78,14 +81,13 @@ export const Calendar = () => {
         },
       });
     }
-    setAllEvents(FakeDataEvents);
   }, []);
 
   function handleDateClick(arg: { date: Date; allDay: boolean }) {
     setNewEvent({
       ...newEvent,
-      start: arg.date,
-      allDay: arg.allDay,
+      startAt: arg.date,
+      isAllDay: arg.allDay,
       id: new Date().getTime(),
     });
     setShowModal(true);
@@ -118,9 +120,9 @@ export const Calendar = () => {
   function handleCloseModal() {
     setShowModal(false);
     setNewEvent({
-      title: "",
-      start: "",
-      allDay: false,
+      name: "",
+      startAt: new Date(),
+      isAllDay: false,
       id: 0,
     });
     setShowDeleteModal(false);
@@ -130,18 +132,18 @@ export const Calendar = () => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setNewEvent({
       ...newEvent,
-      title: e.target.value,
+      name: e.target.value,
     });
   };
 
   function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setAllEvents([...allEvents, newEvent]);
+    setAllEvents([...allEvents, newEvent!]);
     setShowModal(false);
     setNewEvent({
-      title: "",
-      start: "",
-      allDay: false,
+      name: "",
+      startAt: new Date(),
+      isAllDay: false,
       id: 0,
     });
   }
@@ -178,10 +180,10 @@ export const Calendar = () => {
             {unscheduled.map((event) => (
               <div
                 className="fc-event m-3 ml-auto w-full rounded-md border-2 bg-white p-1 text-center"
-                title={event.title}
+                title={event.name}
                 key={event.id}
               >
-                {event.title}
+                {event.name}
               </div>
             ))}
           </div>
@@ -318,16 +320,83 @@ export const Calendar = () => {
                                 placeholder:text-gray-400 
                                 focus:ring-2 focus:ring-inset 
                                 focus:ring-violet-600 sm:text-sm sm:leading-6"
-                            value={newEvent.title}
+                            value={newEvent?.name ?? ""}
                             onChange={(e) => handleChange(e)}
                             placeholder="Title"
                           />
+                        </div>
+                        <div>
+                          {/* Drop Down */}
+                          <Listbox value={selected} onChange={setSelected}>
+                            <div className="relative">
+                              <Listbox.Button
+                                className="mt-4 block w-full rounded-md border-0 py-1.5 pl-3 
+                                text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 
+                                placeholder:text-gray-400 
+                                focus:ring-2 focus:ring-inset 
+                                focus:ring-violet-600 sm:text-sm sm:leading-6"
+                              >
+                                <span className="block truncate">
+                                  {selected === null
+                                    ? "Select card"
+                                    : selected.name}
+                                </span>
+                                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                                  <ChevronDown className="h-5 w-5 text-gray-400" />
+                                </span>
+                              </Listbox.Button>
+                              <Transition
+                                as={Fragment}
+                                leave="transition ease-in duration-100"
+                                leaveFrom="opacity-100"
+                                leaveTo="opacity-0"
+                              >
+                                <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                                  {cards.map((card, cardIdx) => (
+                                    <Listbox.Option
+                                      key={cardIdx}
+                                      className={({ active }) =>
+                                        `relative cursor-default select-none py-2 pr-4 ${
+                                          active
+                                            ? "bg-amber-100 text-amber-900"
+                                            : "text-gray-900"
+                                        }`
+                                      }
+                                      value={card}
+                                    >
+                                      {({ selected }) => (
+                                        <>
+                                          <span
+                                            className={`block truncate ${
+                                              selected
+                                                ? "font-medium"
+                                                : "font-normal"
+                                            }`}
+                                          >
+                                            {card.name}
+                                          </span>
+                                          {selected ? (
+                                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                              <CheckIcon
+                                                className="h-5 w-5"
+                                                aria-hidden="true"
+                                              />
+                                            </span>
+                                          ) : null}
+                                        </>
+                                      )}
+                                    </Listbox.Option>
+                                  ))}
+                                </Listbox.Options>
+                              </Transition>
+                            </div>
+                          </Listbox>
                         </div>
                         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                           <button
                             type="submit"
                             className="inline-flex w-full justify-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-2"
-                            disabled={newEvent.title === ""}
+                            disabled={newEvent?.name === ""}
                           >
                             Create
                           </button>

@@ -16,7 +16,6 @@ interface WorkIdPageProps {
 }
 
 const DoEssayPage = ({ params }: WorkIdPageProps) => {
-
   const [classWork, setClassWork] = useState<any>();
   const [first, setFirst] = useState<any>(true);
   const [previous, setPrevious] = useState<any>("");
@@ -28,7 +27,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
   const filter: any = {
     id: parseInt(params.doId),
     code: "",
-    name: ""
+    name: "",
   };
 
   useEffect(() => {
@@ -36,6 +35,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
       const fetchData = async () => {
         const data = await GetClassEvent(filter);
         setClassWork(data);
+        console.log("classWork: " + classWork);
       };
       fetchData();
       setFirst(false);
@@ -47,38 +47,35 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
       await CreateStudentAnswer({
         appUserId: 1,
         questionId: classWork?.questions[index].id,
-        name: studentAnswer[index] || '',
+        name: studentAnswer[index] || "",
       });
     }
-    window.location.href = '/lem/classroom/1/class-work';
-  }
+    window.location.href = "/lem/classroom/1/class-work";
+  };
 
   const SwapPage = (num) => {
     if (Array.isArray(classWork?.questions)) {
       if (num == 0) {
         if (current == 0) {
           setCurrent(classWork?.questions.length - 1);
-        }
-        else {
+        } else {
           setCurrent(current - 1);
         }
-      }
-      else if (num == 1) {
+      } else if (num == 1) {
         if (current == classWork?.questions.length - 1) {
           setCurrent(0);
-        }
-        else {
+        } else {
           setCurrent(current + 1);
         }
       }
     }
     setCurrentValue("");
-  }
+  };
 
   return (
     <>
       <div className="mx-5">
-        <div className="flex mb-8">
+        <div className="mb-8 flex">
           <Link href="/lem/classroom/class-work">
             <button className="my-1 mr-10 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none">
               Cancel
@@ -86,7 +83,8 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
           </Link>
           <button
             onClick={submitAnswer}
-            className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+            className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
+          >
             Submit
           </button>
         </div>
@@ -98,40 +96,38 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
           <div className="flex">
             <button
               onClick={() => SwapPage(0)}
-              className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+              className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
+            >
               Previous
             </button>
             <button
               onClick={() => SwapPage(1)}
-              className="my-1 ml-20 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+              className="my-1 ml-20 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
+            >
               Next
             </button>
           </div>
         </div>
         <p className="mx-2 mt-5 font-bold">Description:</p>
-        <p className="mx-2">
-          {classWork?.questions[current].description}
-        </p>
+        <p className="mx-2">{classWork?.questions[current].description}</p>
       </div>
       <hr className="mx-7 my-4" />
       <div className="mx-5">
         <p className="mx-2 mt-5 font-bold">Instruction:</p>
-        <p className="mx-2">
-          {classWork?.questions[current].instruction}
-        </p>
+        <p className="mx-2">{classWork?.questions[current].instruction}</p>
       </div>
       <div className="mx-7 my-5 rounded-md">
         <textarea
           rows={20}
           placeholder="Answer"
-          value={studentAnswer[current] || ''}
-          onChange={e => {
+          value={studentAnswer[current] || ""}
+          onChange={(e) => {
             setStudentAnswer((prevAnswer) => {
               const updatedAnswer = { ...prevAnswer };
               updatedAnswer[current] = e.target.value;
-              console.log(updatedAnswer);   
+              console.log(updatedAnswer);
               return updatedAnswer;
-            })
+            });
           }}
           className="flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5"
         ></textarea>

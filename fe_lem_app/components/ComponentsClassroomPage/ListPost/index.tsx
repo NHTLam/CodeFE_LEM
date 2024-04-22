@@ -25,32 +25,16 @@ import { ClassEvent } from "@/models/classevent";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { CreateComment } from "@/services/comment-service";
 
-const useFakeAuth = () => {
-  const user = {
-    userId: "1234567890",
-    username: "John Doe",
-    email: "johndoe@example.com",
-  };
-
-  return {
-    userId: user.userId,
-    username: user.username,
-    email: user.email,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  };
-};
-
 export const ListPost = () => {
-  const { userId } = useFakeAuth();
-  if (userId == "0") {
-    return redirect("/select-org");
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
   }
 
   const filter: FilterData = {
     skip: 0,
     take: 5,
+    classroomId: Number(classroomId),
     isClassWork: false,
   };
 
@@ -89,7 +73,7 @@ export const ListPost = () => {
 
   const [createPost, setCreatePost] = useState({
     id: 0,
-    classroomId: 1,
+    classroomId: Number(classroomId),
     code: "",
     name: "",
     isClassWork: false,
@@ -104,9 +88,11 @@ export const ListPost = () => {
 
   const ConvertDateTime = (datetime) => {
     const convert = new Date(datetime);
-    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${convert.getMonth() + 1}/${convert.getFullYear()}`;
+    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${
+      convert.getMonth() + 1
+    }/${convert.getFullYear()}`;
     return format;
-  }
+  };
 
   const UpdateClassEventFunc = async (createPost, name, description) => {
     const data = {
@@ -127,7 +113,6 @@ export const ListPost = () => {
   };
 
   const actionComment = async (classEventId, descriptionComment) => {
-
     const data = {
       id: 0,
       classEventId: classEventId,
@@ -136,6 +121,7 @@ export const ListPost = () => {
     console.log(data);
 
     await CreateComment(data);
+    window.location.reload();
   };
 
   const showUpdateModal = async (index, classEvent) => {
@@ -157,8 +143,7 @@ export const ListPost = () => {
       };
       await UpdateClassEvent(data);
       window.location.reload();
-    }
-    else if (index == 1) {
+    } else if (index == 1) {
       setShowModal(true);
       const data = {
         id: classEvent.id,
@@ -176,9 +161,7 @@ export const ListPost = () => {
         deletedAt: new Date(),
       };
       setCreatePost(data);
-
-    }
-    else if (index == 2) {
+    } else if (index == 2) {
       await DeleteClassEvent(classEvent.id);
       window.location.reload();
     }
@@ -189,7 +172,7 @@ export const ListPost = () => {
       <div className="ml-25 w-4/5 rounded-lg border border-slate-500 p-2 shadow-lg shadow-slate-400">
         {post == false ? (
           <button onClick={() => setPost(true)} className="w-full">
-            <div className="flex flex-row gap-3 p-5 items-center">
+            <div className="flex flex-row items-center gap-3 p-5">
               <img
                 className="rounded-full border"
                 width={60}
@@ -232,7 +215,7 @@ export const ListPost = () => {
                 })
               }
               placeholder="Description"
-              className="block w-full rounded-md border-0 py-1.5 pl-3 h-30
+              className="block h-30 w-full rounded-md border-0 py-1.5 pl-3
                                 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 
                                 placeholder:text-gray-400 
                                 focus:ring-2 focus:ring-inset 
@@ -242,13 +225,13 @@ export const ListPost = () => {
               <button
                 onClick={() => setPost(false)}
                 className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-5 sm:mt-0"
-                >
+              >
                 Cancel
               </button>
               <button
-                  onClick={async () => {
-                    await CreateClassEvent(createPost);
-                  }}
+                onClick={async () => {
+                  await CreateClassEvent(createPost);
+                }}
                 className="inline-flex w-full justify-center rounded-md bg-sky-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-4"
               >
                 Send
@@ -272,7 +255,9 @@ export const ListPost = () => {
               />
               <div className="flex flex-col">
                 <p className="text-base">{classEvent.appUser.userName}</p>
-                <p className="text-xs">{ConvertDateTime(classEvent.createdAt)}</p>
+                <p className="text-xs">
+                  {ConvertDateTime(classEvent.createdAt)}
+                </p>
               </div>
             </div>
             <div>
@@ -295,7 +280,8 @@ export const ListPost = () => {
                         <Listbox.Option
                           key={actionId}
                           className={({ active }) =>
-                            `relative w-full cursor-default select-none p-4 py-2 ${active ? "bg-amber-100 text-amber-900" : ""
+                            `relative w-full cursor-default select-none p-4 py-2 ${
+                              active ? "bg-amber-100 text-amber-900" : ""
                             }`
                           }
                           value={action}
@@ -337,8 +323,12 @@ export const ListPost = () => {
                         />
                         <div className="flex flex-col gap-1">
                           <div className="flex items-end gap-3">
-                            <p className="text-base">{comment.appUser.userName}</p>
-                            <p className="text-xs">{ConvertDateTime(comment.createdAt)}</p>
+                            <p className="text-base">
+                              {comment.appUser.userName}
+                            </p>
+                            <p className="text-xs">
+                              {ConvertDateTime(comment.createdAt)}
+                            </p>
                           </div>
                           <h1 className=" text-sm">{comment.description}</h1>
                         </div>
@@ -440,7 +430,11 @@ export const ListPost = () => {
                           type="submit"
                           className="inline-flex w-full justify-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-2"
                           onClick={async () =>
-                            await UpdateClassEventFunc(createPost, name, description)
+                            await UpdateClassEventFunc(
+                              createPost,
+                              name,
+                              description,
+                            )
                           }
                         >
                           Update

@@ -1,4 +1,6 @@
 import { Board } from "@/models/board";
+import { Card } from "@/models/card";
+import { CreateBoardsFunction } from "@/models/createBoardsFunction";
 import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/board/";
@@ -13,6 +15,68 @@ export async function ListBoard() {
     });
     const Boards: Board[] = await res.json();
     return Boards;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
+export async function ListCard() {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "list-card-by-userId", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const Cards: Card[] = await res.json();
+    return Cards;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
+export async function DuplicateCard(card: Card) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "duplicate-card", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: card.id,
+        boardId: card.boardId,
+        name: card.name,
+        order: card.order,
+        jobs: card.jobs,
+      }),
+    });
+    const isSuccess = await res.json();
+    return isSuccess;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
+export async function DeleteCard(card: Card) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "delete-card", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        id: card.id,
+        boardId: card.boardId,
+        name: card.name,
+        order: card.order,
+        jobs: card.jobs,
+      }),
+    });
+    const isSuccess = await res.json();
+    return isSuccess;
   } catch (error) {
     console.error("Error parsing JSON:", error);
     return null;
@@ -116,17 +180,34 @@ export async function UpdateBoard(board: Board) {
   return newBoard;
 }
 
-export async function DeleteBoard(request: Request) {
-  const { id }: Partial<Board> = await request.json();
-
-  if (!id) return NextResponse.json({ message: "Board id required" });
-
+export async function DeleteBoard(boardId) {
   await fetch(DATA_SOURCE_URL + "delete", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      id: boardId,
+    }),
   });
 
-  return id;
+  return boardId;
+}
+
+export async function CreateBoardsForClass(
+  createBoardsFunction: CreateBoardsFunction,
+) {
+  const result = await fetch(DATA_SOURCE_URL + "create-boards-for-class", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      numberOfGroups: createBoardsFunction.numberOfGroups,
+      classroomId: createBoardsFunction.classroomId,
+      appUserIds: createBoardsFunction.appUserIds,
+    }),
+  });
+
+  return result;
 }

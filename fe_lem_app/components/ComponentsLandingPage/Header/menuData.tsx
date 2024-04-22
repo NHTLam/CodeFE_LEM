@@ -9,12 +9,6 @@ const menuData: Menu[] = [
   },
   {
     id: 2,
-    title: "Blog",
-    newTab: false,
-    path: "/landing-page/blog",
-  },
-  {
-    id: 2.1,
     title: "Docs",
     newTab: false,
     path: "/landing-page/docs",
@@ -28,37 +22,13 @@ const menuData: Menu[] = [
         id: 31,
         title: "Create Class",
         newTab: false,
-        path: "/landing-page/blog",
+        path: "/auth/signin",
       },
       {
         id: 34,
         title: "Join a Class",
         newTab: false,
         path: "/auth/signin",
-      },
-      {
-        id: 35,
-        title: "Create an exam",
-        newTab: false,
-        path: "/auth/signup",
-      },
-      {
-        id: 35,
-        title: "Do an exam",
-        newTab: false,
-        path: "/landing-page/docs",
-      },
-      {
-        id: 35.1,
-        title: "Create Table",
-        newTab: false,
-        path: "/landing-page/support",
-      },
-      {
-        id: 36,
-        title: "Join Table",
-        newTab: false,
-        path: "/error",
       },
     ],
   },
@@ -67,7 +37,7 @@ const menuData: Menu[] = [
     id: 4,
     title: "Support",
     newTab: false,
-    path: "/support",
+    path: "/landing-page/support",
   },
 ];
 

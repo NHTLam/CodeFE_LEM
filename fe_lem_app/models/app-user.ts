@@ -1,4 +1,4 @@
-import { AppUserRoleMapping } from "./appUserRoleMapping";
+import { AppUserClassroomMapping } from "./appUserClassroomMapping";
 
 export type AppUser = {
     id?: number;
@@ -9,5 +9,5 @@ export type AppUser = {
     gender?: string;
     password: string;
     statusId: number;
-    appUserRoleMappings?: AppUserRoleMapping[];
+    appUserClassroomMappings?: AppUserClassroomMapping[];
 };

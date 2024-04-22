@@ -8,10 +8,10 @@ import { CreateClassEvent } from "@/services/class-event-service";
 import { CreateQuestion } from "@/services/question-service";
 
 const MakeEssayPage = () => {
-  const DefautAnswer = {
-    name: "A",
-    answer: "Answer 1",
-  };
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
+  }
 
   function upLoadFile() {
     console.log("Upload File");
@@ -26,23 +26,21 @@ const MakeEssayPage = () => {
   const dataChildren = (childData) => {
     setQuestionList(childData);
     console.log(childData);
-    
-  }
+  };
 
   const actionChildren = async (childData) => {
-
     const data = await CreateClassEvent({
       ...childData,
       isClassWork: true,
-      classroomId: 1,
+      classroomId: classroomId,
       code: "",
       appUserId: 1,
       questions: questionList,
     });
 
-    window.location.href = '/lem/classroom/1/class-work';
-  }
- 
+    window.location.href = "/lem/classroom/1/class-work";
+  };
+
   return (
     <>
       <div className="flex w-full">

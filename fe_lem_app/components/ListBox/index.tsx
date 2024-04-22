@@ -2,6 +2,8 @@ import Link from "next/link";
 import { FormPopover } from "@/components/Form/form-popover";
 import { Board } from "@/models/board";
 import { Classroom } from "@/models/classroom";
+import { Menu } from "lucide-react";
+import { defaultImages } from "@/public/defaultImages/images";
 
 interface ListBoxPros {
   isRecently: boolean;
@@ -18,7 +20,6 @@ export const ListBox = ({
 }: ListBoxPros) => {
   const datas = dataBoards != null ? dataBoards : dataClasses;
   const isForBoard = dataBoards != null;
-  console.log(datas);
   return (
     <div className="mt-5 space-y-4">
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
@@ -37,7 +38,11 @@ export const ListBox = ({
                 className="group relative aspect-video h-35 w-60 overflow-hidden rounded-sm bg-sky-700 bg-cover bg-center bg-no-repeat p-2"
                 style={{
                   backgroundImage: `url(${
-                    isForBoard ? data.imageUrl : data.homeImg
+                    isForBoard
+                      ? data.imageUrl === null || data.imageUrl === ""
+                        ? defaultImages[5].urls.full
+                        : data.imageUrl
+                      : data.homeImg
                   })`,
                 }}
               >

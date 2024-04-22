@@ -9,4 +9,5 @@ export type FilterData = {
     pinned?: boolean;
     isClassWork?: boolean;
     appUserId?: number;
+    classroomId?: number;
   };

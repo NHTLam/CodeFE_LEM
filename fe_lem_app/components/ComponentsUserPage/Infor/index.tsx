@@ -1,15 +1,15 @@
 "use client";
 
-import { Home, CreditCard, Search, Trash, Pin, Filter } from "lucide-react";
-
+import { Search, Trash, Pin, Filter } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useState } from "react";
-import Link from "next/link";
 
-export const Info = () => {
+export const Info = ({ parentCallback }) => {
   // if (!isLoaded) {
   //   return <Info.Skeleton />;
   // }
+  const handleSearch = (searchKey: string) => {
+    parentCallback(searchKey);
+  };
 
   return (
     <div className="flex items-center gap-x-4 pb-4 pl-3">
@@ -30,6 +30,7 @@ export const Info = () => {
         <input
           type="text"
           placeholder="Search"
+          onChange={(e) => handleSearch(e.target.value)}
           className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
         />
       </div>

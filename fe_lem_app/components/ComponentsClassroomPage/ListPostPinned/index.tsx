@@ -23,34 +23,17 @@ import { ClassEvent } from "@/models/classevent";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { CreateComment } from "@/services/comment-service";
 
-const useFakeAuth = () => {
-  const user = {
-    userId: "1234567890",
-    username: "John Doe",
-    email: "johndoe@example.com",
-  };
-
-  return {
-    userId: user.userId,
-    username: user.username,
-    email: user.email,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  };
-};
-
 export const ListPostPinned = () => {
-  const { userId } = useFakeAuth();
-  if (userId == "0") {
-    return redirect("/select-org");
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
   }
 
   const filter: FilterData = {
     skip: 0,
     take: 10,
     pinned: true,
-    isClassWork: false
+    isClassWork: false,
   };
 
   const [classEvents, setClassEvents] = useState<any>();
@@ -85,18 +68,22 @@ export const ListPostPinned = () => {
   const showDetail = (classEvent) => {
     setShowModal(true);
     setDetailClassEvent(classEvent);
-  }
+  };
 
   const ConvertDateTime = (datetime) => {
     const convert = new Date(datetime);
-    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${convert.getMonth() + 1}/${convert.getFullYear()}`;
+    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${
+      convert.getMonth() + 1
+    }/${convert.getFullYear()}`;
     return format;
-  }
+  };
 
   return (
-    <div className="h-fit w-full max-w-md bg-white border border-gray-200 rounded-lg shadow sm:p-4 sm:pt-8 dark:bg-gray-800 dark:border-gray-700">
-      <div className="flex items-center justify-between mb-4">
-        <h5 className="text-xl ml-4 font-bold leading-none text-gray-900 dark:text-white">Pinned Posts</h5>
+    <div className="h-fit w-full max-w-md rounded-lg border border-gray-200 bg-white shadow dark:border-gray-700 dark:bg-gray-800 sm:p-4 sm:pt-8">
+      <div className="mb-4 flex items-center justify-between">
+        <h5 className="ml-4 text-xl font-bold leading-none text-gray-900 dark:text-white">
+          Pinned Posts
+        </h5>
       </div>
       <hr />
       <div className="flow-root h-96 overflow-auto">
@@ -105,9 +92,10 @@ export const ListPostPinned = () => {
             onClick={() => showDetail(classEvent)}
             key={classEvent.id}
             role="list"
-            className="divide-y w-full divide-gray-200 dark:divide-gray-700 p-2 hover:bg-slate-100 hover:pointer rounded-lg">
-            <li className="py-3 sm:py-4 list-none ">
-              <div className="sm:grid sm:grid-flow-row-dense sm:grid-cols-2 items-center justify-items-start">
+            className="hover:pointer w-full divide-y divide-gray-200 rounded-lg p-2 hover:bg-slate-100 dark:divide-gray-700"
+          >
+            <li className="list-none py-3 sm:py-4 ">
+              <div className="items-center justify-items-start sm:grid sm:grid-flow-row-dense sm:grid-cols-2">
                 <div className="flex items-center gap-3">
                   <img
                     className="rounded-full border"
@@ -117,7 +105,9 @@ export const ListPostPinned = () => {
                   />
                   <div className="flex flex-col justify-start">
                     <p className="text-base">{classEvent.appUser.userName}</p>
-                    <p className="text-xs">{ConvertDateTime(classEvent.createdAt)}</p>
+                    <p className="text-xs">
+                      {ConvertDateTime(classEvent.createdAt)}
+                    </p>
                   </div>
                 </div>
                 <div>
@@ -170,9 +160,9 @@ export const ListPostPinned = () => {
                         {detailClassEvent.name}
                       </Dialog.Title>
                       <div className="mt-2">
-                        <p
-                          className="mt-5 text-start w-full py-1.5 pl-3 text-gray-900 "
-                        >{detailClassEvent.description}</p>
+                        <p className="mt-5 w-full py-1.5 pl-3 text-start text-gray-900 ">
+                          {detailClassEvent.description}
+                        </p>
                       </div>
                       <div className="mt-5 justify-items-end sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                         <button
@@ -192,8 +182,6 @@ export const ListPostPinned = () => {
         </Dialog>
       </Transition.Root>
     </div>
-
-
   );
 };
 

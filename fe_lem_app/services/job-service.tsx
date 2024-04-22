@@ -1,6 +1,7 @@
 import { Job } from "@/models/job";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/job/";
+const token = localStorage.getItem("token") ?? "";
 
 export async function ListJob() {
   try {
@@ -18,12 +19,30 @@ export async function ListJob() {
   }
 }
 
+export async function ListOwnJob() {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "list-own", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const Jobs: Job[] = await res.json();
+    return Jobs;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
 export async function GetJob(id: number) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "get", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ id }),
     });
@@ -41,6 +60,7 @@ export async function CreateJob(job: Job) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         cardId: job.cardId,
@@ -49,6 +69,9 @@ export async function CreateJob(job: Job) {
         startAt: job.startAt,
         endAt: job.endAt,
         todos: job.todos,
+        isAllDay: job.isAllDay,
+        creatorId: job.creatorId,
+        appUserJobMapping: job.appUserJobMaping,
       }),
     });
 
@@ -66,6 +89,7 @@ export async function UpdateJob(job: Job) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: job.id,
@@ -75,6 +99,9 @@ export async function UpdateJob(job: Job) {
       startAt: job.startAt,
       endAt: job.endAt,
       todos: job.todos,
+      isAllDay: job.isAllDay,
+      creatorId: job.creatorId,
+      appUserJobMapping: job.appUserJobMaping,
     }),
   });
   const newJob: Job = await res.json();
@@ -86,6 +113,7 @@ export async function DeleteJob(jobId: number) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: jobId,

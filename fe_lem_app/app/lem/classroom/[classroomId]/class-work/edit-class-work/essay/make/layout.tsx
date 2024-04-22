@@ -7,7 +7,6 @@ export default function EditClassWorkLayout({
 }) {
   return (
     <>
-
       <section className="grow">{children}</section>
     </>
   );

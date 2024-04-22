@@ -1,6 +1,7 @@
 "use client";
 import { AppUser } from "@/models/app-user";
 import { ListAppUserByClassroom } from "@/services/app-user-service";
+import { GetClass } from "@/services/class-service";
 import { Dialog, Transition } from "@headlessui/react";
 import { Avatar } from "@nextui-org/react";
 import {
@@ -19,6 +20,7 @@ export const ListUser = () => {
   const [usersInClass, setUsersInClass] = useState<AppUser[] | null>(null);
   const [roles, setRoles] = useState<any>();
   const [showGetCodeModal, setShowGetCodeModal] = useState(false);
+  const [classroomCode, setClassroomCode] = useState("");
 
   var currentUserId = "";
   var classroomId = "";
@@ -33,23 +35,19 @@ export const ListUser = () => {
       setUsersInClass(users);
       if (users !== null) {
         const newRoles = users!.flatMap(
-          (user) => user.appUserRoleMappings?.map((a) => a.role),
+          (user) => user.appUserClassroomMappings?.map((a) => a.role),
         );
         if (newRoles !== null) {
           const uniqueSet = new Set(newRoles.map((role) => role!.id)); //Lấy những id không bị trùng
           const uniqueRoles = Array.from(uniqueSet).map((id) =>
             newRoles.find((role) => role!.id === id),
           ); //map lại
-          uniqueRoles.sort((a, b) => {
-            if (a!.name === "Teacher") {
-              return -1;
-            } else {
-              return a!.name.localeCompare(b!.name);
-            }
-          });
           setRoles(uniqueRoles);
         }
       }
+      const classroom = await GetClass(Number(classroomId));
+      console.log("Class Code: " + classroom?.code);
+      setClassroomCode(classroom?.code ?? "");
     };
     fetchData();
     console.log("usersInClass2: " + usersInClass);
@@ -92,7 +90,7 @@ export const ListUser = () => {
               {usersInClass?.map((user) => (
                 <>
                   {user
-                    .appUserRoleMappings!.map((x) => x.roleId)
+                    .appUserClassroomMappings!.map((x) => x.roleId)
                     .includes(role.id) ? (
                     <div className="mx-40 my-2 flex items-center gap-x-4 pb-4 pl-3">
                       <div className="relative">
@@ -182,15 +180,7 @@ export const ListUser = () => {
                         <hr className="my-2" />
                         <div className="text-2sm flex grow items-center font-semibold">
                           Classroom code for teacher:
-                          <p className="ml-3 text-cyan-700">slakjh-asdk-3 c</p>
-                        </div>
-                        <div className="text-2sm flex grow items-center font-semibold">
-                          Classroom code for student:
-                          <p className="ml-3 text-cyan-700">slakjh-asdk-3 s</p>
-                        </div>
-                        <div className="text-2sm flex grow items-center font-semibold">
-                          Classroom code for other:
-                          <p className="ml-3 text-cyan-700">slakjh-asdk-3 o</p>
+                          <p className="ml-3 text-cyan-700">{classroomCode}</p>
                         </div>
                       </div>
                     </Dialog.Panel>

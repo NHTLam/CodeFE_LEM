@@ -10,57 +10,38 @@ import Link from "next/link";
 import { FilterData } from "@/models/filter";
 import { ListClassEvent } from "@/services/class-event-service";
 
-const useFakeAuth = () => {
-  const user = {
-    userId: "1234567890",
-    username: "John Doe",
-    email: "johndoe@example.com",
-  };
-
-  return {
-    userId: user.userId,
-    username: user.username,
-    email: user.email,
-    isAuthenticated: true,
-    isLoading: false,
-    error: null,
-  };
-};
-
 export const ListClassWork = () => {
-  const { userId } = useFakeAuth();
-  if (userId == "0") {
-    return redirect("/select-org");
+  var classroomId = "";
+  var appUserId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
+    appUserId = localStorage.getItem("userId") ?? "";
   }
-
   const filter: FilterData = {
     skip: 0,
-    appUserId: 1,
-    isClassWork: true
+    isClassWork: true,
+    appUserId: Number(appUserId),
+    classroomId: Number(classroomId),
   };
 
   const [classEvents, setClassEvents] = useState<any>();
-  const [first, setFirst] = useState<any>(true);
 
   useEffect(() => {
-    if (first == true) {
-      const fetchData = async () => {
-        const data = await ListClassEvent(filter);
-        setClassEvents(data);
-      };
-      fetchData();
-      setFirst(false);
-    }
+    const fetchData = async () => {
+      const data = await ListClassEvent(filter);
+      setClassEvents(data);
+    };
+    fetchData();
   }, []);
 
   const classWorkTypes = [
     {
       name: "Essay",
-      link: "/lem/classroom/class-work/edit-class-work/essay/make",
+      link: `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/make`,
     },
     {
       name: "Multiple choice",
-      link: "/lem/classroom/class-work/edit-class-work/multiple-choice/make",
+      link: `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/make`,
     },
   ];
   const [post, setPost] = useState<any>(false);
@@ -69,9 +50,11 @@ export const ListClassWork = () => {
 
   const ConvertDateTime = (datetime) => {
     const convert = new Date(datetime);
-    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${convert.getMonth() + 1}/${convert.getFullYear()}`;
+    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${
+      convert.getMonth() + 1
+    }/${convert.getFullYear()}`;
     return format;
-  }
+  };
 
   return (
     <div>
@@ -136,8 +119,8 @@ export const ListClassWork = () => {
             key={index}
             className="w-3/4 rounded-lg border border-slate-500 p-6"
           >
-            <div className="flex items-center gap-3 justify-between">
-              <div className="sm:grid sm:grid-flow-row-dense sm:grid-cols-4 items-center justify-items-start w-full">
+            <div className="flex items-center justify-between gap-3">
+              <div className="w-full items-center justify-items-start sm:grid sm:grid-flow-row-dense sm:grid-cols-4">
                 <div className="flex items-center gap-3">
                   <img
                     className="rounded-full border"
@@ -147,32 +130,39 @@ export const ListClassWork = () => {
                   />
                   <div className="flex flex-col">
                     <p className="text-base">{classEvent.appUser.userName}</p>
-                    <p className="text-xs">{ConvertDateTime(classEvent.createdAt)}</p>
+                    <p className="text-xs">
+                      {ConvertDateTime(classEvent.createdAt)}
+                    </p>
                   </div>
                 </div>
                 <div>
-                  <h1 className="text-xl font-semibold">
-                    {classEvent.name}
-                  </h1>
+                  <h1 className="text-xl font-semibold">{classEvent.name}</h1>
                 </div>
               </div>
-              <Link href={`/lem/classroom/1/class-work/edit-class-work/essay/mark/${classEvent.id}`} >
-                <button
-                  className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-                  Chấm bài
+              <Link
+                href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do/${classEvent.id}`}
+              >
+                <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                  Do
                 </button>
               </Link>
-              {classEvent.isSubmit == false ? (<Link href={`/lem/classroom/class-work/edit-class-work/essay/do/${classEvent.id}`} >
-                <button
-                  className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-                  Làm bài
-                </button>
-              </Link>) : (<Link href={`/lem/classroom/1/class-work/edit-class-work/essay/detail/${classEvent.id}`} >
-                <button
-                  className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-                  Xem bài làm
-                </button>
-              </Link>)}
+              {classEvent.isSubmit == false ? (
+                <Link
+                  href={`/lem/classroom/class-work/edit-class-work/essay/do/${classEvent.id}`}
+                >
+                  <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                    Làm bài
+                  </button>
+                </Link>
+              ) : (
+                <Link
+                  href={`/lem/classroom/1/class-work/edit-class-work/essay/detail/${classEvent.id}`}
+                >
+                  <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                    Xem bài làm
+                  </button>
+                </Link>
+              )}
             </div>
           </div>
         ))}

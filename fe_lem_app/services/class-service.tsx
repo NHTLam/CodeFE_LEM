@@ -2,6 +2,7 @@ import { Classroom } from "@/models/classroom";
 import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
+const token = localStorage.getItem("token") ?? "";
 
 export async function ListClass() {
   try {
@@ -14,7 +15,7 @@ export async function ListClass() {
     const Classes: Classroom[] = await res.json();
     return Classes;
   } catch (error) {
-    console.error("Error parsing JSON:", error);
+    console.error("Error:", error);
     return null;
   }
 }
@@ -32,7 +33,25 @@ export async function ListOwn(userId) {
     const classes: Classroom[] = await res.json();
     return classes;
   } catch (error) {
-    console.error("Error parsing JSON:", error);
+    console.error("Error:", error);
+    return null;
+  }
+}
+
+export async function JoinClass(code, token) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ code: code }),
+    });
+    const isSuccess = await res.json();
+    return isSuccess;
+  } catch (error) {
+    console.error("Error:", error);
     return null;
   }
 }
@@ -49,7 +68,7 @@ export async function GetClass(id: number) {
     const Classes: Classroom = await res.json();
     return Classes;
   } catch (error) {
-    console.error("Error parsing JSON:", error);
+    console.error("Error:", error);
     return null;
   }
 }
@@ -69,13 +88,14 @@ export async function UpdateClass(classroom) {
 }
 
 export async function DeleteClass(id) {
-  if (!id) return NextResponse.json({ message: "Class id required" });
-
   await fetch(DATA_SOURCE_URL + "delete", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
+    body: JSON.stringify({
+      id,
+    }),
   });
 
   return id;
@@ -87,6 +107,7 @@ export async function CreateClass(newClassData: any) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: newClassData.name,
