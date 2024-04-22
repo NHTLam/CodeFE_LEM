@@ -19,7 +19,7 @@ export async function CreateQuestion(question: any) {
         instruction: question.instruction,
         name: question.name,
         correctAnswer: question.correctAnswer,
-        studentAnswer: question.studentAnswer,
+        studentAnswers: question.studentAnswers,
         answers: question.answers,
       }),
     });
@@ -46,7 +46,7 @@ export async function UpdateQuestion(question: any) {
       instruction: question.instruction,
       name: question.name,
       correctAnswer: question.correctAnswer,
-      studentAnswer: question.studentAnswer,
+      studentAnswers: question.studentAnswers,
       answers: question.answers,
     }),
   });

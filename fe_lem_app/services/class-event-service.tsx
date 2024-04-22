@@ -2,7 +2,7 @@ import { ClassEvent } from "@/models/classevent";
 import { FilterData } from "@/models/filter";
 import { NextResponse } from "next/server";
 
-const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
+const DATA_SOURCE_URL = process.env.BASE_URL + "/tel/classroom/";
 
 export async function ListClassEvent(filter: FilterData) {
   try {
@@ -21,6 +21,7 @@ export async function ListClassEvent(filter: FilterData) {
         take: filter.take,
         ordertype: filter.ordertype,
         orderby: filter.orderby,
+        appUserId: filter.appUserId,
         classroomId: filter.classroomId,
       }),
     });
@@ -65,6 +66,7 @@ export async function CreateClassEvent(classevent: any) {
         classroomId: classevent.classroomId,
         code: classevent.code,
         name: classevent.name,
+        appUserId: classevent.appUserId,
         isClassWork: classevent.isClassWork,
         description: classevent.description,
         pinned: classevent.pinned,
@@ -73,8 +75,8 @@ export async function CreateClassEvent(classevent: any) {
         startAt: classevent.startAt,
         updatedAt: classevent.updatedAt,
         deletedAt: classevent.deletedAt,
-        comment: classevent.comment,
-        question: classevent.question,
+        comments: classevent.comments,
+        questions: classevent.questions,
       }),
     });
 
@@ -114,11 +116,7 @@ export async function UpdateClassEvent(classevent: any) {
   return newClassEvent;
 }
 
-export async function DeleteClassEvent(request: Request) {
-  const { id }: Partial<ClassEvent> = await request.json();
-
-  if (!id) return NextResponse.json({ message: "ClassEvent id required" });
-
+export async function DeleteClassEvent(id: any) {
   await fetch(DATA_SOURCE_URL + "delete-class-event", {
     method: "POST",
     headers: {
@@ -126,8 +124,9 @@ export async function DeleteClassEvent(request: Request) {
     },
     body: JSON.stringify({
       id,
+      name: "",
+      code: "",
     }),
   });
-
   return id;
 }
