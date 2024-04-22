@@ -19,7 +19,7 @@ interface Event {
 }
 
 export const Calendar = () => {
-  const [events, setEvents] = useState([
+  const [unscheduled, setUnscheduled] = useState([
     { title: "event 1", id: "1" },
     { title: "event 2", id: "2" },
     { title: "event 3", id: "3" },
@@ -175,7 +175,7 @@ export const Calendar = () => {
             className="col-span-3 ml-8 mr-5 mt-16 rounded-md border-2 bg-blue-50 p-2"
           >
             <h1 className="text-center text-lg font-bold">Unscheduled list</h1>
-            {events.map((event) => (
+            {unscheduled.map((event) => (
               <div
                 className="fc-event m-3 ml-auto w-full rounded-md border-2 bg-white p-1 text-center"
                 title={event.title}

@@ -23,6 +23,7 @@ import { Board } from "@/models/board";
 import { CreateClass } from "@/services/class-service";
 import { Classroom } from "@/models/classroom";
 import { AppUserClassroomMapping } from "@/models/appUserClassroomMapping";
+import { AppUserBoardMapping } from "@/models/appUserBoardMapping";
 
 interface FormPopoverProps {
   children: React.ReactNode;
@@ -32,6 +33,7 @@ interface FormPopoverProps {
   isForBoard: boolean;
   classroomData: Classroom[] | null;
   boardData: Board[] | null;
+  classroomIdForBoard: number;
 }
 
 export const FormPopover = ({
@@ -42,6 +44,7 @@ export const FormPopover = ({
   isForBoard,
   classroomData,
   boardData,
+  classroomIdForBoard,
 }: FormPopoverProps) => {
   //const proModal = useProModal();
   var currentUserId = "";
@@ -80,7 +83,33 @@ export const FormPopover = ({
     };
     appUserClassroomMappings.push(appUserClassroomMapping);
 
-    const newData = { name: name, imageUrl: imageUrl };
+    var appUserBoardMappings: AppUserBoardMapping[] = [];
+    if (boardData !== null) {
+      const boardIds = boardData.map((x) => x.id);
+      for (let i = 0; i < boardIds.length; i++) {
+        var appUserBoardMapping: AppUserBoardMapping = {
+          id: 0,
+          appUserId: Number(currentUserId),
+          boardId: boardIds[i]!,
+          appUserTypeId: 2,
+        };
+        appUserBoardMappings.push(appUserBoardMapping);
+      }
+    }
+    var appUserBoardMapping: AppUserBoardMapping = {
+      id: 0,
+      appUserId: Number(currentUserId),
+      boardId: 0,
+      appUserTypeId: 2,
+    };
+    appUserBoardMappings.push(appUserBoardMapping);
+
+    const newBoardData = {
+      name: name,
+      imageUrl: imageUrl,
+      appUserBoardMappings: appUserBoardMappings,
+      classroomId: classroomIdForBoard,
+    };
     const newClassData = {
       name: name,
       imageUrl: imageUrl,
@@ -88,9 +117,11 @@ export const FormPopover = ({
     };
 
     if (isForBoard) {
-      await CreateBoard(newData);
+      await CreateBoard(newBoardData);
+      window.location.reload();
     } else {
       await CreateClass(newClassData);
+      window.location.reload();
     }
   };
 

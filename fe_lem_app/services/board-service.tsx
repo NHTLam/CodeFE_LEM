@@ -43,10 +43,27 @@ export async function GetOwnBoard(userId: number) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ userId }),
+      body: JSON.stringify({ appUserId: userId }),
     });
-    const Boards: Board = await res.json();
-    return Boards;
+    const board = await res.json();
+    return board;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}
+
+export async function ListByClassroom(classroomId: number) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "list-by-classroom", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ classroomId: classroomId }),
+    });
+    const boards = await res.json();
+    return boards;
   } catch (error) {
     console.error("Error parsing JSON:", error);
     return null;
@@ -63,10 +80,12 @@ export async function CreateBoard(board: any) {
       body: JSON.stringify({
         name: board.name,
         imageUrl: board.imageUrl,
+        appUserBoardMappings: board.appUserBoardMappings,
+        classroomId: board.classroomId,
       }),
     });
 
-    const newBoard: Board = await res.json();
+    const newBoard = await res.json();
     return newBoard; // Return the created board if successful
   } catch (error) {
     // Handle network errors or unexpected exceptions
@@ -75,35 +94,22 @@ export async function CreateBoard(board: any) {
   }
 }
 
-export async function UpdateBoard(request: Request) {
-  const {
-    id,
-    code,
-    name,
-    description,
-    imageUrl,
-    isFavourite,
-    createdAt,
-    updatedAt,
-    deletedAt,
-    card,
-  }: Partial<Board> = await request.json();
-
+export async function UpdateBoard(board: Board) {
   const res = await fetch(DATA_SOURCE_URL + "update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      id,
-      code,
-      name,
-      description,
-      imageUrl,
-      isFavourite,
-      createdAt,
-      updatedAt,
-      card,
+      id: board.id,
+      code: board.code,
+      name: board.name,
+      description: board.description,
+      isFavourite: board.isFavourite,
+      imageUrl: board.imageUrl,
+      classroomId: board.classroomId,
+      appUserBoardMappings: board.appUserBoardMappings,
+      cards: board.cards,
     }),
   });
   const newBoard: Board = await res.json();

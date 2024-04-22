@@ -4,6 +4,7 @@ import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { Draggable } from "@hello-pangea/dnd";
 import Datepicker from "react-tailwindcss-datepicker";
 import {
+  Check,
   CheckCircle,
   CheckIcon,
   ChevronDown,
@@ -12,33 +13,39 @@ import {
   X,
 } from "lucide-react";
 import { title } from "process";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
+import { Job } from "@/models/job";
+import { Todo } from "@/models/todo";
+import { UpdateJob } from "@/services/job-service";
 
 //import { useCardModal } from "@/hooks/use-card-modal";
 
 interface CardItemProps {
-  data: {
-    id: string;
-    title: string;
-    order: number;
-    description: string | null;
-    listId: string;
-    createdAt: Date;
-    updatedAt: Date;
-  };
+  data: Job;
   index: number;
 }
 
-export const CardItem = ({ data, index }: CardItemProps) => {
+export const JobItem = ({ data, index }: CardItemProps) => {
   // const cardModal = useCardModal();
   const [showModal, setShowModal] = useState(false);
+  const [todoCheckBoxes, setTodoCheckBoxes] = useState<Todo[]>(
+    data.todos ?? [],
+  );
+  const [isEditTodo, setIsEditTodo] = useState(false);
+  const [updateTodoCheckBox, setUpdateTodoCheckBox] = useState("");
   const [value, setValue] = useState({
-    startDate: new Date(),
-    endDate: new Date("11-03-2024"),
+    startDate: data.startAt ?? new Date(),
+    endDate: data.endAt ?? new Date(),
   });
+  const [job, setJob] = useState<Job>(data);
 
   const handleValueChange = (newValue) => {
     setValue(newValue);
+    setJob({
+      ...job,
+      startAt: newValue.startDate,
+      endAt: newValue.endDate,
+    });
   };
 
   const member = [
@@ -48,17 +55,56 @@ export const CardItem = ({ data, index }: CardItemProps) => {
   ];
   const [selected, setSelected] = useState(member[0]);
 
-  function handleClick(e) {
+  function handleClick() {
     setShowModal(true);
   }
 
-  function handleCloseModal(e) {
+  function handleCloseModal() {
     setShowModal(false);
   }
 
+  const handleAddTodo = () => {
+    const todo: Todo = {
+      id: 0,
+      jobId: data.id,
+      description: "Default option",
+    };
+    setTodoCheckBoxes((prevTodoCheckBoxes) => [...prevTodoCheckBoxes, todo]);
+  };
+
+  const handleRemoveTodo = (index: number) => {
+    const deletedTodoCheckBoxes = [
+      ...todoCheckBoxes.slice(0, index),
+      ...todoCheckBoxes.slice(index + 1),
+    ];
+    setTodoCheckBoxes(deletedTodoCheckBoxes);
+  };
+
+  const handleUpdateTodo = (index: number) => {
+    handleRemoveTodo(index);
+    const todo: Todo = {
+      id: 0,
+      jobId: data.id,
+      description: updateTodoCheckBox,
+    };
+    setTodoCheckBoxes((prevTodoCheckBoxes) => [...prevTodoCheckBoxes, todo]);
+    setIsEditTodo(false);
+  };
+
+  const handleUpdateJob = async () => {
+    const updateJob = job;
+    if (updateJob.todos === null) {
+      updateJob.todos = [];
+    }
+    updateJob!.todos = todoCheckBoxes;
+    const result = await UpdateJob(updateJob);
+    console.log("result: " + result);
+    window.location.reload();
+  };
+
   return (
     <>
-      <Draggable draggableId={data.id} index={index}>
+      <Draggable draggableId={data.id!.toString()} index={index}>
         {(provided) => (
           <button onClick={handleClick}>
             <div
@@ -69,14 +115,14 @@ export const CardItem = ({ data, index }: CardItemProps) => {
               //onClick={() => cardModal.onOpen(data.id)}
               className="truncate rounded-md border-2 border-transparent bg-white px-3 py-2 text-sm shadow-sm hover:border-black"
             >
-              {data.title}
+              {data.name}
             </div>
           </button>
         )}
       </Draggable>
 
       <Transition.Root show={showModal} as={Fragment}>
-        <Dialog as="div" className="relative z-10" onClose={setShowModal}>
+        <Dialog as="div" className="relative z-50" onClose={setShowModal}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -105,9 +151,10 @@ export const CardItem = ({ data, index }: CardItemProps) => {
                     <div className="flex gap-y-2">
                       <div className="flex grow items-center text-2xl font-semibold">
                         <ClipboardList className="mr-2 h-10 w-10" />
-                        Name
+                        {data.name}
                       </div>
                       <button
+                        type="button"
                         className="float-right flex w-10 justify-center rounded-sm text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
                         onClick={handleCloseModal}
                       >
@@ -115,14 +162,11 @@ export const CardItem = ({ data, index }: CardItemProps) => {
                       </button>
                     </div>
                     <div className="mt-3 text-center sm:mt-5">
-                      <form
-                        action="submit"
-                        // onSubmit={handleSubmit}
-                      >
+                      <form>
                         <div className="mt-2">
                           <div className="flex">
                             <p className="float-left mr-3 mt-2">Member: </p>
-                            <div>
+                            <div className="z-10">
                               {/* Drop Down */}
                               <Listbox value={selected} onChange={setSelected}>
                                 <div className="relative">
@@ -198,11 +242,16 @@ export const CardItem = ({ data, index }: CardItemProps) => {
                             <p className="float-left mr-3 mt-2">Description:</p>
                             <div className="w-full">
                               <textarea
-                                // onKeyDown={onTextareakeyDown}
-                                // ref={ref}
                                 className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full grow rounded-lg border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
-                                placeholder="Enter description"
-                                // errors={fieldErrors}
+                                placeholder={data.description}
+                                onChange={(e) =>
+                                  setJob({
+                                    ...job,
+                                    description: e.target.value
+                                      ? e.target.value
+                                      : data.description,
+                                  })
+                                }
                               />
                             </div>
                           </div>
@@ -218,27 +267,59 @@ export const CardItem = ({ data, index }: CardItemProps) => {
                           </div>
 
                           <div className="ml-3 mt-2">
-                            <div className="mb-4 flex items-center">
-                              <input
-                                type="checkbox"
-                                value=""
-                                className="h-4 w-4 rounded border-blue-300 bg-blue-100"
-                              />
-                              <label className="ms-2 text-sm font-medium dark:text-blue-300">
-                                Default checkbox
-                              </label>
-                            </div>
-                            <div className="flex items-center">
-                              <input
-                                type="checkbox"
-                                value=""
-                                className="h-4 w-4 rounded border-blue-300 bg-blue-100"
-                              />
-                              <label className="ms-2 text-sm font-medium dark:text-blue-300">
-                                Checked state
-                              </label>
-                            </div>
+                            {todoCheckBoxes !== null ? (
+                              <>
+                                {todoCheckBoxes?.map((todo, index) => (
+                                  <div className="mb-4 flex items-center">
+                                    <input
+                                      type="checkbox"
+                                      value=""
+                                      className="h-4 w-4 rounded border-blue-300 bg-blue-100"
+                                    />
+                                    {isEditTodo === false ? (
+                                      <label
+                                        onClick={() => setIsEditTodo(true)}
+                                        className="ms-2 text-sm font-medium dark:text-blue-300"
+                                      >
+                                        {todo.description}
+                                      </label>
+                                    ) : (
+                                      <>
+                                        <input
+                                          className="text-body-color dark:text-body-color-dark dark:shadow-two ml-2 flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+                                          placeholder={todo.description}
+                                          onChange={(e) =>
+                                            setUpdateTodoCheckBox(
+                                              e.target.value,
+                                            )
+                                          }
+                                        />
+                                        <button
+                                          type="button"
+                                          className="flex w-10 justify-center rounded-sm text-base outline-none transition-all duration-300 hover:border-green-600 hover:bg-green-200/5 hover:text-green-600 dark:border-transparent dark:bg-green-200 dark:hover:border-green-600 dark:hover:bg-green-200/5 dark:hover:text-green-600 dark:hover:shadow-none"
+                                          onClick={() =>
+                                            handleUpdateTodo(index)
+                                          }
+                                        >
+                                          <Check className="h-4 w-4" />
+                                        </button>
+                                      </>
+                                    )}
+                                    <button
+                                      type="button"
+                                      className="flex w-10 justify-center rounded-sm text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
+                                      onClick={() => handleRemoveTodo(index)}
+                                    >
+                                      <X className="h-4 w-4" />
+                                    </button>
+                                  </div>
+                                ))}
+                              </>
+                            ) : (
+                              <></>
+                            )}
                             <button
+                              onClick={handleAddTodo}
                               type="button"
                               className="mt-3 flex w-50 justify-center rounded-sm border py-1 text-base outline-none transition-all duration-300 hover:border-blue-600 hover:bg-blue-200/5 hover:text-blue-600 dark:border-transparent dark:bg-red-200 dark:hover:border-blue-600 dark:hover:bg-red-200/5 dark:hover:text-blue-600 dark:hover:shadow-none"
                             >
@@ -275,9 +356,9 @@ export const CardItem = ({ data, index }: CardItemProps) => {
                         </div>
                         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                           <button
-                            type="submit"
+                            type="button"
                             className="inline-flex w-full justify-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-2"
-                            // disabled={newEvent.title === ""}
+                            onClick={handleUpdateJob}
                           >
                             Create
                           </button>

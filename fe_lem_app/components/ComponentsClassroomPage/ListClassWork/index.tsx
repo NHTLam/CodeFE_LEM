@@ -95,7 +95,8 @@ export const ListClassWork = () => {
                   <Listbox.Option
                     key={personIdx}
                     className={({ active }) =>
-                      `relative w-full cursor-default select-none py-2 pr-4 ${active ? "bg-amber-100 text-amber-900" : ""
+                      `relative w-full cursor-default select-none py-2 pr-4 ${
+                        active ? "bg-amber-100 text-amber-900" : ""
                       }`
                     }
                     value={person}
@@ -104,8 +105,9 @@ export const ListClassWork = () => {
                       <>
                         <Link href={`${person.link}`}>
                           <span
-                            className={`block truncate pl-5 ${selected ? "font-medium" : "font-normal"
-                              }`}
+                            className={`block truncate pl-5 ${
+                              selected ? "font-medium" : "font-normal"
+                            }`}
                           >
                             {person.name}
                           </span>

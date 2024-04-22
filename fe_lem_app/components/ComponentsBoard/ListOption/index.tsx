@@ -16,25 +16,10 @@ import {
 import { FormSubmit } from "@/components/Form/form-submit";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Button } from "@nextui-org/react";
+import { Card } from "@/models/card";
 
 interface ListOptionsProps {
-  data: {
-    id: string;
-    title: string;
-    order: number;
-    boardId: string;
-    createdAt: Date;
-    updatedAt: Date;
-    cards: {
-      id: string;
-      title: string;
-      order: number;
-      description: string | null;
-      listId: string;
-      createdAt: Date;
-      updatedAt: Date;
-    }[];
-  };
+  data: Card;
   onAddCard: () => void;
 }
 
