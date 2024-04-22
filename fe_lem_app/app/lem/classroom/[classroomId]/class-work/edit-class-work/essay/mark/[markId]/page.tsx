@@ -110,7 +110,7 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
             appUserFeedbackId: 1,
           });
         }
-        window.location.href = '/lem/classroom/class-work';
+        window.location.href = '/lem/classroom/1/class-work';
       }
 
     return (

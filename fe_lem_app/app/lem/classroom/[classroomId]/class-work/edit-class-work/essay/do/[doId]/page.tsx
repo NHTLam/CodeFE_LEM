@@ -50,7 +50,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
         name: studentAnswer[index] || '',
       });
     }
-    window.location.href = '/lem/classroom/class-work';
+    window.location.href = '/lem/classroom/1/class-work';
   }
 
   const SwapPage = (num) => {

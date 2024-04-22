@@ -2,7 +2,7 @@ import { ClassEvent } from "@/models/classevent";
 import { FilterData } from "@/models/filter";
 import { NextResponse } from "next/server";
 
-const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
+const DATA_SOURCE_URL = process.env.BASE_URL + "/tel/classroom/";
 
 export async function ListClassEvent(filter: FilterData) {
     try {

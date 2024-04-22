@@ -156,7 +156,7 @@ export const ListClassWork = () => {
                   </h1>
                 </div>
               </div>
-              <Link href={`/lem/classroom/class-work/edit-class-work/essay/mark/${classEvent.id}`} >
+              <Link href={`/lem/classroom/1/class-work/edit-class-work/essay/mark/${classEvent.id}`} >
                 <button
                   className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
                   Chấm bài
@@ -167,7 +167,7 @@ export const ListClassWork = () => {
                   className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
                   Làm bài
                 </button>
-              </Link>) : (<Link href={`/lem/classroom/class-work/edit-class-work/essay/detail/${classEvent.id}`} >
+              </Link>) : (<Link href={`/lem/classroom/1/class-work/edit-class-work/essay/detail/${classEvent.id}`} >
                 <button
                   className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
                   Xem bài làm

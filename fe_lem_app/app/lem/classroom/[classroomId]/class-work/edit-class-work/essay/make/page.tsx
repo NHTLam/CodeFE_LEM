@@ -40,7 +40,7 @@ const MakeEssayPage = () => {
       questions: questionList,
     });
 
-    window.location.href = '/lem/classroom/class-work';
+    window.location.href = '/lem/classroom/1/class-work';
   }
  
   return (
