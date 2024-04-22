@@ -1,8 +1,8 @@
 "use client";
 
 import { InforGroups } from "@/components/ComponentsClassroomPage/InforGroups";
-import { NavClassroom } from "@/components/ComponentsClassroomPage/NavClassroom";
 import { ListBox } from "@/components/ListBox";
+import { Board } from "@/models/board";
 import { ListByClassroom } from "@/services/board-service";
 import { Users } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -12,7 +12,7 @@ export const Groups = () => {
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
   }
-  const [boards, setBoards] = useState<any>();
+  const [boards, setBoards] = useState<Board[]>();
   useEffect(() => {
     const fetchData = async () => {
       const data = await ListByClassroom(Number(classroomId));
@@ -23,7 +23,7 @@ export const Groups = () => {
 
   return (
     <>
-      <InforGroups />
+      <InforGroups dataBoards={boards ?? []} />
       <hr className="mx-25 mt-5" />
       <div className="mx-25 mt-5">
         <div className="flex items-center text-lg font-semibold text-neutral-700">
@@ -32,7 +32,7 @@ export const Groups = () => {
         <ListBox
           classroomIdForBoard={Number(classroomId)}
           isRecently={false}
-          dataBoards={boards}
+          dataBoards={boards ?? []}
           dataClasses={null}
         />
       </div>

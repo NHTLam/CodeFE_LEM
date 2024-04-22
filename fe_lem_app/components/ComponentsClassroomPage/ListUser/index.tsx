@@ -35,7 +35,7 @@ export const ListUser = () => {
       setUsersInClass(users);
       if (users !== null) {
         const newRoles = users!.flatMap(
-          (user) => user.appUserRoleMappings?.map((a) => a.role),
+          (user) => user.appUserClassroomMappings?.map((a) => a.role),
         );
         if (newRoles !== null) {
           const uniqueSet = new Set(newRoles.map((role) => role!.id)); //Lấy những id không bị trùng
@@ -90,7 +90,7 @@ export const ListUser = () => {
               {usersInClass?.map((user) => (
                 <>
                   {user
-                    .appUserRoleMappings!.map((x) => x.roleId)
+                    .appUserClassroomMappings!.map((x) => x.roleId)
                     .includes(role.id) ? (
                     <div className="mx-40 my-2 flex items-center gap-x-4 pb-4 pl-3">
                       <div className="relative">
@@ -180,21 +180,7 @@ export const ListUser = () => {
                         <hr className="my-2" />
                         <div className="text-2sm flex grow items-center font-semibold">
                           Classroom code for teacher:
-                          <p className="ml-3 text-cyan-700">
-                            {classroomCode} c
-                          </p>
-                        </div>
-                        <div className="text-2sm flex grow items-center font-semibold">
-                          Classroom code for student:
-                          <p className="ml-3 text-cyan-700">
-                            {classroomCode} s
-                          </p>
-                        </div>
-                        <div className="text-2sm flex grow items-center font-semibold">
-                          Classroom code for other:
-                          <p className="ml-3 text-cyan-700">
-                            {classroomCode} o
-                          </p>
+                          <p className="ml-3 text-cyan-700">{classroomCode}</p>
                         </div>
                       </div>
                     </Dialog.Panel>

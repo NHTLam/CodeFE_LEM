@@ -2,6 +2,7 @@ import { Classroom } from "@/models/classroom";
 import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
+const token = localStorage.getItem("token") ?? "";
 
 export async function ListClass() {
   try {
@@ -106,6 +107,7 @@ export async function CreateClass(newClassData: any) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: newClassData.name,
