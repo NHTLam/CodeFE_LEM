@@ -101,6 +101,7 @@ export async function UpdateClassEvent(classevent: any) {
       code: classevent.code,
       name: classevent.name,
       isClassWork: classevent.isClassWork,
+      appUserId: classevent.appUserId,
       description: classevent.description,
       pinned: classevent.pinned,
       createdAt: classevent.createdAt,

@@ -34,6 +34,8 @@ export const ListPostPinned = () => {
     take: 10,
     pinned: true,
     isClassWork: false,
+    orderby: 0,
+    ordertype: 1,
   };
 
   const [classEvents, setClassEvents] = useState<any>();

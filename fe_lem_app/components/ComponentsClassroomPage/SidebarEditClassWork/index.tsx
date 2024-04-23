@@ -2,6 +2,7 @@
 
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronDown } from "lucide-react";
+import Link from "next/link";
 import { Fragment, useState } from "react";
 import Datepicker from "react-tailwindcss-datepicker";
 import { redirect } from "next/navigation";
@@ -160,12 +161,19 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
         />
       </div>
       <div className="mt-5 flex justify-end">
-        <button
+      <button
           onClick={handlerProp}
           className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
         >
           Create
         </button>
+        <Link href="/lem/classroom/1/class-work">
+          <button
+            className="my-1 ml-5 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
+          >
+            Return
+          </button>
+        </Link>
       </div>
     </div>
   );
