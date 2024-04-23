@@ -32,17 +32,6 @@ export const CardInput = ({ boardData }: CardInputProps) => {
     setIsEditing(false);
   };
 
-  // const { execute, fieldErrors } = useAction(createList, {
-  //   onSuccess: (data) => {
-  //     toast.success(`List "${data.title}" created`);
-  //     disableEditing();
-  //     router.refresh();
-  //   },
-  //   onError: (error) => {
-  //     toast.error(error);
-  //   },
-  // });
-
   const onKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Escape") {
       disableEditing();
@@ -61,7 +50,20 @@ export const CardInput = ({ boardData }: CardInputProps) => {
     }
     boardData.cards!.push(card);
     const result = await UpdateBoard(boardData);
-    window.location.reload();
+    if (result.status !== 200) {
+      toast.error("Create Card fail", {
+        style: {
+          color: "red",
+        },
+      });
+    } else {
+      toast.success("Create card success", {
+        style: {
+          color: "green",
+        },
+      });
+      window.location.reload();
+    }
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

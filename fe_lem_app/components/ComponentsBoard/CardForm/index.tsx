@@ -2,20 +2,9 @@
 
 import { toast } from "sonner";
 import { Plus, X } from "lucide-react";
-import {
-  forwardRef,
-  useRef,
-  ElementRef,
-  KeyboardEventHandler,
-  useState,
-} from "react";
+import { forwardRef, useRef, ElementRef, useState } from "react";
 import { useParams } from "next/navigation";
 import { useOnClickOutside, useEventListener } from "usehooks-ts";
-
-//import { useAction } from "@/hooks/use-action";
-//import { createCard } from "@/actions/create-card";
-import { FormSubmit } from "@/components/Form/form-submit";
-import { FormTextarea } from "@/components/Form/form-textArea";
 import { Button } from "@nextui-org/react";
 import { CreateJob } from "@/services/job-service";
 import { Job } from "@/models/job";
@@ -37,16 +26,6 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
     const formRef = useRef<ElementRef<"form">>(null);
     const [jobName, setJobName] = useState("");
 
-    // const { execute, fieldErrors } = useAction(createCard, {
-    //   onSuccess: (data) => {
-    //     toast.success(`Card "${data.title}" created`);
-    //     formRef.current?.reset();
-    //   },
-    //   onError: (error) => {
-    //     toast.error(error);
-    //   },
-    // });
-
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         disableEditing();
@@ -62,7 +41,20 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
         name: jobName,
       };
       const result = await CreateJob(job, classroomId);
-      window.location.reload();
+      if (result === null) {
+        toast.error("Create job fail", {
+          style: {
+            color: "red",
+          },
+        });
+      } else {
+        toast.success("Create job success", {
+          style: {
+            color: "green",
+          },
+        });
+        window.location.reload();
+      }
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {

@@ -83,7 +83,7 @@ export async function CreateJob(job: Job, classroomId) {
   } catch (error) {
     // Handle network errors or unexpected exceptions
     console.error("Error creating Job:", error);
-    return { error: "An unexpected error occurred." }; // Return a generic error message
+    return null;
   }
 }
 

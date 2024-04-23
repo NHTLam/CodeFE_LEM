@@ -43,8 +43,8 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
   const [isEditTodo, setIsEditTodo] = useState(false);
   const [updateTodoCheckBox, setUpdateTodoCheckBox] = useState("");
   const [value, setValue] = useState({
-    startDate: data.startAt ?? new Date(),
-    endDate: data.endAt ?? new Date(),
+    startDate: data.startAt ?? null,
+    endDate: data.endAt ?? null,
   });
   const [job, setJob] = useState<Job>(data);
 
@@ -216,7 +216,8 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                     <div className="mt-3 text-center sm:mt-5">
                       <form>
                         <div className="mt-2">
-                          {boardData.classroomId !== null ? (
+                          {boardData.classroomId !== null &&
+                          boardData.classroomId !== 0 ? (
                             <div className="flex">
                               <p className="float-left mr-3 mt-2">Member: </p>
                               <div className="z-10">
