@@ -11,7 +11,10 @@ import {
   ChevronDown,
   GripVertical,
   Menu,
+  Pen,
+  PencilLine,
   SendHorizontal,
+  Trash2,
   UsersRound,
 } from "lucide-react";
 import { FilterData } from "@/models/filter";
@@ -23,7 +26,7 @@ import {
 } from "@/services/class-event-service";
 import { ClassEvent } from "@/models/classevent";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
-import { CreateComment } from "@/services/comment-service";
+import { CreateComment, DeleteComment, UpdateComment } from "@/services/comment-service";
 
 export const ListPost = () => {
   var classroomId = "";
@@ -36,20 +39,35 @@ export const ListPost = () => {
     take: 5,
     classroomId: Number(classroomId),
     isClassWork: false,
+    orderby: 0,
+    ordertype: 1,
   };
 
-  const [classEvents, setClassEvents] = useState<any>();
+  const [classEvents, setClassEvents] = useState<any>([]);
   const [first, setFirst] = useState<any>(true);
+  const [height, setHeight] = useState<object>({
+    0: false,
+  });
 
   useEffect(() => {
     if (first == true) {
       const fetchData = async () => {
         const data = await ListClassEvent(filter);
         setClassEvents(data);
+        for (let index = 1; index < classEvents.length; index++) {
+          const data = { index: false }
+          setHeight({
+            ...height,
+            data,
+          });
+        }
       };
       fetchData();
       setFirst(false);
     }
+
+    console.log(height);
+
   }, []);
 
   const PostAction = [
@@ -77,6 +95,7 @@ export const ListPost = () => {
     code: "",
     name: "",
     isClassWork: false,
+    appUserId: 1,
     description: "",
     instruction: "",
     pinned: false,
@@ -88,9 +107,8 @@ export const ListPost = () => {
 
   const ConvertDateTime = (datetime) => {
     const convert = new Date(datetime);
-    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${
-      convert.getMonth() + 1
-    }/${convert.getFullYear()}`;
+    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${convert.getMonth() + 1
+      }/${convert.getFullYear()}`;
     return format;
   };
 
@@ -117,6 +135,7 @@ export const ListPost = () => {
       id: 0,
       classEventId: classEventId,
       description: descriptionComment,
+      appUserId: 1,
     };
     console.log(data);
 
@@ -131,6 +150,7 @@ export const ListPost = () => {
         classroomId: classEvent.classroomId,
         code: classEvent.code,
         name: classEvent.name,
+        appUserId: classEvent.appUserId,
         isClassWork: classEvent.isClassWork,
         description: classEvent.description,
         instruction: classEvent.instruction,
@@ -152,6 +172,7 @@ export const ListPost = () => {
         name: classEvent.name,
         isClassWork: classEvent.isClassWork,
         description: classEvent.description,
+        appUserId: classEvent.appUserId,
         instruction: classEvent.instruction,
         comment: [classEvent.comment],
         pinned: classEvent.pinned,
@@ -231,6 +252,7 @@ export const ListPost = () => {
               <button
                 onClick={async () => {
                   await CreateClassEvent(createPost);
+                  window.location.reload();
                 }}
                 className="inline-flex w-full justify-center rounded-md bg-sky-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-4"
               >
@@ -240,7 +262,7 @@ export const ListPost = () => {
           </div>
         )}
       </div>
-      {classEvents?.map((classEvent) => (
+      {classEvents?.map((classEvent, index) => (
         <div
           key={classEvent.id}
           className="ml-25 w-4/5 rounded-lg border border-slate-500 p-2"
@@ -280,8 +302,7 @@ export const ListPost = () => {
                         <Listbox.Option
                           key={actionId}
                           className={({ active }) =>
-                            `relative w-full cursor-default select-none p-4 py-2 ${
-                              active ? "bg-amber-100 text-amber-900" : ""
+                            `relative w-full cursor-default select-none p-4 py-2 ${active ? "bg-amber-100 text-amber-900" : ""
                             }`
                           }
                           value={action}
@@ -301,27 +322,34 @@ export const ListPost = () => {
           </div>
           <hr></hr>
           <div className="flex flex-col items-start gap-3 p-2">
-            <section className="grid place-items-center">
-              <label>
+            <section className="grid w-full place-items-center">
+              <label className="w-full">
                 <input
                   className="peer/showLabel absolute scale-0"
                   type="checkbox"
                 />
-                <span className="block max-h-14 overflow-hidden px-4 py-0 transition-all duration-300 peer-checked/showLabel:max-h-52">
-                  <h3 className="flex h-14 cursor-pointer items-center font-semibold">
-                    <UsersRound size={20} />
-                    Show all comment
-                  </h3>
+                <button
+                  onClick={() => setHeight((prev) => {
+                    const updated = { ...prev };
+                    updated[index] = !updated[index];
+                    console.log(updated);
+                    return updated;
+                  })}
+                  className="flex h-14 w-50 cursor-pointer items-center font-semibold">
+                  <UsersRound size={20} />
+                  Show all comment
+                </button>
+                <span className={`block ${height[index] ? 'max-h-56' : 'max-h-0'} w-full overflow-auto px-4 py-0 transition-all duration-300}`}>
                   <div>
                     {classEvent.comments?.map((comment, index) => (
-                      <div key={index} className="flex items-center gap-1 ">
+                      <div key={index} className="flex items-center w-full gap-1 ">
                         <img
                           className="m-2 rounded-full border"
                           width={40}
                           alt="Avatar"
                           src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
                         />
-                        <div className="flex flex-col gap-1">
+                        <div className="flex flex-col w-full gap-1">
                           <div className="flex items-end gap-3">
                             <p className="text-base">
                               {comment.appUser.userName}
@@ -332,6 +360,24 @@ export const ListPost = () => {
                           </div>
                           <h1 className=" text-sm">{comment.description}</h1>
                         </div>
+                        <button onClick={() => {
+                          UpdateComment({
+                            id: comment.id,
+                          });
+                          window.location.reload();
+                        }}>
+                          <PencilLine className="text-blue-400" />
+                        </button>
+                        <button
+                          onClick={() => {
+                            DeleteComment({
+                              id: comment.id,
+                            });
+                            window.location.reload();
+                          }}
+                          className="ml-2">
+                          <Trash2 className="text-red-400" />
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -353,14 +399,18 @@ export const ListPost = () => {
                 onChange={(e) => setDescriptionComment(e.target.value)}
               />
               <button
-                onClick={() => actionComment(classEvent.id, descriptionComment)}
+                onClick={() => {
+                  actionComment(classEvent.id, descriptionComment)
+                  window.location.reload()
+                }}
               >
                 <SendHorizontal />
               </button>
             </div>
           </div>
         </div>
-      ))}
+      ))
+      }
 
       <Transition.Root show={showModal} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setShowModal}>
@@ -429,13 +479,14 @@ export const ListPost = () => {
                         <button
                           type="submit"
                           className="inline-flex w-full justify-center rounded-md bg-violet-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-violet-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-2"
-                          onClick={async () =>
+                          onClick={async () => {
                             await UpdateClassEventFunc(
                               createPost,
                               name,
                               description,
-                            )
-                          }
+                            );
+                            window.location.reload();
+                          }}
                         >
                           Update
                         </button>
@@ -455,7 +506,7 @@ export const ListPost = () => {
           </div>
         </Dialog>
       </Transition.Root>
-    </div>
+    </div >
   );
 };
 

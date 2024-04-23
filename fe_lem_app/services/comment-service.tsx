@@ -1,3 +1,4 @@
+import { ClassEvent } from "@/models/classevent";
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
 const token =
   typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
@@ -13,6 +14,7 @@ export async function CreateComment(comment: any) {
       body: JSON.stringify({
         id: comment.id,
         classEventId: comment.classEventId,
+        appUserId: comment.appUserId,
         description: comment.description,
       }),
     });
@@ -52,6 +54,9 @@ export async function DeleteComment(comment: any) {
     },
     body: JSON.stringify({
       id: comment.id,
+      classEventId: 1,
+      appUserId: 1,
+      description: "",
     }),
   });
 
