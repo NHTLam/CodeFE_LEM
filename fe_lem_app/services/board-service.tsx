@@ -1,9 +1,10 @@
 import { Board } from "@/models/board";
 import { Card } from "@/models/card";
 import { CreateBoardsFunction } from "@/models/createBoardsFunction";
-import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/board/";
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
 export async function ListBoard() {
   try {
@@ -11,6 +12,7 @@ export async function ListBoard() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     const Boards: Board[] = await res.json();
@@ -27,6 +29,7 @@ export async function ListCard() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     const Cards: Card[] = await res.json();
@@ -37,12 +40,13 @@ export async function ListCard() {
   }
 }
 
-export async function DuplicateCard(card: Card) {
+export async function DuplicateCard(card: Card, classroomId) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "duplicate-card", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: card.id,
@@ -50,6 +54,7 @@ export async function DuplicateCard(card: Card) {
         name: card.name,
         order: card.order,
         jobs: card.jobs,
+        classroomId: Number(classroomId),
       }),
     });
     const isSuccess = await res.json();
@@ -60,12 +65,13 @@ export async function DuplicateCard(card: Card) {
   }
 }
 
-export async function DeleteCard(card: Card) {
+export async function DeleteCard(card: Card, classroomId) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "delete-card", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: card.id,
@@ -73,6 +79,7 @@ export async function DeleteCard(card: Card) {
         name: card.name,
         order: card.order,
         jobs: card.jobs,
+        classroomId: Number(classroomId),
       }),
     });
     const isSuccess = await res.json();
@@ -89,6 +96,7 @@ export async function GetBoard(id: number) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ id }),
     });
@@ -106,6 +114,7 @@ export async function GetOwnBoard(userId: number) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ appUserId: userId }),
     });
@@ -123,6 +132,7 @@ export async function ListByClassroom(classroomId: number) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ classroomId: classroomId }),
     });
@@ -140,6 +150,7 @@ export async function CreateBoard(board: any) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: board.name,
@@ -163,6 +174,7 @@ export async function UpdateBoard(board: Board) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: board.id,
@@ -185,6 +197,7 @@ export async function DeleteBoard(boardId) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: boardId,
@@ -201,6 +214,7 @@ export async function CreateBoardsForClass(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       numberOfGroups: createBoardsFunction.numberOfGroups,

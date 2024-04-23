@@ -1,16 +1,16 @@
-import { ClassEvent } from "@/models/classevent";
-import { FilterData } from "@/models/filter";
 import { Question } from "@/models/question";
-import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
-export async function CreateQuestion(question: any) {
+export async function CreateQuestion(question: any, classroomId) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "create-question", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: question.id,
@@ -21,6 +21,7 @@ export async function CreateQuestion(question: any) {
         correctAnswer: question.correctAnswer,
         studentAnswers: question.studentAnswers,
         answers: question.answers,
+        classroomId: Number(classroomId),
       }),
     });
 
@@ -33,11 +34,12 @@ export async function CreateQuestion(question: any) {
   }
 }
 
-export async function UpdateQuestion(question: any) {
+export async function UpdateQuestion(question: any, classroomId) {
   const res = await fetch(DATA_SOURCE_URL + "update-question", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: question.id,
@@ -48,20 +50,23 @@ export async function UpdateQuestion(question: any) {
       correctAnswer: question.correctAnswer,
       studentAnswers: question.studentAnswers,
       answers: question.answers,
+      classroomId: Number(classroomId),
     }),
   });
   const newQuestion: Question = await res.json();
   return newQuestion;
 }
 
-export async function DeleteQuestion(question: any) {
+export async function DeleteQuestion(question: any, classroomId) {
   await fetch(DATA_SOURCE_URL + "delete-question", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: question.id,
+      classroomId: Number(classroomId),
     }),
   });
 

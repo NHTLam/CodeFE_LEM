@@ -1,8 +1,6 @@
-import { ClassEvent } from "@/models/classevent";
-import { FilterData } from "@/models/filter";
-import { NextResponse } from "next/server";
-
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
 export async function CreateComment(comment: any) {
   try {
@@ -10,6 +8,7 @@ export async function CreateComment(comment: any) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: comment.id,
@@ -32,6 +31,7 @@ export async function UpdateComment(comment: any) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: comment.id,
@@ -48,6 +48,7 @@ export async function DeleteComment(comment: any) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: comment.id,

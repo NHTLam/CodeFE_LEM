@@ -2,6 +2,8 @@ import { AppUser } from "@/models/app-user";
 import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/app-user/";
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
 export async function ListAppUser() {
   try {
@@ -9,6 +11,7 @@ export async function ListAppUser() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     const AppUsers: AppUser[] = await res.json();
@@ -25,6 +28,7 @@ export async function ListAppUserByClassroom(classroomId: number) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ classroomId }),
     });
@@ -42,6 +46,7 @@ export async function GetAppUser(id: number) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ id }),
     });
@@ -69,6 +74,7 @@ export async function UpdateAppUser(request: Request) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id,
@@ -94,31 +100,9 @@ export async function DeleteAppUser(request: Request) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   });
 
   return id;
 }
-
-// export async function CreateAppUser(AppUser: any) {
-//   try {
-//     debugger;
-//     const res = await fetch(DATA_SOURCE_URL + "create", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         name: AppUser.name,
-//         imageUrl: AppUser.imageUrl,
-//       }),
-//     });
-
-//     const newAppUser: AppUser = await res.json();
-//     return newAppUser; // Return the created AppUser if successful
-//   } catch (error) {
-//     // Handle network errors or unexpected exceptions
-//     console.error("Error creating AppUser:", error);
-//     return { error: "An unexpected error occurred." }; // Return a generic error message
-//   }
-// }

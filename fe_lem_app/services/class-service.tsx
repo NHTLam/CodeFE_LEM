@@ -2,7 +2,8 @@ import { Classroom } from "@/models/classroom";
 import { NextResponse } from "next/server";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
-const token = localStorage.getItem("token") ?? "";
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
 export async function ListClass() {
   try {
@@ -10,6 +11,7 @@ export async function ListClass() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     const Classes: Classroom[] = await res.json();
@@ -27,6 +29,7 @@ export async function ListOwn(userId) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ AppUserId: newUserId }),
     });
@@ -62,6 +65,7 @@ export async function GetClass(id: number) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ id }),
     });
@@ -78,6 +82,7 @@ export async function UpdateClass(classroom) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       classroom,
@@ -92,6 +97,7 @@ export async function DeleteClass(id) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id,

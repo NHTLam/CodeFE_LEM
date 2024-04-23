@@ -26,14 +26,18 @@ interface ListOptionsProps {
 
 export const ListOption = ({ data, onAddCard }: ListOptionsProps) => {
   const closeRef = useRef<ElementRef<"button">>(null);
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
+  }
 
   async function onDelete() {
-    const result = await DeleteCard(data);
+    const result = await DeleteCard(data, classroomId);
     window.location.reload();
   }
 
   async function onCopy() {
-    const result = await DuplicateCard(data);
+    const result = await DuplicateCard(data, classroomId);
     window.location.reload();
   }
 
