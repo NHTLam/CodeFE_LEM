@@ -15,12 +15,29 @@ import {
   CheckIcon,
   ChevronDown,
 } from "lucide-react";
-import { ListOwnJob } from "@/services/job-service";
+import {
+  CreateJob,
+  DeleteJob,
+  ListOwnJob,
+  UpdateJob,
+} from "@/services/job-service";
 import { Job } from "@/models/job";
 import { ListCard } from "@/services/board-service";
 import { Card } from "@/models/card";
+import { toast } from "sonner";
 
+interface Event {
+  id: number;
+  title: string;
+  start: string;
+  end: string;
+  allDay: boolean;
+}
 export const Calendar = () => {
+  var currentUserId = "";
+  if (typeof window !== "undefined") {
+    currentUserId = localStorage.getItem("userId") ?? "";
+  }
   const [unscheduled, setUnscheduled] = useState<Job[]>([]);
   const [allEvents, setAllEvents] = useState<Job[]>([]);
   const [showModal, setShowModal] = useState(false);
@@ -29,40 +46,16 @@ export const Calendar = () => {
   const [newEvent, setNewEvent] = useState<Job>();
   const [cards, setCards] = useState<Card[]>([]);
   const [selected, setSelected] = useState<Card | null>(null);
-
-  // const FakeDataEvents: Event[] = [
-  //   {
-  //     id: 1,
-  //     title: "Meeting with Team A",
-  //     start: "2024-03-11 10:00",
-  //     allDay: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     title: "Doctor Appointment",
-  //     start: "2024-03-12 14:30",
-  //     allDay: false,
-  //   },
-  //   {
-  //     id: 3,
-  //     title: "Birthday Party",
-  //     start: "2024-03-13",
-  //     allDay: true,
-  //   },
-  //   {
-  //     id: 4,
-  //     title: "Movie Night",
-  //     start: "2024-03-14 19:00", // String representing a valid date format
-  //     allDay: false,
-  //   },
-  // ];
+  const [showError, setShowError] = useState(false);
+  const [currentEventJob, setCurrentEventJob] = useState<any>();
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await ListOwnJob();
       const scheduledData = data?.filter((d) => d.startAt !== null) ?? [];
       const unScheduledData = data?.filter((d) => d.startAt === null) ?? [];
-      setAllEvents(scheduledData);
+      const allScheduledData = convertJobsToEvents(scheduledData);
+      setAllEvents(allScheduledData);
       setUnscheduled(unScheduledData);
       const cards = await ListCard();
       setCards(cards ?? []);
@@ -87,21 +80,50 @@ export const Calendar = () => {
     setNewEvent({
       ...newEvent,
       startAt: arg.date,
+      endAt: arg.date,
       isAllDay: arg.allDay,
       id: new Date().getTime(),
     });
     setShowModal(true);
   }
 
-  function addEvent(data: DropArg) {
-    const event = {
-      ...newEvent,
-      start: data.date.toISOString(),
-      title: data.draggedEl.innerText,
-      allDay: data.allDay,
-      id: new Date().getTime(),
-    };
-    setAllEvents([...allEvents, event]);
+  async function addEvent(data: DropArg, currentEventJob: Job) {
+    if (currentEventJob.id !== null && currentEventJob.id !== undefined) {
+      const job: Job = {
+        id: currentEventJob.id,
+        cardId: currentEventJob.cardId,
+        name: currentEventJob.name,
+        description: currentEventJob.description,
+        creatorId: currentEventJob.creatorId,
+        startAt: data.date,
+        endAt: data.date,
+        isAllDay: false,
+        todos: currentEventJob.todos,
+        appUserJobMapings: [
+          {
+            jobId: currentEventJob.id,
+            appUserId: Number(currentUserId),
+          },
+        ],
+      };
+      const result = await UpdateJob(job, "");
+      if (result === null) {
+        toast.error("Create job fail", {
+          style: {
+            color: "red",
+          },
+        });
+      } else {
+        toast.success("Create job success", {
+          style: {
+            color: "green",
+          },
+        });
+      }
+      const newEventData = allEvents.concat(convertJobsToEvents([job!]));
+      setAllEvents(newEventData);
+      window.location.reload();
+    }
   }
 
   function handleDeleteModal(data: { event: { id: string } }) {
@@ -109,12 +131,14 @@ export const Calendar = () => {
     setIdToDelete(Number(data.event.id));
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     setAllEvents(
       allEvents.filter((event) => Number(event.id) !== Number(idToDelete)),
     );
     setShowDeleteModal(false);
     setIdToDelete(null);
+    const result = await DeleteJob(idToDelete ?? 0, "");
+    window.location.reload();
   }
 
   function handleCloseModal() {
@@ -136,17 +160,60 @@ export const Calendar = () => {
     });
   };
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setAllEvents([...allEvents, newEvent!]);
-    setShowModal(false);
-    setNewEvent({
-      name: "",
-      startAt: new Date(),
-      isAllDay: false,
-      id: 0,
-    });
+  const handleGetDatUnschedule = (job) => {
+    debugger;
+    setCurrentEventJob(job);
+  };
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    if (selected === null) {
+      setShowError(true);
+    } else {
+      e.preventDefault();
+      const job: Job = {
+        cardId: selected?.id,
+        name: newEvent?.name,
+        startAt: newEvent?.startAt,
+        endAt: newEvent?.endAt,
+        isAllDay: false,
+      };
+      const result = await CreateJob(job, "");
+      if (result === null) {
+        toast.error("Create job fail", {
+          style: {
+            color: "red",
+          },
+        });
+      } else {
+        toast.success("Create job success", {
+          style: {
+            color: "green",
+          },
+        });
+      }
+      const newEventData = allEvents.concat(convertJobsToEvents([newEvent!]));
+      setAllEvents(newEventData);
+      setShowModal(false);
+      setNewEvent({
+        name: "",
+        startAt: new Date(),
+        isAllDay: false,
+        id: 0,
+      });
+    }
   }
+
+  const convertJobsToEvents = (jobs: Job[]): Event[] => {
+    return jobs.map((job) => {
+      return {
+        id: job.id ?? 0,
+        title: job.name ?? "",
+        start: ((job.startAt ?? "") as string) || "", // Cast to string or provide default
+        end: ((job.endAt ?? "") as string) || "",
+        allDay: job.isAllDay ?? false,
+      };
+    });
+  };
 
   return (
     <>
@@ -167,7 +234,7 @@ export const Calendar = () => {
               selectable={true}
               selectMirror={true}
               dateClick={handleDateClick}
-              drop={(data) => addEvent(data)}
+              drop={(data) => addEvent(data, currentEventJob ?? {})}
               eventClick={(data) => handleDeleteModal(data)}
             />
           </div>
@@ -182,6 +249,7 @@ export const Calendar = () => {
                 className="fc-event m-3 ml-auto w-full rounded-md border-2 bg-white p-1 text-center"
                 title={event.name}
                 key={event.id}
+                onClick={() => handleGetDatUnschedule(event)}
               >
                 {event.name}
               </div>
@@ -310,7 +378,7 @@ export const Calendar = () => {
                       >
                         Add Event
                       </Dialog.Title>
-                      <form action="submit" onSubmit={handleSubmit}>
+                      <form onSubmit={handleSubmit}>
                         <div className="mt-2">
                           <input
                             type="text"
@@ -391,6 +459,11 @@ export const Calendar = () => {
                               </Transition>
                             </div>
                           </Listbox>
+                          {showError === true ? (
+                            <p className="text-rose-500">Can not null</p>
+                          ) : (
+                            <></>
+                          )}
                         </div>
                         <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
                           <button
