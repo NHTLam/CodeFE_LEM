@@ -27,6 +27,7 @@ import {
 import { ClassEvent } from "@/models/classevent";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
 import { CreateComment, DeleteComment, UpdateComment } from "@/services/comment-service";
+import { toast } from "sonner";
 
 export const ListPost = () => {
   var classroomId = "";
@@ -140,6 +141,11 @@ export const ListPost = () => {
     console.log(data);
 
     await CreateComment(data);
+    toast.success("Create comment success", {
+      style: {
+        color: "green",
+      },
+    });
     window.location.reload();
   };
 
@@ -162,6 +168,11 @@ export const ListPost = () => {
         deletedAt: new Date(),
       };
       await UpdateClassEvent(data);
+      toast.success("Pin success", {
+        style: {
+          color: "green",
+        },
+      });
       window.location.reload();
     } else if (index == 1) {
       setShowModal(true);
@@ -184,6 +195,11 @@ export const ListPost = () => {
       setCreatePost(data);
     } else if (index == 2) {
       await DeleteClassEvent(classEvent.id);
+      toast.success("Delete success", {
+        style: {
+          color: "green",
+        },
+      });
       window.location.reload();
     }
   };
@@ -252,6 +268,11 @@ export const ListPost = () => {
               <button
                 onClick={async () => {
                   await CreateClassEvent(createPost);
+                  toast.success("Create success", {
+                    style: {
+                      color: "green",
+                    },
+                  });
                   window.location.reload();
                 }}
                 className="inline-flex w-full justify-center rounded-md bg-sky-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-4"
@@ -361,9 +382,7 @@ export const ListPost = () => {
                           <h1 className=" text-sm">{comment.description}</h1>
                         </div>
                         <button onClick={() => {
-                          UpdateComment({
-                            id: comment.id,
-                          });
+                          
                           window.location.reload();
                         }}>
                           <PencilLine className="text-blue-400" />
@@ -372,6 +391,11 @@ export const ListPost = () => {
                           onClick={() => {
                             DeleteComment({
                               id: comment.id,
+                            });
+                            toast.success("Delete success", {
+                              style: {
+                                color: "green",
+                              },
                             });
                             window.location.reload();
                           }}
@@ -401,7 +425,6 @@ export const ListPost = () => {
               <button
                 onClick={() => {
                   actionComment(classEvent.id, descriptionComment)
-                  window.location.reload()
                 }}
               >
                 <SendHorizontal />
@@ -485,6 +508,11 @@ export const ListPost = () => {
                               name,
                               description,
                             );
+                            toast.success("Update post success", {
+                              style: {
+                                color: "green",
+                              },
+                            });
                             window.location.reload();
                           }}
                         >

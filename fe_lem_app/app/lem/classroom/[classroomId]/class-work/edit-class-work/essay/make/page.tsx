@@ -32,13 +32,13 @@ const MakeEssayPage = () => {
     const data = await CreateClassEvent({
       ...childData,
       isClassWork: true,
-      classroomId: classroomId,
+      classroomId: Number(classroomId),
       code: "",
       appUserId: 1,
       questions: questionList,
     });
 
-    window.location.href = "/lem/classroom/1/class-work";
+    window.location.href = `/lem/classroom/${classroomId}/class-work`;
   };
 
   return (

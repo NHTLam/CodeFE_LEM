@@ -150,7 +150,7 @@ export const ListClassWork = () => {
               </Link>
               {classEvent.isSubmit == false ? (
                 <Link
-                  href={`/lem/classroom/1/class-work/edit-class-work/essay/do/${classEvent.id}`}
+                  href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do/${classEvent.id}`}
                 >
                   <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
                     Do
@@ -158,7 +158,7 @@ export const ListClassWork = () => {
                 </Link>
               ) : (
                 <Link
-                  href={`/lem/classroom/1/class-work/edit-class-work/essay/detail/${classEvent.id}`}
+                  href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/detail/${classEvent.id}`}
                 >
                   <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
                     Detail

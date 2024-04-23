@@ -31,6 +31,13 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
     const [feedback, setFeedback] = useState<object>({});
     const [currentValue, setCurrentValue] = useState<any>();
 
+    var classroomId = "";
+    var appUserId = "";
+    if (typeof window !== "undefined") {
+      classroomId = localStorage.getItem("classroomId") ?? "";
+      appUserId = localStorage.getItem("userId") ?? "";
+    }
+
     const filter: any = {
         id: parseInt(params.markId),
         code: "",
@@ -53,6 +60,7 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
                 setAppUser(dataUser);
                 setAnswer(dataAnswer);
                 console.log(dataUser);
+                console.log(dataAnswer);
             };
             fetchData();
             setFirst(false);
@@ -110,14 +118,14 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
             appUserFeedbackId: 1,
           });
         }
-        window.location.href = '/lem/classroom/1/class-work';
+        window.location.href = `/lem/classroom/${classroomId}/class-work`;
       }
 
     return (
         <>
             <div className="mx-5">
                 <div className="flex mb-8">
-                    <Link href="/lem/classroom/1/class-work">
+                    <Link href={`/lem/classroom/${classroomId}/class-work`}>
                         <button className="my-1 mr-10 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadetailw-none">
                             Return
                         </button>
