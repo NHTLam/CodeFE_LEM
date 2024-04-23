@@ -1,7 +1,8 @@
 import { Job } from "@/models/job";
 
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/job/";
-const token = localStorage.getItem("token") ?? "";
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
 export async function ListJob() {
   try {
@@ -9,6 +10,7 @@ export async function ListJob() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
     });
     const Jobs: Job[] = await res.json();
@@ -54,7 +56,7 @@ export async function GetJob(id: number) {
   }
 }
 
-export async function CreateJob(job: Job) {
+export async function CreateJob(job: Job, classroomId) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "create", {
       method: "POST",
@@ -72,6 +74,7 @@ export async function CreateJob(job: Job) {
         isAllDay: job.isAllDay,
         creatorId: job.creatorId,
         appUserJobMapping: job.appUserJobMaping,
+        classroomId: Number(classroomId),
       }),
     });
 
@@ -84,7 +87,7 @@ export async function CreateJob(job: Job) {
   }
 }
 
-export async function UpdateJob(job: Job) {
+export async function UpdateJob(job: Job, classroomId) {
   const res = await fetch(DATA_SOURCE_URL + "update", {
     method: "POST",
     headers: {
@@ -102,13 +105,14 @@ export async function UpdateJob(job: Job) {
       isAllDay: job.isAllDay,
       creatorId: job.creatorId,
       appUserJobMapping: job.appUserJobMaping,
+      classroomId: Number(classroomId),
     }),
   });
   const newJob: Job = await res.json();
   return newJob;
 }
 
-export async function DeleteJob(jobId: number) {
+export async function DeleteJob(jobId: number, classroomId) {
   await fetch(DATA_SOURCE_URL + "delete", {
     method: "POST",
     headers: {
@@ -117,6 +121,7 @@ export async function DeleteJob(jobId: number) {
     },
     body: JSON.stringify({
       id: jobId,
+      classroomId: Number(classroomId),
     }),
   });
 

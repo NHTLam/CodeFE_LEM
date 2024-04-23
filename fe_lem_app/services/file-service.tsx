@@ -1,7 +1,12 @@
 const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/attachment/";
-const token = localStorage.getItem("token") ?? "";
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
-export async function UploadFile(listFile: FileList, questionId: number) {
+export async function UploadFile(
+  listFile: FileList,
+  questionId: number,
+  classroomId,
+) {
   const formData = new FormData();
   const filesArray = Array.from(listFile);
   // Thêm từng tệp vào FormData
@@ -9,8 +14,8 @@ export async function UploadFile(listFile: FileList, questionId: number) {
     formData.append("files", file);
   });
 
-  // Thêm questionId vào FormData
   formData.append("questionId", questionId.toString());
+  formData.append("classroomId", classroomId);
 
   // Gửi yêu cầu POST với FormData
   const result = await fetch(DATA_SOURCE_URL + "upload-file", {
@@ -24,14 +29,14 @@ export async function UploadFile(listFile: FileList, questionId: number) {
   return result;
 }
 
-export async function DownloadFile(fileId: number) {
+export async function DownloadFile(fileId: number, classroomId) {
   const result = await fetch(DATA_SOURCE_URL + "download-file", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ id: fileId }),
+    body: JSON.stringify({ id: fileId, classroomId: Number(classroomId) }),
   });
 
   return result;

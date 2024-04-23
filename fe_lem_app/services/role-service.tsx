@@ -1,12 +1,18 @@
 const DATA_SOURCE_URL = process.env.BASE_URL + "lem/role/";
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
-export async function ListRole() {
+export async function ListRole(classroomId) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "list-role", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
+      body: JSON.stringify({
+        classroomId: Number(classroomId),
+      }),
     });
     const roles = await res.json();
     return roles;
@@ -16,14 +22,15 @@ export async function ListRole() {
   }
 }
 
-export async function GetRole(id: number) {
+export async function GetRole(id: number, classroomId) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "get-role", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ id }),
+      body: JSON.stringify({ id, classroomId: Number(classroomId) }),
     });
     const roles = await res.json();
     return roles;
@@ -33,16 +40,18 @@ export async function GetRole(id: number) {
   }
 }
 
-export async function CreateRole(role) {
+export async function CreateRole(role, classroomId) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "create-role", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         name: role.name,
         decription: role.description,
+        classroomId: Number(classroomId),
       }),
     });
 
@@ -55,30 +64,34 @@ export async function CreateRole(role) {
   }
 }
 
-export async function UpdateRole(role) {
+export async function UpdateRole(role, classroomId) {
   const res = await fetch(DATA_SOURCE_URL + "update-role", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: role.id,
       name: role.name,
       description: role.description,
+      classroomId: Number(classroomId),
     }),
   });
   const newRole = await res.json();
   return newRole;
 }
 
-export async function DeleteRole(roleId: number) {
+export async function DeleteRole(roleId: number, classroomId) {
   await fetch(DATA_SOURCE_URL + "delete-role", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: roleId,
+      classroomId: Number(classroomId),
     }),
   });
 

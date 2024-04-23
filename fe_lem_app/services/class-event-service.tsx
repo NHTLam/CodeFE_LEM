@@ -1,8 +1,9 @@
 import { ClassEvent } from "@/models/classevent";
 import { FilterData } from "@/models/filter";
-import { NextResponse } from "next/server";
 
-const DATA_SOURCE_URL = process.env.BASE_URL + "/tel/classroom/";
+const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/classroom/";
+const token =
+  typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
 export async function ListClassEvent(filter: FilterData) {
   try {
@@ -10,6 +11,7 @@ export async function ListClassEvent(filter: FilterData) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: filter.id,
@@ -39,6 +41,7 @@ export async function GetClassEvent(filter: FilterData) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: filter.id,
@@ -60,6 +63,7 @@ export async function CreateClassEvent(classevent: any) {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
         id: classevent.id,
@@ -94,6 +98,7 @@ export async function UpdateClassEvent(classevent: any) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id: classevent.id,
@@ -122,6 +127,7 @@ export async function DeleteClassEvent(id: any) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
       id,

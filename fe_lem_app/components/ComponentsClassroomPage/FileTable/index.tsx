@@ -5,16 +5,20 @@ import { Download, FileUp, Trash2 } from "lucide-react";
 import { Fragment, useState } from "react";
 
 export const FileTable = () => {
+  var classroomId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
+  }
   const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>([]);
 
   const handleUploadFile = async () => {
-    const result = await UploadFile(selectedFile, 9); //Tạm thời fix cứng question id
+    const result = await UploadFile(selectedFile, 9, classroomId); //Tạm thời fix cứng question id
     window.location.reload();
   };
 
   const handleDownloadFile = async () => {
-    const result = await DownloadFile(8); //Tạm thời fix cứng id
+    const result = await DownloadFile(8, classroomId); //Tạm thời fix cứng id
 
     const blob = await result.blob();
     const url = window.URL.createObjectURL(blob);

@@ -124,14 +124,14 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
       updateJob.todos = [];
     }
     updateJob!.todos = todoCheckBoxes;
-    const result = await UpdateJob(updateJob);
+    const result = await UpdateJob(updateJob, classroomId);
     console.log("result: " + result);
     window.location.reload();
   };
 
   const handleDeleteJob = async () => {
     const deleteJob = job;
-    const result = await DeleteJob(deleteJob?.id ?? 0);
+    const result = await DeleteJob(deleteJob?.id ?? 0, classroomId);
     window.location.reload();
   };
 

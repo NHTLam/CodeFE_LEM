@@ -29,6 +29,10 @@ interface CardFormProps {
 
 export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
   ({ cardId, enableEditing, disableEditing, isEditing }, ref) => {
+    var classroomId = "";
+    if (typeof window !== "undefined") {
+      classroomId = localStorage.getItem("classroomId") ?? "";
+    }
     const params = useParams();
     const formRef = useRef<ElementRef<"form">>(null);
     const [jobName, setJobName] = useState("");
@@ -57,7 +61,7 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
         cardId: cardId,
         name: jobName,
       };
-      const result = await CreateJob(job);
+      const result = await CreateJob(job, classroomId);
       window.location.reload();
     };
 
