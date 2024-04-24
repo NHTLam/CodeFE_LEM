@@ -39,6 +39,14 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
     name: ""
   };
 
+  const ConvertDateTime = (datetime) => {
+    const convert = new Date(datetime);
+    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${
+      convert.getMonth() + 1
+    }/${convert.getFullYear()}`;
+    return format;
+  };
+
   useEffect(() => {
     if (first == true) {
       const fetchData = async () => {
@@ -147,6 +155,18 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
                   Feedback
                 </td>
                 <td className="whitespace-nowrap px-6 py-4">{answer[current]?.feedback}</td>
+              </tr>
+              <tr>
+                <td className="w-24 whitespace-nowrap bg-gray-50 px-6 py-4">
+                  Marker
+                </td>
+                <td className="whitespace-nowrap px-6 py-4">{answer[current]?.appUserFeedback.userName}</td>
+              </tr>
+              <tr>
+                <td className="w-24 whitespace-nowrap bg-gray-50 px-6 py-4">
+                  Grade At
+                </td>
+                <td className="whitespace-nowrap px-6 py-4">{ConvertDateTime(answer[current]?.gradeAt)}</td>
               </tr>
             </tbody>
           </table>

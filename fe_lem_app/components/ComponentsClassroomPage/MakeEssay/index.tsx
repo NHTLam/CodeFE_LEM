@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { FileTable } from "../FileTable";
+import { toast } from "sonner";
 
 export const MakeEssay = ({ ParentCallBack }) => {
   const [instruction, setInstruction] = useState<object>({});
@@ -36,6 +37,11 @@ export const MakeEssay = ({ ParentCallBack }) => {
         return updated;
       });
     }
+    toast.success("Create question success", {
+      style: {
+        color: "green",
+      },
+    });
   };
 
   return (
@@ -59,7 +65,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
               />
             </div>
             <div className="flex w-full items-center">
-              <p className="mr-2">Description: </p>
+              <p className="mr-2">Question: </p>
               <input
                 onChange={(e) => {
                   setDescription((prev) => {
