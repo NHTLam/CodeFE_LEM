@@ -3,8 +3,8 @@ export interface AppUserClassroomMapping {
   id: number;
   classroomId: number;
   appUserId: number;
-  roleId: number;
-  role: Role;
+  roleId?: number;
+  role?: Role;
 }
 
 export interface Role {

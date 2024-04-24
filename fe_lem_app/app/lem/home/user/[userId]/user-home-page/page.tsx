@@ -17,11 +17,11 @@ const HomePage = () => {
       <Info parentCallback={dataFromChild} />
       <hr className="mr-4 py-2"></hr>
 
-      <div className="px-2 md:px-4">
+      <div className="px-2">
         <ClassListRecents searchKey={newSearchKey} />
       </div>
 
-      <div className="mt-5 px-2 md:px-4">
+      <div className="mt-5 px-2">
         <ClassList searchKey={newSearchKey} />
       </div>
     </div>
