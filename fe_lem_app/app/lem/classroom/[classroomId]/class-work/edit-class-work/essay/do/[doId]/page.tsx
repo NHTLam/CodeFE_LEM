@@ -24,6 +24,13 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
   const [studentAnswer, setStudentAnswer] = useState<object>({});
   const [currentValue, setCurrentValue] = useState<any>();
 
+  var classroomId = "";
+  var appUserId = "";
+  if (typeof window !== "undefined") {
+    classroomId = localStorage.getItem("classroomId") ?? "";
+    appUserId = localStorage.getItem("userId") ?? "";
+  }
+
   const filter: any = {
     id: parseInt(params.doId),
     code: "",
@@ -45,12 +52,12 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
   const submitAnswer = async () => {
     for (let index = 0; index < classWork?.questions.length; index++) {
       await CreateStudentAnswer({
-        appUserId: 1,
+        appUserId: Number(appUserId) == 0 ? 1 : Number(appUserId),
         questionId: classWork?.questions[index].id,
         name: studentAnswer[index] || "",
       });
     }
-    window.location.href = "/lem/classroom/1/class-work";
+    window.location.href = `/lem/classroom/${classroomId}/class-work`;
   };
 
   const SwapPage = (num) => {
@@ -76,7 +83,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
     <>
       <div className="mx-5">
         <div className="mb-8 flex">
-          <Link href="/lem/classroom/1/class-work">
+          <Link href = {`/lem/classroom/${classroomId}/class-work`}>
             <button className="my-1 mr-10 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none">
               Cancel
             </button>

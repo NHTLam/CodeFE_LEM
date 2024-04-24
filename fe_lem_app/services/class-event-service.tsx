@@ -106,7 +106,7 @@ export async function UpdateClassEvent(classevent: any) {
       code: classevent.code,
       name: classevent.name,
       isClassWork: classevent.isClassWork,
-      appUserId: classevent.appUserId,
+      appUserId: 1,
       description: classevent.description,
       pinned: classevent.pinned,
       createdAt: classevent.createdAt,
@@ -133,6 +133,7 @@ export async function DeleteClassEvent(id: any) {
       id,
       name: "",
       code: "",
+      appUserId: 1,
     }),
   });
   return id;

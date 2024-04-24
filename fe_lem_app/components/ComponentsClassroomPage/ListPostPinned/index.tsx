@@ -32,6 +32,7 @@ export const ListPostPinned = () => {
   const filter: FilterData = {
     skip: 0,
     take: 10,
+    classroomId: Number(classroomId),
     pinned: true,
     isClassWork: false,
     orderby: 0,
