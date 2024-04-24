@@ -1,16 +1,22 @@
 "use client";
-
-import { DeleteClass } from "@/services/class-service";
+import { Role } from "@/models/appUserClassroomMapping";
+import { Classroom } from "@/models/classroom";
+import { ListAppUserByClassroom } from "@/services/app-user-service";
+import { DeleteClass, GetClass } from "@/services/class-service";
+import { ListRole } from "@/services/role-service";
 import { Dialog, Transition } from "@headlessui/react";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Edit, Trash2 } from "lucide-react";
 import { redirect } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 export const Setting = () => {
-  var classroomId = "";
-  var currentUserId = "";
   const [canRedirect, setCanRedirect] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [classroom, setClassroom] = useState<Classroom>();
+  const [roles, setRoles] = useState<any>();
+
+  var classroomId = "";
+  var currentUserId = "";
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
     currentUserId = localStorage.getItem("userId") ?? "";
@@ -26,6 +32,22 @@ export const Setting = () => {
     redirect(url);
   }
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const classroomData = await GetClass(Number(classroomId));
+      if (classroomData !== null) {
+        setClassroom(classroomData!);
+      }
+
+      const rolesData = await ListRole(Number(classroomId), false);
+      if (rolesData !== null) {
+        setRoles(rolesData);
+      }
+      debugger;
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="mx-20 rounded-sm bg-white p-3">
@@ -36,26 +58,89 @@ export const Setting = () => {
           <div className="grid text-sm md:grid-cols-2">
             <div className="grid grid-cols-3">
               <div className="px-4 py-2 font-semibold">Class Name:</div>
-              <div className="col-span-2 px-4 py-2">Jane</div>
+              <div className="col-span-2 px-4 py-2">{classroom?.name}</div>
             </div>
             <div className="grid grid-cols-3">
               <div className="px-4 py-2 font-semibold">Owner:</div>
-              <div className="col-span-2 px-4 py-2">Doe</div>
+              <div className="col-span-2 px-4 py-2">Teacher</div>
             </div>
             <div className="grid grid-cols-3">
               <div className="px-4 py-2 font-semibold">Number of member:</div>
-              <div className="col-span-2 px-4 py-2">2</div>
+              <div className="col-span-2 px-4 py-2">20</div>
             </div>
             <div className="grid grid-cols-3">
               <div className="px-4 py-2 font-semibold">Number of groups:</div>
-              <div className="col-span-2 px-4 py-2">2</div>
+              <div className="col-span-2 px-4 py-2">4</div>
+            </div>
+          </div>
+          <hr className="my-5" />
+          <div>
+            <div className="flex px-4 py-2">
+              <div className="flex grow items-center text-lg font-semibold">
+                Manage Role
+              </div>
+              <div className="">
+                <button
+                  type="button"
+                  className="float-right flex w-20 justify-center rounded-sm border border-green-500 py-1.5 text-sm text-green-500 hover:bg-green-100"
+                >
+                  Add Role
+                </button>
+              </div>
+            </div>
+            <div className="mt-3 px-4 text-center sm:mt-5">
+              <div className="mt-2">
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                  <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                    <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                        <th scope="col" className="w-1/6 px-6 py-3">
+                          No
+                        </th>
+                        <th scope="col" className="w-1/6 px-6 py-3">
+                          Role Name
+                        </th>
+                        <th scope="col" className="w-1/6 px-6 py-3">
+                          Role Type
+                        </th>
+                        <th scope="col" className="w-1/3 px-6 py-3">
+                          Description
+                        </th>
+                        <th scope="col" className="w-1/6 self-center px-6 py-3">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {roles?.map((role, roleIdx) => (
+                        <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                          <td className="px-6 py-4">{roleIdx + 1}</td>
+                          <td className="px-6 py-4">{role.name}</td>
+                          <td className="px-6 py-4">{role.roleTypeId}</td>
+                          <td className="px-6 py-4">{role.descrription}</td>
+                          <td className="px-6 py-4">
+                            <div className="flex">
+                              <button className="mr-3 flex w-10 justify-center rounded-sm text-blue-600">
+                                <Edit />
+                              </button>
+                              <button className="mr-3 flex w-10 justify-center rounded-sm  text-rose-600">
+                                <Trash2 />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <hr className="my-5" />
           <div className="px-4 py-2 text-lg font-semibold text-rose-700">
             Danger zone
           </div>
-          <div>
+          <div className="px-4 py-2">
             <button
               onClick={() => setShowDeleteModal(true)}
               className="my-1 mr-10 flex w-60 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
