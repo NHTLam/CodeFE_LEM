@@ -7,7 +7,10 @@ import { FileTable } from "@/components/ComponentsClassroomPage/FileTable";
 import { GetClassEvent } from "@/services/class-event-service";
 import { FilterData } from "@/models/filter";
 import { UpdateQuestion } from "@/services/question-service";
-import { CreateStudentAnswer, DetailStudentAnswer } from "@/services/student-answer-service";
+import {
+  CreateStudentAnswer,
+  DetailStudentAnswer,
+} from "@/services/student-answer-service";
 
 interface WorkIdPageProps {
   params: {
@@ -16,7 +19,6 @@ interface WorkIdPageProps {
 }
 
 const detailEssayPage = ({ params }: WorkIdPageProps) => {
-
   const [classWork, setClassWork] = useState<any>();
   const [answer, setAnswer] = useState<any>([]);
   const [first, setFirst] = useState<any>(true);
@@ -36,7 +38,7 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
   const filter: any = {
     id: parseInt(params.detailId),
     code: "",
-    name: ""
+    name: "",
   };
 
   useEffect(() => {
@@ -44,9 +46,9 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
       const fetchData = async () => {
         const data = await GetClassEvent(filter);
         const dataAnswer = await DetailStudentAnswer({
-            id: 0,
-            appUserId: 1,
-            classEventId: parseInt(params.detailId),
+          id: 0,
+          appUserId: 1,
+          classEventId: parseInt(params.detailId),
         });
         setClassWork(data);
         setAnswer(dataAnswer);
@@ -61,29 +63,26 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
       if (num == 0) {
         if (current == 0) {
           setCurrent(classWork?.questions.length - 1);
-        }
-        else {
+        } else {
           setCurrent(current - 1);
         }
-      }
-      else if (num == 1) {
+      } else if (num == 1) {
         if (current == classWork?.questions.length - 1) {
           setCurrent(0);
-        }
-        else {
+        } else {
           setCurrent(current + 1);
         }
       }
     }
     setCurrentValue("");
-  }
+  };
 
   return (
     <>
       <div className="mx-5">
-        <div className="flex mb-8">
+        <div className="mb-8 flex">
           <Link href={`/lem/classroom/${classroomId}/class-work`}>
-            <button className="my-1 mr-10 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadetailw-none">
+            <button className="dark:hover:shadetailw-none my-1 mr-10 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600">
               Return
             </button>
           </Link>
@@ -96,34 +95,30 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
           <div className="flex">
             <button
               onClick={() => SwapPage(0)}
-              className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadetailw-none">
+              className="dark:hover:shadetailw-none my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800"
+            >
               Previous
             </button>
             <button
               onClick={() => SwapPage(1)}
-              className="my-1 ml-20 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadetailw-none">
+              className="dark:hover:shadetailw-none my-1 ml-20 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800"
+            >
               Next
             </button>
           </div>
         </div>
         <p className="mx-2 mt-5 font-bold">Description:</p>
-        <p className="mx-2">
-          {classWork?.questions[current].description}
-        </p>
+        <p className="mx-2">{classWork?.questions[current].description}</p>
       </div>
       <hr className="mx-7 my-4" />
       <div className="mx-5">
         <p className="mx-2 mt-5 font-bold">Instruction:</p>
-        <p className="mx-2">
-          {classWork?.questions[current].instruction}
-        </p>
+        <p className="mx-2">{classWork?.questions[current].instruction}</p>
       </div>
       <hr className="mx-7 my-4" />
       <div className="mx-5 mb-10">
         <p className="mx-2 mt-5 font-bold">Answer:</p>
-        <p className="mx-2">
-        {answer[current]?.name}
-        </p>
+        <p className="mx-2">{answer[current]?.name}</p>
       </div>
       <div className="mx-8 mb-5">
         <p className="ml-2">Attached file</p>
@@ -132,27 +127,31 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
       <div className="mb-20">
         <p className="ml-10">FeedBack</p>
         <div className="flex flex-col">
-      <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-        <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
-          <table className="min-w-full divide-y divide-gray-200">
-            <tbody className="divide-y divide-gray-200 bg-white">
-              <tr>
-                <td className="w-24 whitespace-nowrap bg-gray-50 px-6 py-4">
-                  Grade
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">{answer[current]?.grade}</td>
-              </tr>
-              <tr>
-                <td className="w-24 whitespace-nowrap bg-gray-50 px-6 py-4">
-                  Feedback
-                </td>
-                <td className="whitespace-nowrap px-6 py-4">{answer[current]?.feedback}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+            <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
+              <table className="min-w-full divide-y divide-gray-200">
+                <tbody className="divide-y divide-gray-200 bg-white">
+                  <tr>
+                    <td className="w-24 whitespace-nowrap bg-gray-50 px-6 py-4">
+                      Grade
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {answer[current]?.grade}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="w-24 whitespace-nowrap bg-gray-50 px-6 py-4">
+                      Feedback
+                    </td>
+                    <td className="whitespace-nowrap px-6 py-4">
+                      {answer[current]?.feedback}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
       </div>
     </>
   );

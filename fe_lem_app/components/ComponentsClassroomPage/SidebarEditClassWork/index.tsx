@@ -103,13 +103,6 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
         </Listbox>
       </div>
       <div className="mt-5 flex">
-        <p>Point: </p>
-        <input
-          type="text"
-          className="text-body-color dark:text-body-color-dark dark:shadow-two ml-3 flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
-        />
-      </div>
-      <div className="mt-5 flex">
         <p className="mt-1.5">Submission deadline: </p>
         <Datepicker
           value={value}
@@ -161,16 +154,14 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
         />
       </div>
       <div className="mt-5 flex justify-end">
-      <button
+        <button
           onClick={handlerProp}
           className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
         >
           Create
         </button>
-        <Link href="/lem/classroom/1/class-work">
-          <button
-            className="my-1 ml-5 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
-          >
+        <Link href={`/lem/classroom/${classroomId}/class-work`}>
+          <button className="my-1 ml-5 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
             Return
           </button>
         </Link>

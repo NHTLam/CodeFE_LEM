@@ -32,7 +32,7 @@ export const InforGroups = ({ dataBoards }: InforGroupsPros) => {
         (user) =>
           user.appUserClassroomMappings?.some(
             (appUserClassroomMapping) =>
-              appUserClassroomMapping.role.name !== "Teacher",
+              appUserClassroomMapping.role?.name !== "Teacher",
           ),
       );
       setUsersInClass(filterUsers ?? []);
@@ -304,7 +304,7 @@ export const InforGroups = ({ dataBoards }: InforGroupsPros) => {
                                     {user.appUserClassroomMappings !== null
                                       ? user
                                           .appUserClassroomMappings!.map(
-                                            (mapping) => mapping.role.name,
+                                            (mapping) => mapping.role?.name,
                                           )
                                           .join(", ")
                                       : ""}

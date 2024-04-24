@@ -1,4 +1,4 @@
-const DATA_SOURCE_URL = process.env.BASE_URL + "lem/role/";
+const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/role/";
 const token =
   typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
@@ -52,6 +52,7 @@ export async function CreateRole(role, classroomId) {
       body: JSON.stringify({
         name: role.name,
         decription: role.description,
+        permissionRoleMappings: role.permissionRoleMappings,
         classroomId: Number(classroomId),
       }),
     });
