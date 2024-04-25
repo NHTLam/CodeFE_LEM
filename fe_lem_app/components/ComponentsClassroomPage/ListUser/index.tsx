@@ -118,11 +118,6 @@ export const ListUser = () => {
                             </Link>
                           </button>
                         )}
-                        <button className="my-1 flex w-20 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-                          <Link href="">
-                            <MessageCircleMore className="w-full" />
-                          </Link>
-                        </button>
                       </div>
                     </div>
                   ) : (

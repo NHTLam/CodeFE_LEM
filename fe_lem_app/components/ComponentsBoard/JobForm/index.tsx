@@ -9,14 +9,14 @@ import { Button } from "@nextui-org/react";
 import { CreateJob } from "@/services/job-service";
 import { Job } from "@/models/job";
 
-interface CardFormProps {
+interface JobFormProps {
   cardId: number;
   enableEditing: () => void;
   disableEditing: () => void;
   isEditing: boolean;
 }
 
-export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
+export const JobForm = forwardRef<HTMLTextAreaElement, JobFormProps>(
   ({ cardId, enableEditing, disableEditing, isEditing }, ref) => {
     var classroomId = "";
     if (typeof window !== "undefined") {
@@ -105,4 +105,4 @@ export const CardForm = forwardRef<HTMLTextAreaElement, CardFormProps>(
   },
 );
 
-CardForm.displayName = "CardForm";
+JobForm.displayName = "JobForm";

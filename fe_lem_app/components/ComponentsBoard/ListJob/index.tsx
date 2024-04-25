@@ -6,7 +6,7 @@ import { Draggable, Droppable } from "@hello-pangea/dnd";
 import { cn } from "@/lib/utils";
 //import { ListWithCards } from "@/types";
 
-import { CardForm } from "@/components/ComponentsBoard/CardForm";
+import { JobForm } from "@/components/ComponentsBoard/JobForm";
 import { JobItem } from "@/components/ComponentsBoard/JobItem";
 import { CardHeader } from "@/components/ComponentsBoard/CardHeader";
 import { Card } from "@/models/card";
@@ -65,7 +65,7 @@ export const ListJob = ({ data, index, boardData }: ListJobProps) => {
                   </ol>
                 )}
               </Droppable>
-              <CardForm
+              <JobForm
                 cardId={data.id!}
                 isEditing={isEditing}
                 enableEditing={enableEditing}

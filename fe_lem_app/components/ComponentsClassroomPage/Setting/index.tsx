@@ -110,7 +110,7 @@ export const Setting = () => {
       };
       const result = await CreateRole(newRoleData, classroomId);
       setShowModal(false);
-      //window.location.reload();
+      window.location.reload();
     }
   }
 
