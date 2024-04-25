@@ -81,9 +81,9 @@ export const ListUser = () => {
                   ) : (
                     <></>
                   )}
-                  <button className="my-1 flex w-40 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
+                  {/* <button className="my-1 flex w-40 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
                     Add Member
-                  </button>
+                  </button> */}
                 </div>
               </div>
               <hr className="mx-40 my-2" />

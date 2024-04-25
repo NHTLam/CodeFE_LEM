@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import { ListCard } from "@/components/ComponentsBoard/ListCard";
+import { BoardComponent } from "@/components/ComponentsBoard/Board";
 
 interface BoardIdPageProps {
   params: {
@@ -7,12 +6,8 @@ interface BoardIdPageProps {
   };
 }
 
-const BoardIdPage = async ({ params }: BoardIdPageProps) => {
-  return (
-    <div className="h-full overflow-x-auto p-4 pt-30">
-      <ListCard boardId={params.boardId} />
-    </div>
-  );
+const BoardIdPage = ({ params }: BoardIdPageProps) => {
+  return <BoardComponent boardId={params.boardId} />;
 };
 
 export default BoardIdPage;

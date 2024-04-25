@@ -3,6 +3,7 @@ import { FilterData } from "@/models/filter";
 import { ListClassEvent } from "@/services/class-event-service";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+
 export const NavClassroom = (params) => {
   const pathname = usePathname();
   const classroomId = Number(params.classroomId);

@@ -20,5 +20,5 @@ export interface Job {
     updateAt?: Date;
     creator?: AppUser;
     todos?: Todo[];
-    appUserJobMaping?: AppUserJobMapping[];
+    appUserJobMapings?: AppUserJobMapping[];
 }

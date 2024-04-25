@@ -31,8 +31,10 @@ interface CardItemProps {
 
 export const JobItem = ({ data, index, boardData }: CardItemProps) => {
   var classroomId = "";
+  var currentUserId = "";
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
+    currentUserId = localStorage.getItem("userId") ?? "";
   }
 
   const [showModal, setShowModal] = useState(false);
@@ -43,8 +45,8 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
   const [isEditTodo, setIsEditTodo] = useState(false);
   const [updateTodoCheckBox, setUpdateTodoCheckBox] = useState("");
   const [value, setValue] = useState({
-    startDate: data.startAt ?? new Date(),
-    endDate: data.endAt ?? new Date(),
+    startDate: data.startAt ?? null,
+    endDate: data.endAt ?? null,
   });
   const [job, setJob] = useState<Job>(data);
 
@@ -57,11 +59,10 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
     });
   };
 
-  const member = [
-    { name: "Member A" },
-    { name: "Member B" },
-    { name: "Member C" },
-  ];
+  const member =
+    boardData.appUserBoardMappings?.map(
+      (appUserBoardMapping) => appUserBoardMapping.appUser,
+    ) ?? [];
   const [selected, setSelected] = useState(member[0]);
 
   function handleClick() {
@@ -124,8 +125,24 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
       updateJob.todos = [];
     }
     updateJob!.todos = todoCheckBoxes;
+    if (classroomId == null || classroomId == "") {
+      const appUserJobMappings = [
+        {
+          jobId: job.id,
+          appUserId: Number(currentUserId),
+        },
+      ];
+      updateJob!.appUserJobMapings = appUserJobMappings;
+    } else {
+      const appUserJobMappings = [
+        {
+          jobId: job.id,
+          appUserId: Number(selected.id),
+        },
+      ];
+      updateJob!.appUserJobMapings = appUserJobMappings;
+    }
     const result = await UpdateJob(updateJob, classroomId);
-    console.log("result: " + result);
     window.location.reload();
   };
 
@@ -216,7 +233,8 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                     <div className="mt-3 text-center sm:mt-5">
                       <form>
                         <div className="mt-2">
-                          {boardData.classroomId !== null ? (
+                          {boardData.classroomId !== null &&
+                          boardData.classroomId !== 0 ? (
                             <div className="flex">
                               <p className="float-left mr-3 mt-2">Member: </p>
                               <div className="z-10">
@@ -228,7 +246,7 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                                   <div className="relative">
                                     <Listbox.Button className="relative my-1 flex w-full cursor-default justify-center rounded-lg border border-stroke bg-white py-2 pl-3 pr-10 text-left text-sm outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
                                       <span className="block truncate">
-                                        {selected.name}
+                                        {selected.userName}
                                       </span>
                                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                         <ChevronDown className="h-5 w-5 text-gray-400" />
@@ -262,7 +280,7 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                                                       : "font-normal"
                                                   }`}
                                                 >
-                                                  {person.name}
+                                                  {person.userName}
                                                 </span>
                                                 {selected ? (
                                                   <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">

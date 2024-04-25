@@ -73,7 +73,7 @@ export async function CreateJob(job: Job, classroomId) {
         todos: job.todos,
         isAllDay: job.isAllDay,
         creatorId: job.creatorId,
-        appUserJobMapping: job.appUserJobMaping,
+        appUserJobMappings: job.appUserJobMapings,
         classroomId: Number(classroomId),
       }),
     });
@@ -83,7 +83,7 @@ export async function CreateJob(job: Job, classroomId) {
   } catch (error) {
     // Handle network errors or unexpected exceptions
     console.error("Error creating Job:", error);
-    return { error: "An unexpected error occurred." }; // Return a generic error message
+    return null;
   }
 }
 
@@ -104,7 +104,7 @@ export async function UpdateJob(job: Job, classroomId) {
       todos: job.todos,
       isAllDay: job.isAllDay,
       creatorId: job.creatorId,
-      appUserJobMapping: job.appUserJobMaping,
+      appUserJobMappings: job.appUserJobMapings,
       classroomId: Number(classroomId),
     }),
   });

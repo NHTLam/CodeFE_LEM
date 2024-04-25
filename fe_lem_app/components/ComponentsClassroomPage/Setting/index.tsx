@@ -1,16 +1,31 @@
 "use client";
-
-import { DeleteClass } from "@/services/class-service";
+import { Role } from "@/models/appUserClassroomMapping";
+import { Classroom } from "@/models/classroom";
+import { ListAppUserByClassroom } from "@/services/app-user-service";
+import { DeleteClass, GetClass } from "@/services/class-service";
+import { ListPermission } from "@/services/permission-service";
+import { CreateRole, ListRole } from "@/services/role-service";
 import { Dialog, Transition } from "@headlessui/react";
-import { AlertTriangle } from "lucide-react";
+import { AlertTriangle, Edit, ShieldBan, Trash2 } from "lucide-react";
 import { redirect } from "next/navigation";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 export const Setting = () => {
-  var classroomId = "";
-  var currentUserId = "";
   const [canRedirect, setCanRedirect] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [classroom, setClassroom] = useState<Classroom>();
+  const [roles, setRoles] = useState<any>();
+  const [permissions, setPermissions] = useState<any>();
+  const [displayPermissions, setDisplayPermissions] = useState<any>();
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
+  const [newRole, setNewRole] = useState<any>();
+  const [showError, setShowError] = useState(false);
+  const [removeFromDisplayPermissions, setRemoveFromDisplayPermissions] =
+    useState<any>();
+
+  var classroomId = "";
+  var currentUserId = "";
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
     currentUserId = localStorage.getItem("userId") ?? "";
@@ -26,6 +41,105 @@ export const Setting = () => {
     redirect(url);
   }
 
+  useEffect(() => {
+    const fetchData = async () => {
+      const classroomData = await GetClass(Number(classroomId));
+      if (classroomData !== null) {
+        setClassroom(classroomData!);
+      }
+    };
+    fetchData();
+
+    const fetchRoleData = async () => {
+      const rolesData = await ListRole(Number(classroomId), false);
+      if (rolesData !== null) {
+        setRoles(rolesData);
+      }
+    };
+    fetchRoleData();
+
+    const fetchPermissionData = async () => {
+      const permissionData = await ListPermission(Number(classroomId));
+      if (permissionData !== null) {
+        const distinctPermissionData = permissionData.filter(
+          (item, index) =>
+            permissionData.findIndex(
+              (otherObj) => otherObj.name === item.name,
+            ) === index,
+        );
+        const removeFromDisplayPermissionDatas = permissionData.filter(
+          (x) => !distinctPermissionData.map((y) => y.id).includes(x.id),
+        );
+        setRemoveFromDisplayPermissions(removeFromDisplayPermissionDatas);
+        setPermissions(permissionData);
+        setDisplayPermissions(distinctPermissionData);
+      }
+    };
+    fetchPermissionData();
+  }, []);
+
+  async function handleCreateRole() {
+    if (
+      newRole?.name === null ||
+      newRole?.name === undefined ||
+      newRole?.name === ""
+    ) {
+      setShowError(true);
+    } else {
+      const currentSelectedPermission = permissions.filter((x) =>
+        selectedPermissions.includes(x.id),
+      );
+      const getSameRemovePermission = removeFromDisplayPermissions.filter((x) =>
+        currentSelectedPermission.map((y) => y.name).includes(x.name),
+      );
+
+      const newPermissionForRole = currentSelectedPermission.concat(
+        getSameRemovePermission,
+      );
+      var newPermissionRoleMappings: any = [];
+      newPermissionForRole.forEach((element) => {
+        const newPermissionRoleMapping = {
+          permissionId: element.id,
+        };
+        newPermissionRoleMappings.push(newPermissionRoleMapping);
+      });
+      const newRoleData = {
+        name: newRole.name,
+        description: newRole.description,
+        permissionRoleMappings: newPermissionRoleMappings,
+      };
+      const result = await CreateRole(newRoleData, classroomId);
+      setShowModal(false);
+      //window.location.reload();
+    }
+  }
+
+  function handleTickAllNewPermissionForRole() {
+    if (selectedPermissions.length === displayPermissions?.length) {
+      setSelectedPermissions([]);
+    } else {
+      const fullpermissionId =
+        displayPermissions?.map((permission) => permission?.id ?? 0) ?? [];
+      const newSelectedPermission: number[] = selectedPermissions.concat(
+        ...fullpermissionId,
+      );
+      setSelectedPermissions(newSelectedPermission);
+    }
+  }
+
+  function handleTickNewPermssionForRole(permissionId: number) {
+    if (selectedPermissions.includes(permissionId)) {
+      const newSelectedPermission: number[] = selectedPermissions.filter(
+        (element) => element !== permissionId,
+      );
+      setSelectedPermissions(newSelectedPermission);
+    } else {
+      const newSelectedMembers: number[] =
+        selectedPermissions.concat(permissionId);
+      setSelectedPermissions(newSelectedMembers);
+    }
+  }
+
   return (
     <>
       <div className="mx-20 rounded-sm bg-white p-3">
@@ -36,26 +150,109 @@ export const Setting = () => {
           <div className="grid text-sm md:grid-cols-2">
             <div className="grid grid-cols-3">
               <div className="px-4 py-2 font-semibold">Class Name:</div>
-              <div className="col-span-2 px-4 py-2">Jane</div>
+              <div className="col-span-2 px-4 py-2">{classroom?.name}</div>
             </div>
             <div className="grid grid-cols-3">
               <div className="px-4 py-2 font-semibold">Owner:</div>
-              <div className="col-span-2 px-4 py-2">Doe</div>
+              <div className="col-span-2 px-4 py-2">Teacher</div>
             </div>
             <div className="grid grid-cols-3">
               <div className="px-4 py-2 font-semibold">Number of member:</div>
-              <div className="col-span-2 px-4 py-2">2</div>
+              <div className="col-span-2 px-4 py-2">20</div>
             </div>
             <div className="grid grid-cols-3">
               <div className="px-4 py-2 font-semibold">Number of groups:</div>
-              <div className="col-span-2 px-4 py-2">2</div>
+              <div className="col-span-2 px-4 py-2">4</div>
+            </div>
+          </div>
+          <hr className="my-5" />
+          <div>
+            <div className="flex px-4 py-2">
+              <div className="flex grow items-center text-lg font-semibold">
+                Manage Role
+              </div>
+              <div className="">
+                <button
+                  type="button"
+                  onClick={() => setShowModal(true)}
+                  className="float-right flex w-20 justify-center rounded-sm border border-green-500 py-1.5 text-sm text-green-500 hover:bg-green-100"
+                >
+                  Add Role
+                </button>
+              </div>
+            </div>
+            <div className="mt-3 px-4 text-center sm:mt-5">
+              <div className="mt-2">
+                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                  <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                    <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                      <tr>
+                        <th scope="col" className="w-1/6 px-6 py-3">
+                          No
+                        </th>
+                        <th scope="col" className="w-1/6 px-6 py-3">
+                          Role Name
+                        </th>
+                        <th scope="col" className="w-1/6 px-6 py-3">
+                          Role Type
+                        </th>
+                        <th scope="col" className="w-1/3 px-6 py-3">
+                          Description
+                        </th>
+                        <th scope="col" className="w-1/6 self-center px-6 py-3">
+                          Action
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {roles?.map((role, roleIdx) => (
+                        <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                          <td className="px-6 py-4">{roleIdx + 1}</td>
+                          <td className="px-6 py-4">{role.name}</td>
+                          <td className="px-6 py-4">
+                            {role.roleTypeId == 1 ? "Default" : "User Create"}
+                          </td>
+                          <td className="px-6 py-4">{role.description}</td>
+                          <td className="px-6 py-4">
+                            {role.roleTypeId == 1 ? (
+                              <div className="flex">
+                                <button
+                                  disabled={true}
+                                  className="mr-3 flex w-10 justify-center rounded-sm text-gray-400"
+                                >
+                                  <Edit />
+                                </button>
+                                <button
+                                  disabled={true}
+                                  className="mr-3 flex w-10 justify-center rounded-sm  text-gray-400"
+                                >
+                                  <Trash2 />
+                                </button>
+                              </div>
+                            ) : (
+                              <div className="flex">
+                                <button className="mr-3 flex w-10 justify-center rounded-sm text-blue-600">
+                                  <Edit />
+                                </button>
+                                <button className="mr-3 flex w-10 justify-center rounded-sm  text-rose-600">
+                                  <Trash2 />
+                                </button>
+                              </div>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
           <hr className="my-5" />
           <div className="px-4 py-2 text-lg font-semibold text-rose-700">
             Danger zone
           </div>
-          <div>
+          <div className="px-4 py-2">
             <button
               onClick={() => setShowDeleteModal(true)}
               className="my-1 mr-10 flex w-60 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
@@ -138,6 +335,159 @@ export const Setting = () => {
                     >
                       Cancel
                     </button>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition.Root>
+
+      <Transition.Root show={showModal} as={Fragment}>
+        <Dialog as="div" className="relative z-50" onClose={setShowModal}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity" />
+          </Transition.Child>
+
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative w-1/2 rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all">
+                  <div>
+                    <div className="flex">
+                      <div className="flex grow items-center text-2xl font-semibold">
+                        <ShieldBan className="mr-2 h-10 w-10" />
+                        List permission
+                      </div>
+                      <div className="">
+                        <button
+                          type="button"
+                          className="float-right flex w-20 justify-center rounded-sm border border-green-500 py-1.5 text-sm text-green-500 hover:bg-green-100"
+                          onClick={handleCreateRole}
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          className="float-right mr-3 flex w-20 justify-center rounded-sm border border-rose-500 py-1.5 text-sm text-rose-500 hover:bg-rose-100"
+                          onClick={() => setShowModal(false)}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </div>
+                    <div className="mt-5 flex gap-x-10">
+                      <div className="flex">
+                        <p>Role Name:</p>
+                        <input
+                          onChange={(e) =>
+                            setNewRole({ ...newRole, name: e.target.value })
+                          }
+                          type="text"
+                          className="ml-5 flex grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+                        />
+                      </div>
+                      <div className="flex">
+                        <p>Description:</p>
+                        <input
+                          onChange={(e) =>
+                            setNewRole({
+                              ...newRole,
+                              description: e.target.value,
+                            })
+                          }
+                          type="text"
+                          className="ml-5 flex grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+                        />
+                      </div>
+                    </div>
+                    {showError ? (
+                      <p className="text-sm text-rose-500">
+                        Role Name can not null
+                      </p>
+                    ) : (
+                      <></>
+                    )}
+                    <div className="mt-3 text-center sm:mt-5">
+                      <div className="mt-2">
+                        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                          <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                            <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                              <tr>
+                                <th scope="col" className="p-4">
+                                  <div className="flex items-center">
+                                    <input
+                                      id="checkbox-all-search"
+                                      type="checkbox"
+                                      onClick={() =>
+                                        handleTickAllNewPermissionForRole()
+                                      }
+                                      className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                                    />
+                                    <label className="sr-only">checkbox</label>
+                                  </div>
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                  Permisson
+                                </th>
+                                <th scope="col" className="px-6 py-3">
+                                  Description
+                                </th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {displayPermissions?.map((permission) => (
+                                <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                                  <td className="w-4 p-4">
+                                    <div className="flex items-center">
+                                      <input
+                                        id="checkbox-table-search-1"
+                                        type="checkbox"
+                                        checked={selectedPermissions.some(
+                                          (permissionId) =>
+                                            permissionId === permission.id,
+                                        )}
+                                        onClick={() =>
+                                          handleTickNewPermssionForRole(
+                                            permission.id ?? 0,
+                                          )
+                                        }
+                                        className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600 focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:ring-offset-gray-800 dark:focus:ring-blue-600 dark:focus:ring-offset-gray-800"
+                                      />
+                                      <label className="sr-only">
+                                        checkbox
+                                      </label>
+                                    </div>
+                                  </td>
+                                  <td className="px-6 py-4">
+                                    {permission.name}
+                                  </td>
+                                  <td className="px-6 py-4">
+                                    {permission.description}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>

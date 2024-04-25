@@ -141,12 +141,25 @@ export const ListCard = ({ boardId }: ListCardProps) => {
 
   async function handleDeleteBoard() {
     const result = await DeleteBoard(board?.id ?? 0);
+    if (result.status !== 200) {
+      toast.error("Delete fail", {
+        style: {
+          color: "red",
+        },
+      });
+    } else {
+      toast.success("Delete success", {
+        style: {
+          color: "green",
+        },
+      });
+    }
     window.history.back();
   }
 
   return (
     <>
-      {board?.classroomId !== null ? (
+      {board?.classroomId !== null && board?.classroomId !== 0 ? (
         <button
           type="button"
           className="float-right mr-3 flex w-50 justify-center rounded-sm border border-rose-500 py-1.5 text-sm text-rose-500 hover:bg-rose-100"

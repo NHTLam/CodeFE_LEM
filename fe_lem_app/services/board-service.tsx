@@ -1,3 +1,4 @@
+"use client";
 import { Board } from "@/models/board";
 import { Card } from "@/models/card";
 import { CreateBoardsFunction } from "@/models/createBoardsFunction";
@@ -188,8 +189,7 @@ export async function UpdateBoard(board: Board) {
       cards: board.cards,
     }),
   });
-  const newBoard: Board = await res.json();
-  return newBoard;
+  return res;
 }
 
 export async function DeleteBoard(boardId) {

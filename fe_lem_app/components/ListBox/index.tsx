@@ -22,7 +22,7 @@ export const ListBox = ({
   const isForBoard = dataBoards != null;
   return (
     <div className="mt-5 space-y-4">
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
         {datas == null ? (
           <></>
         ) : (

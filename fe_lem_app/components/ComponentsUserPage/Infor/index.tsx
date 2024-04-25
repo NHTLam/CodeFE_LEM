@@ -4,12 +4,13 @@ import { Search, Trash, Pin, Filter } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export const Info = ({ parentCallback }) => {
-  // if (!isLoaded) {
-  //   return <Info.Skeleton />;
-  // }
   const handleSearch = (searchKey: string) => {
     parentCallback(searchKey);
   };
+
+  if (typeof window !== "undefined") {
+    localStorage.setItem("classroomId", ""); // cứ về trang đầu đồng nghĩa là thoát classroom thì set lại classroomId là rỗng
+  }
 
   return (
     <div className="flex items-center gap-x-4 pb-4 pl-3">
@@ -33,23 +34,6 @@ export const Info = ({ parentCallback }) => {
           onChange={(e) => handleSearch(e.target.value)}
           className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
         />
-      </div>
-    </div>
-  );
-};
-
-Info.Skeleton = function SkeletonInfo() {
-  return (
-    <div className="flex items-center gap-x-4">
-      <div className="relative h-[60px] w-[60px]">
-        <Skeleton className="absolute h-full w-full" />
-      </div>
-      <div className="space-y-2">
-        <Skeleton className="h-10 w-[200px]" />
-        <div className="flex items-center">
-          <Skeleton className="mr-2 h-4 w-4" />
-          <Skeleton className="h-4 w-[100px]" />
-        </div>
       </div>
     </div>
   );

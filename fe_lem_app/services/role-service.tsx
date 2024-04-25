@@ -1,8 +1,8 @@
-const DATA_SOURCE_URL = process.env.BASE_URL + "lem/role/";
+const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/role/";
 const token =
   typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
-export async function ListRole(classroomId) {
+export async function ListRole(classroomId, isFull) {
   try {
     const res = await fetch(DATA_SOURCE_URL + "list-role", {
       method: "POST",
@@ -12,6 +12,7 @@ export async function ListRole(classroomId) {
       },
       body: JSON.stringify({
         classroomId: Number(classroomId),
+        isFull: isFull,
       }),
     });
     const roles = await res.json();
@@ -51,6 +52,7 @@ export async function CreateRole(role, classroomId) {
       body: JSON.stringify({
         name: role.name,
         decription: role.description,
+        permissionRoleMappings: role.permissionRoleMappings,
         classroomId: Number(classroomId),
       }),
     });
