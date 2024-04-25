@@ -51,7 +51,7 @@ export async function CreateRole(role, classroomId) {
       },
       body: JSON.stringify({
         name: role.name,
-        decription: role.description,
+        description: role.description,
         permissionRoleMappings: role.permissionRoleMappings,
         classroomId: Number(classroomId),
       }),
@@ -77,6 +77,7 @@ export async function UpdateRole(role, classroomId) {
       id: role.id,
       name: role.name,
       description: role.description,
+      permissionRoleMappings: role.permissionRoleMappings,
       classroomId: Number(classroomId),
     }),
   });

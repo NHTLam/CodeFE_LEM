@@ -4,7 +4,12 @@ import { Classroom } from "@/models/classroom";
 import { ListAppUserByClassroom } from "@/services/app-user-service";
 import { DeleteClass, GetClass } from "@/services/class-service";
 import { ListPermission } from "@/services/permission-service";
-import { CreateRole, DeleteRole, ListRole } from "@/services/role-service";
+import {
+  CreateRole,
+  DeleteRole,
+  ListRole,
+  UpdateRole,
+} from "@/services/role-service";
 import { Dialog, Transition } from "@headlessui/react";
 import { AlertTriangle, Edit, ShieldBan, Trash2 } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -81,7 +86,48 @@ export const Setting = () => {
   }, []);
 
   async function handleSaveRole() {
+    const currentSelectedPermission = permissions.filter((x) =>
+      selectedPermissions.includes(x.id),
+    );
+    const getSameRemovePermission = removeFromDisplayPermissions.filter((x) =>
+      currentSelectedPermission.map((y) => y.name).includes(x.name),
+    );
+
+    const newPermissionForRole = currentSelectedPermission.concat(
+      getSameRemovePermission,
+    );
+    var newPermissionRoleMappings: any = [];
+    newPermissionForRole.forEach((element) => {
+      const newPermissionRoleMapping = {
+        permissionId: element.id,
+      };
+      newPermissionRoleMappings.push(newPermissionRoleMapping);
+    });
+
     if (isEdit) {
+      const currentUpdateRole = {
+        id: updateRole.id,
+        name: newRole?.name ?? "",
+        description: newRole?.description ?? "",
+        permissionRoleMappings: newPermissionRoleMappings,
+      };
+      if (
+        newRole?.name === null ||
+        newRole?.name === "" ||
+        newRole?.name === undefined
+      ) {
+        currentUpdateRole.name = updateRole.name;
+      }
+      if (
+        newRole?.description === null ||
+        newRole?.description === "" ||
+        newRole?.name === undefined
+      ) {
+        currentUpdateRole.description = updateRole.description;
+      }
+      const result = await UpdateRole(currentUpdateRole, classroomId);
+      setShowModal(false);
+      //window.location.reload();
     } else {
       if (
         newRole?.name === null ||
@@ -90,23 +136,6 @@ export const Setting = () => {
       ) {
         setShowError(true);
       } else {
-        const currentSelectedPermission = permissions.filter((x) =>
-          selectedPermissions.includes(x.id),
-        );
-        const getSameRemovePermission = removeFromDisplayPermissions.filter(
-          (x) => currentSelectedPermission.map((y) => y.name).includes(x.name),
-        );
-
-        const newPermissionForRole = currentSelectedPermission.concat(
-          getSameRemovePermission,
-        );
-        var newPermissionRoleMappings: any = [];
-        newPermissionForRole.forEach((element) => {
-          const newPermissionRoleMapping = {
-            permissionId: element.id,
-          };
-          newPermissionRoleMappings.push(newPermissionRoleMapping);
-        });
         const newRoleData = {
           name: newRole.name,
           description: newRole.description,
@@ -197,6 +226,7 @@ export const Setting = () => {
                   onClick={() => {
                     setShowModal(true);
                     setIsEdit(false);
+                    setSelectedPermissions([]);
                   }}
                   className="float-right flex w-20 justify-center rounded-sm border border-green-500 py-1.5 text-sm text-green-500 hover:bg-green-100"
                 >
@@ -431,7 +461,7 @@ export const Setting = () => {
                             setNewRole({ ...newRole, name: e.target.value })
                           }
                           type="text"
-                          value={isEdit ? updateRole.name : ""}
+                          placeholder={isEdit ? updateRole.name : ""}
                           className="ml-5 flex grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
                         />
                       </div>
@@ -444,7 +474,7 @@ export const Setting = () => {
                               description: e.target.value,
                             })
                           }
-                          value={isEdit ? updateRole.description : ""}
+                          placeholder={isEdit ? updateRole.description : ""}
                           type="text"
                           className="ml-5 flex grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
                         />
