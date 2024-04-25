@@ -9,6 +9,7 @@ import { FilterData } from "@/models/filter";
 import { UpdateQuestion } from "@/services/question-service";
 import { CreateStudentAnswer, DetailStudentAnswer, ListStudentAnswer, UpdateStudentAnswer } from "@/services/student-answer-service";
 import { Listbox, Transition } from "@headlessui/react";
+import { toast } from "sonner";
 
 interface WorkIdPageProps {
     params: {
@@ -34,8 +35,8 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
     var classroomId = "";
     var appUserId = "";
     if (typeof window !== "undefined") {
-      classroomId = localStorage.getItem("classroomId") ?? "";
-      appUserId = localStorage.getItem("userId") ?? "";
+        classroomId = localStorage.getItem("classroomId") ?? "";
+        appUserId = localStorage.getItem("userId") ?? "";
     }
 
     const filter: any = {
@@ -108,43 +109,46 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
 
     const submitAnswer = async () => {
         for (let index = 0; index < answer.length; index++) {
-          await UpdateStudentAnswer({
-            appUserId: userId,
-            questionId: classWork?.questions[index].id,
-            name: answer[index]?.name,
-            id: answer[index]?.id,
-            grade: grade[index],
-            feedback: feedback[index],
-            appUserFeedbackId: 1,
-          });
+            await UpdateStudentAnswer({
+                appUserId: userId,
+                questionId: classWork?.questions[index].id,
+                name: answer[index]?.name,
+                id: answer[index]?.id,
+                grade: grade[index],
+                feedback: feedback[index],
+                appUserFeedbackId: 1,
+            });
         }
         window.location.href = `/lem/classroom/${classroomId}/class-work`;
-      }
+        toast.success("Create question success", {
+            style: {
+              color: "green",
+            },
+          });
+    }
 
     return (
         <>
             <div className="mx-5">
-                <div className="flex mb-8">
-                    <Link href={`/lem/classroom/${classroomId}/class-work`}>
-                        <button className="my-1 mr-10 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadetailw-none">
-                            Return
+                <div className="flex justify-between">
+                    <div className="flex h-10 mb-8">
+                        <Link href={`/lem/classroom/${classroomId}/class-work`}>
+                            <button className="my-1 mr-10 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadetailw-none">
+                                Return
+                            </button>
+                        </Link>
+                        <button
+                            onClick={submitAnswer}
+                            className="my-1 mr-10 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-blue-600 hover:bg-blue-200/5 hover:text-blue-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadetailw-none">
+                            Mark
                         </button>
-                    </Link>
-                    <button 
-                    onClick={submitAnswer}
-                    className="my-1 mr-10 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-blue-600 hover:bg-blue-200/5 hover:text-blue-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadetailw-none">
-                        Mark
-                    </button>
-                </div>
-                <div className="flex items-center justify-between text-2xl font-semibold text-blue-500">
-                    <div className="flex">
-                        <ClipboardPen className="mr-2 h-10 w-10" />
-                        <p>{classWork?.questions[current].name}</p>
                     </div>
-                    <div className="flex">
-                        <div className="mx-50 mt-10 flex justify-end">
+
+                    <div className="flex items-center mr-80">
+                        <p className="font-bold">Choose student:</p>
+                        <div className="flex justify-end">
                             <Listbox value={selected} onChange={setSelected}>
-                                <div className="relative z-10 pl-15">
+                                <div className="relative z-10 pl-5">
                                     <Listbox.Button className="relative my-1 flex w-full cursor-default justify-center rounded-lg border border-stroke bg-white py-2 pl-3 pr-10 text-left text-sm outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
                                         <span className="block truncate">{selected.userName}</span>
                                         <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -194,6 +198,15 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
                                 </div>
                             </Listbox>
                         </div>
+                    </div>
+                </div>
+                <div className="flex items-center justify-between text-2xl font-semibold text-blue-500">
+                    <div className="flex">
+                        <ClipboardPen className="mr-2 h-10 w-10" />
+                        <p>{classWork?.questions[current].name}</p>
+                    </div>
+                    <div className="flex">
+
                         <button
                             onClick={() => SwapPage(0)}
                             className="my-1 flex w-30 h-10 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadetailw-none">
@@ -201,7 +214,7 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
                         </button>
                         <button
                             onClick={() => SwapPage(1)}
-                            className="my-1 ml-20 flex w-30 h-10 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadetailw-none">
+                            className="my-1 ml-10 flex w-30 h-10 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadetailw-none">
                             Next
                         </button>
                     </div>

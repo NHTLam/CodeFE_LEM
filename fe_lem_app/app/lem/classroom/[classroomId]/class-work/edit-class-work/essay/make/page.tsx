@@ -6,6 +6,7 @@ import { MakeEssay } from "@/components/ComponentsClassroomPage/MakeEssay";
 import { SidebarEditClassWork } from "@/components/ComponentsClassroomPage/SidebarEditClassWork";
 import { CreateClassEvent } from "@/services/class-event-service";
 import { CreateQuestion } from "@/services/question-service";
+import { toast } from "sonner";
 
 const MakeEssayPage = () => {
   var classroomId = "";
@@ -39,6 +40,11 @@ const MakeEssayPage = () => {
     });
 
     window.location.href = `/lem/classroom/${classroomId}/class-work`;
+    toast.success("Create question success", {
+      style: {
+        color: "green",
+      },
+    });
   };
 
   return (

@@ -8,6 +8,7 @@ import { GetClassEvent } from "@/services/class-event-service";
 import { FilterData } from "@/models/filter";
 import { UpdateQuestion } from "@/services/question-service";
 import { CreateStudentAnswer } from "@/services/student-answer-service";
+import { toast } from "sonner";
 
 interface WorkIdPageProps {
   params: {
@@ -58,6 +59,11 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
       });
     }
     window.location.href = `/lem/classroom/${classroomId}/class-work`;
+    toast.success("Create question success", {
+      style: {
+        color: "green",
+      },
+    });
   };
 
   const SwapPage = (num) => {

@@ -141,12 +141,12 @@ export const ListPost = () => {
     console.log(data);
 
     await CreateComment(data);
+    window.location.reload();
     toast.success("Create comment success", {
       style: {
         color: "green",
       },
     });
-    window.location.reload();
   };
 
   const showUpdateModal = async (index, classEvent) => {
@@ -168,12 +168,12 @@ export const ListPost = () => {
         deletedAt: new Date(),
       };
       await UpdateClassEvent(data);
+      window.location.reload();
       toast.success("Pin success", {
         style: {
           color: "green",
         },
       });
-      window.location.reload();
     } else if (index == 1) {
       setShowModal(true);
       const data = {
@@ -195,12 +195,12 @@ export const ListPost = () => {
       setCreatePost(data);
     } else if (index == 2) {
       await DeleteClassEvent(classEvent.id);
+      window.location.reload();
       toast.success("Delete success", {
         style: {
           color: "green",
         },
       });
-      window.location.reload();
     }
   };
 
@@ -268,12 +268,12 @@ export const ListPost = () => {
               <button
                 onClick={async () => {
                   await CreateClassEvent(createPost);
+                  window.location.reload();
                   toast.success("Create success", {
                     style: {
                       color: "green",
                     },
                   });
-                  window.location.reload();
                 }}
                 className="inline-flex w-full justify-center rounded-md bg-sky-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-sky-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-violet-600 disabled:opacity-25 sm:col-start-4"
               >
@@ -392,12 +392,12 @@ export const ListPost = () => {
                             DeleteComment({
                               id: comment.id,
                             });
+                            window.location.reload();
                             toast.success("Delete success", {
                               style: {
                                 color: "green",
                               },
                             });
-                            window.location.reload();
                           }}
                           className="ml-2">
                           <Trash2 className="text-red-400" />
@@ -508,12 +508,12 @@ export const ListPost = () => {
                               name,
                               description,
                             );
+                            window.location.reload();
                             toast.success("Update post success", {
                               style: {
                                 color: "green",
                               },
                             });
-                            window.location.reload();
                           }}
                         >
                           Update
