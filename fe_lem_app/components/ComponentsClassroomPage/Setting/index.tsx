@@ -4,7 +4,7 @@ import { Classroom } from "@/models/classroom";
 import { ListAppUserByClassroom } from "@/services/app-user-service";
 import { DeleteClass, GetClass } from "@/services/class-service";
 import { ListPermission } from "@/services/permission-service";
-import { CreateRole, ListRole } from "@/services/role-service";
+import { CreateRole, DeleteRole, ListRole } from "@/services/role-service";
 import { Dialog, Transition } from "@headlessui/react";
 import { AlertTriangle, Edit, ShieldBan, Trash2 } from "lucide-react";
 import { redirect } from "next/navigation";
@@ -20,7 +20,9 @@ export const Setting = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedPermissions, setSelectedPermissions] = useState<number[]>([]);
   const [newRole, setNewRole] = useState<any>();
+  const [updateRole, setUpdateRole] = useState<any>();
   const [showError, setShowError] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [removeFromDisplayPermissions, setRemoveFromDisplayPermissions] =
     useState<any>();
 
@@ -78,39 +80,42 @@ export const Setting = () => {
     fetchPermissionData();
   }, []);
 
-  async function handleCreateRole() {
-    if (
-      newRole?.name === null ||
-      newRole?.name === undefined ||
-      newRole?.name === ""
-    ) {
-      setShowError(true);
+  async function handleSaveRole() {
+    if (isEdit) {
     } else {
-      const currentSelectedPermission = permissions.filter((x) =>
-        selectedPermissions.includes(x.id),
-      );
-      const getSameRemovePermission = removeFromDisplayPermissions.filter((x) =>
-        currentSelectedPermission.map((y) => y.name).includes(x.name),
-      );
+      if (
+        newRole?.name === null ||
+        newRole?.name === undefined ||
+        newRole?.name === ""
+      ) {
+        setShowError(true);
+      } else {
+        const currentSelectedPermission = permissions.filter((x) =>
+          selectedPermissions.includes(x.id),
+        );
+        const getSameRemovePermission = removeFromDisplayPermissions.filter(
+          (x) => currentSelectedPermission.map((y) => y.name).includes(x.name),
+        );
 
-      const newPermissionForRole = currentSelectedPermission.concat(
-        getSameRemovePermission,
-      );
-      var newPermissionRoleMappings: any = [];
-      newPermissionForRole.forEach((element) => {
-        const newPermissionRoleMapping = {
-          permissionId: element.id,
+        const newPermissionForRole = currentSelectedPermission.concat(
+          getSameRemovePermission,
+        );
+        var newPermissionRoleMappings: any = [];
+        newPermissionForRole.forEach((element) => {
+          const newPermissionRoleMapping = {
+            permissionId: element.id,
+          };
+          newPermissionRoleMappings.push(newPermissionRoleMapping);
+        });
+        const newRoleData = {
+          name: newRole.name,
+          description: newRole.description,
+          permissionRoleMappings: newPermissionRoleMappings,
         };
-        newPermissionRoleMappings.push(newPermissionRoleMapping);
-      });
-      const newRoleData = {
-        name: newRole.name,
-        description: newRole.description,
-        permissionRoleMappings: newPermissionRoleMappings,
-      };
-      const result = await CreateRole(newRoleData, classroomId);
-      setShowModal(false);
-      window.location.reload();
+        const result = await CreateRole(newRoleData, classroomId);
+        setShowModal(false);
+        window.location.reload();
+      }
     }
   }
 
@@ -138,6 +143,21 @@ export const Setting = () => {
         selectedPermissions.concat(permissionId);
       setSelectedPermissions(newSelectedMembers);
     }
+  }
+
+  async function handleDeleteRole(roleId: number) {
+    const result = await DeleteRole(roleId, classroomId);
+    window.location.reload();
+  }
+
+  function handleViewPermssionOfCurrentRole(role) {
+    const permissionIds = role.permissionRoleMappings.map(
+      (x) => x.permissionId,
+    );
+    setUpdateRole(role);
+    setSelectedPermissions(permissionIds);
+    setShowModal(true);
+    setIsEdit(true);
   }
 
   return (
@@ -174,7 +194,10 @@ export const Setting = () => {
               <div className="">
                 <button
                   type="button"
-                  onClick={() => setShowModal(true)}
+                  onClick={() => {
+                    setShowModal(true);
+                    setIsEdit(false);
+                  }}
                   className="float-right flex w-20 justify-center rounded-sm border border-green-500 py-1.5 text-sm text-green-500 hover:bg-green-100"
                 >
                   Add Role
@@ -231,10 +254,18 @@ export const Setting = () => {
                               </div>
                             ) : (
                               <div className="flex">
-                                <button className="mr-3 flex w-10 justify-center rounded-sm text-blue-600">
+                                <button
+                                  onClick={() =>
+                                    handleViewPermssionOfCurrentRole(role)
+                                  }
+                                  className="mr-3 flex w-10 justify-center rounded-sm text-blue-600"
+                                >
                                   <Edit />
                                 </button>
-                                <button className="mr-3 flex w-10 justify-center rounded-sm  text-rose-600">
+                                <button
+                                  onClick={() => handleDeleteRole(role.id)}
+                                  className="mr-3 flex w-10 justify-center rounded-sm  text-rose-600"
+                                >
                                   <Trash2 />
                                 </button>
                               </div>
@@ -379,7 +410,7 @@ export const Setting = () => {
                         <button
                           type="button"
                           className="float-right flex w-20 justify-center rounded-sm border border-green-500 py-1.5 text-sm text-green-500 hover:bg-green-100"
-                          onClick={handleCreateRole}
+                          onClick={handleSaveRole}
                         >
                           Save
                         </button>
@@ -400,6 +431,7 @@ export const Setting = () => {
                             setNewRole({ ...newRole, name: e.target.value })
                           }
                           type="text"
+                          value={isEdit ? updateRole.name : ""}
                           className="ml-5 flex grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
                         />
                       </div>
@@ -412,6 +444,7 @@ export const Setting = () => {
                               description: e.target.value,
                             })
                           }
+                          value={isEdit ? updateRole.description : ""}
                           type="text"
                           className="ml-5 flex grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
                         />

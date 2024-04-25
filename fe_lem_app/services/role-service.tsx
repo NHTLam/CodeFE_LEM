@@ -85,7 +85,7 @@ export async function UpdateRole(role, classroomId) {
 }
 
 export async function DeleteRole(roleId: number, classroomId) {
-  await fetch(DATA_SOURCE_URL + "delete-role", {
+  const result = await fetch(DATA_SOURCE_URL + "delete-role", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -97,5 +97,5 @@ export async function DeleteRole(roleId: number, classroomId) {
     }),
   });
 
-  return roleId;
+  return result;
 }
