@@ -58,18 +58,7 @@ export async function GetAppUser(id: number) {
   }
 }
 
-export async function UpdateAppUser(request: Request) {
-  const {
-    id,
-    fullName,
-    userName,
-    email,
-    phone,
-    gender,
-    password,
-    statusId,
-  }: Partial<AppUser> = await request.json();
-
+export async function UpdateAppUser(user) {
   const res = await fetch(DATA_SOURCE_URL + "update", {
     method: "POST",
     headers: {
@@ -77,14 +66,15 @@ export async function UpdateAppUser(request: Request) {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      id,
-      fullName,
-      userName,
-      email,
-      phone,
-      gender,
-      password,
-      statusId,
+      id: user.id,
+      fullName: user.fullName,
+      userName: user.userName,
+      email: user.email,
+      phone: user.phone,
+      gender: user.gender,
+      password: user.password,
+      statusId: user.statusId,
+      appUserClassroomMappings: user.appUserClassroomMappings,
     }),
   });
   const newAppUser: AppUser = await res.json();
