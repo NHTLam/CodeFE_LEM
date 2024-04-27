@@ -191,7 +191,7 @@ export const Setting = () => {
 
   return (
     <>
-      <div className="mx-20 rounded-sm bg-white p-3">
+      <div className="mx-20 rounded-sm p-3">
         <div className="text-gray-700">
           <div className="px-4 py-2 text-lg font-semibold">
             Classroom Information

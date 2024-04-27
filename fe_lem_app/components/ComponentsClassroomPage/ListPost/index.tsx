@@ -26,10 +26,26 @@ import {
 } from "@/services/class-event-service";
 import { ClassEvent } from "@/models/classevent";
 import { Dialog, Listbox, Transition } from "@headlessui/react";
-import { CreateComment, DeleteComment, UpdateComment } from "@/services/comment-service";
+import {
+  CreateComment,
+  DeleteComment,
+  UpdateComment,
+} from "@/services/comment-service";
 import { toast } from "sonner";
 
 export const ListPost = () => {
+  const PostAction = [
+    {
+      name: "Pin",
+    },
+    {
+      name: "Update",
+    },
+    {
+      name: "Delete",
+    },
+  ];
+
   var classroomId = "";
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
@@ -43,53 +59,17 @@ export const ListPost = () => {
     orderby: 0,
     ordertype: 1,
   };
-
-  const [classEvents, setClassEvents] = useState<any>([]);
-  const [first, setFirst] = useState<any>(true);
-  const [height, setHeight] = useState<object>({
-    0: false,
-  });
-
-  useEffect(() => {
-    if (first == true) {
-      const fetchData = async () => {
-        const data = await ListClassEvent(filter);
-        setClassEvents(data);
-        for (let index = 1; index < classEvents.length; index++) {
-          const data = { index: false }
-          setHeight({
-            ...height,
-            data,
-          });
-        }
-      };
-      fetchData();
-      setFirst(false);
-    }
-
-    console.log(height);
-
-  }, []);
-
-  const PostAction = [
-    {
-      name: "Pin",
-    },
-    {
-      name: "Update",
-    },
-    {
-      name: "Delete",
-    },
-  ];
-
   const [post, setPost] = useState<any>(false);
   const [description, setDescription] = useState<any>("");
   const [descriptionComment, setDescriptionComment] = useState<any>("");
   const [name, setName] = useState<any>("");
   const [showModal, setShowModal] = useState<any>(false);
   const [selected, setSelected] = useState(PostAction[0]);
-
+  const [classEvents, setClassEvents] = useState<any>([]);
+  const [first, setFirst] = useState<any>(true);
+  const [height, setHeight] = useState<object>({
+    0: false,
+  });
   const [createPost, setCreatePost] = useState({
     id: 0,
     classroomId: Number(classroomId),
@@ -106,10 +86,31 @@ export const ListPost = () => {
     deletedAt: new Date(),
   });
 
+  useEffect(() => {
+    if (first == true) {
+      const fetchData = async () => {
+        const data = await ListClassEvent(filter);
+        setClassEvents(data);
+        for (let index = 1; index < classEvents.length; index++) {
+          const data = { index: false };
+          setHeight({
+            ...height,
+            data,
+          });
+        }
+      };
+      fetchData();
+      setFirst(false);
+    }
+
+    console.log(height);
+  }, []);
+
   const ConvertDateTime = (datetime) => {
     const convert = new Date(datetime);
-    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${convert.getMonth() + 1
-      }/${convert.getFullYear()}`;
+    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${
+      convert.getMonth() + 1
+    }/${convert.getFullYear()}`;
     return format;
   };
 
@@ -323,7 +324,8 @@ export const ListPost = () => {
                         <Listbox.Option
                           key={actionId}
                           className={({ active }) =>
-                            `relative w-full cursor-default select-none p-4 py-2 ${active ? "bg-amber-100 text-amber-900" : ""
+                            `relative w-full cursor-default select-none p-4 py-2 ${
+                              active ? "bg-amber-100 text-amber-900" : ""
                             }`
                           }
                           value={action}
@@ -350,27 +352,37 @@ export const ListPost = () => {
                   type="checkbox"
                 />
                 <button
-                  onClick={() => setHeight((prev) => {
-                    const updated = { ...prev };
-                    updated[index] = !updated[index];
-                    console.log(updated);
-                    return updated;
-                  })}
-                  className="flex h-14 w-50 cursor-pointer items-center font-semibold">
+                  onClick={() =>
+                    setHeight((prev) => {
+                      const updated = { ...prev };
+                      updated[index] = !updated[index];
+                      console.log(updated);
+                      return updated;
+                    })
+                  }
+                  className="flex h-14 w-50 cursor-pointer items-center font-semibold"
+                >
                   <UsersRound size={20} />
                   Show all comment
                 </button>
-                <span className={`block ${height[index] ? 'max-h-56' : 'max-h-0'} w-full overflow-auto px-4 py-0 transition-all duration-300}`}>
+                <span
+                  className={`block ${
+                    height[index] ? "max-h-56" : "max-h-0"
+                  } duration-300} w-full overflow-auto px-4 py-0 transition-all`}
+                >
                   <div>
                     {classEvent.comments?.map((comment, index) => (
-                      <div key={index} className="flex items-center w-full gap-1 ">
+                      <div
+                        key={index}
+                        className="flex w-full items-center gap-1 "
+                      >
                         <img
                           className="m-2 rounded-full border"
                           width={40}
                           alt="Avatar"
                           src="https://steamuserimages-a.akamaihd.net/ugc/784122845539964192/CD556A633510634D654B7C3CBB6A50DFFDC3258F/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false"
                         />
-                        <div className="flex flex-col w-full gap-1">
+                        <div className="flex w-full flex-col gap-1">
                           <div className="flex items-end gap-3">
                             <p className="text-base">
                               {comment.appUser.userName}
@@ -381,10 +393,11 @@ export const ListPost = () => {
                           </div>
                           <h1 className=" text-sm">{comment.description}</h1>
                         </div>
-                        <button onClick={() => {
-                          
-                          window.location.reload();
-                        }}>
+                        <button
+                          onClick={() => {
+                            window.location.reload();
+                          }}
+                        >
                           <PencilLine className="text-blue-400" />
                         </button>
                         <button
@@ -399,7 +412,8 @@ export const ListPost = () => {
                               },
                             });
                           }}
-                          className="ml-2">
+                          className="ml-2"
+                        >
                           <Trash2 className="text-red-400" />
                         </button>
                       </div>
@@ -424,7 +438,7 @@ export const ListPost = () => {
               />
               <button
                 onClick={() => {
-                  actionComment(classEvent.id, descriptionComment)
+                  actionComment(classEvent.id, descriptionComment);
                 }}
               >
                 <SendHorizontal />
@@ -432,8 +446,7 @@ export const ListPost = () => {
             </div>
           </div>
         </div>
-      ))
-      }
+      ))}
 
       <Transition.Root show={showModal} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setShowModal}>
@@ -534,21 +547,6 @@ export const ListPost = () => {
           </div>
         </Dialog>
       </Transition.Root>
-    </div >
-  );
-};
-
-ListPost.Skeleton = function SkeletonClassEventList() {
-  return (
-    <div className="gird-cols-2 grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
     </div>
   );
 };
