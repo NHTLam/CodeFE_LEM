@@ -38,16 +38,16 @@ export const Calendar = () => {
   if (typeof window !== "undefined") {
     currentUserId = localStorage.getItem("userId") ?? "";
   }
-  const [unscheduled, setUnscheduled] = useState<Job[]>([]);
-  const [allEvents, setAllEvents] = useState<Job[]>([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [idToDelete, setIdToDelete] = useState<number | null>(null);
-  const [newEvent, setNewEvent] = useState<Job>();
-  const [cards, setCards] = useState<Card[]>([]);
-  const [selected, setSelected] = useState<Card | null>(null);
-  const [showError, setShowError] = useState(false);
-  const [currentEventJob, setCurrentEventJob] = useState<any>();
+  const [unscheduled, setUnscheduled] = useState<Job[]>([]); // danh sách job chưa được lên lịch trình
+  const [allEvents, setAllEvents] = useState<Job[]>([]); // danh sách những event sẽ hiển thị trên calendar
+  const [showModal, setShowModal] = useState(false); // kiểm soát việc hiện thị popup thêm job
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // kiểm soát việc hiện thị popup cảnh báo xóa
+  const [idToDelete, setIdToDelete] = useState<number | null>(null); // lưu lại id đang được đánh dấu là đang muốn xóa
+  const [newEvent, setNewEvent] = useState<Job>(); // lưu dữ liệu của event mới
+  const [cards, setCards] = useState<Card[]>([]); // danh sách các cards trong board cá nhân
+  const [selected, setSelected] = useState<Card | null>(null); // lưu trữ card được chọn trong danh sách
+  const [showError, setShowError] = useState(false); // kiểm soát việc hiện thị thông báo lỗi
+  const [currentEventJob, setCurrentEventJob] = useState<any>(); // lưu giữ liệu của job được chọn để kéo thả
 
   useEffect(() => {
     const fetchData = async () => {
@@ -87,7 +87,7 @@ export const Calendar = () => {
     setShowModal(true);
   }
 
-  async function addEvent(data: DropArg, currentEventJob: Job) {
+  async function updateEvent(data: DropArg, currentEventJob: Job) {
     if (currentEventJob.id !== null && currentEventJob.id !== undefined) {
       const job: Job = {
         id: currentEventJob.id,
@@ -160,11 +160,6 @@ export const Calendar = () => {
     });
   };
 
-  const handleGetDatUnschedule = (job) => {
-    debugger;
-    setCurrentEventJob(job);
-  };
-
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     if (selected === null) {
       setShowError(true);
@@ -208,7 +203,7 @@ export const Calendar = () => {
       return {
         id: job.id ?? 0,
         title: job.name ?? "",
-        start: ((job.startAt ?? "") as string) || "", // Cast to string or provide default
+        start: ((job.startAt ?? "") as string) || "",
         end: ((job.endAt ?? "") as string) || "",
         allDay: job.isAllDay ?? false,
       };
@@ -234,7 +229,7 @@ export const Calendar = () => {
               selectable={true}
               selectMirror={true}
               dateClick={handleDateClick}
-              drop={(data) => addEvent(data, currentEventJob ?? {})}
+              drop={(data) => updateEvent(data, currentEventJob ?? {})}
               eventClick={(data) => handleDeleteModal(data)}
             />
           </div>
@@ -249,7 +244,7 @@ export const Calendar = () => {
                 className="fc-event m-3 ml-auto w-full rounded-md border-2 bg-white p-1 text-center"
                 title={event.name}
                 key={event.id}
-                onClick={() => handleGetDatUnschedule(event)}
+                onClick={() => setCurrentEventJob(event)}
               >
                 {event.name}
               </div>

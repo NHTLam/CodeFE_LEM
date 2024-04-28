@@ -9,7 +9,7 @@ export default function EditClassWorkLayout({
     <>
       <div className="flex w-full">
         <div className="w-1/3">
-          <SidebarEditClassWork />
+          <SidebarEditClassWork ParentCallBack={undefined} />
         </div>
         <section className="grow">{children}</section>
       </div>
