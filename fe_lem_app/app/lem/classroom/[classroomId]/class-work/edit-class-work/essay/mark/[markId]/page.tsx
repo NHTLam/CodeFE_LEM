@@ -114,25 +114,6 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
     setCurrentValue("");
   };
 
-  const submitAnswer = async () => {
-    for (let index = 0; index < answer.length; index++) {
-      await UpdateStudentAnswer({
-        appUserId: userId,
-        questionId: classWork?.questions[index].id,
-        name: answer[index]?.name,
-        id: answer[index]?.id,
-        grade: grade[index],
-        feedback: feedback[index],
-        appUserFeedbackId: 1,
-      });
-    }
-    window.location.href = `/lem/classroom/${classroomId}/class-work`;
-    toast.success("Create question success", {
-      style: {
-        color: "green",
-      },
-    });
-  };
     const submitAnswer = async () => {
         for (let index = 0; index < answer.length; index++) {
             await UpdateStudentAnswer({
