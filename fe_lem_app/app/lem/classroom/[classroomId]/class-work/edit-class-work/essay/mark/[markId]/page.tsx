@@ -119,7 +119,9 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
                 appUserFeedbackId: 1,
             });
         }
-        window.location.href = `/lem/classroom/${classroomId}/class-work`;
+        setTimeout(() => {
+            window.location.href = `/lem/classroom/${classroomId}/class-work`;
+          }, 1000);
         toast.success("Create question success", {
             style: {
               color: "green",

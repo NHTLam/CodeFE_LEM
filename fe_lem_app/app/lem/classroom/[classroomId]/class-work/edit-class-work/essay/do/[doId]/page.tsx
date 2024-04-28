@@ -58,7 +58,10 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
         name: studentAnswer[index] || "",
       });
     }
-    window.location.href = `/lem/classroom/${classroomId}/class-work`;
+    
+    setTimeout(() => {
+      window.location.href = `/lem/classroom/${classroomId}/class-work`;
+    }, 1000);
     toast.success("Create question success", {
       style: {
         color: "green",
