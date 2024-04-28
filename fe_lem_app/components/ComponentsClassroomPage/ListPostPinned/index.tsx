@@ -44,7 +44,7 @@ export const ListPostPinned = () => {
   const [showModal, setShowModal] = useState<any>(false);
   const [detailClassEvent, setDetailClassEvent] = useState({
     id: 0,
-    classroomId: 1,
+    classroomId: Number(classroomId),
     code: "",
     name: "",
     isClassWork: false,
@@ -52,7 +52,6 @@ export const ListPostPinned = () => {
     instruction: "",
     pinned: false,
     createdAt: new Date(),
-    endAt: new Date(),
     updatedAt: new Date(),
     deletedAt: new Date(),
   });
