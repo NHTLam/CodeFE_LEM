@@ -21,6 +21,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
   }, [questionList, ParentCallBack]);
 
   const createQuestion = () => {
+    setQuestionList([]);
     for (let index = 0; index < current; index++) {
       setQuestionList((prev) => {
         const updated = [

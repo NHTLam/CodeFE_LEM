@@ -42,7 +42,7 @@ export const ListClassWork = () => {
       link: `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/make`,
     },
     {
-      name: "Multiple choice",
+      name: "Activity",
       link: `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/make`,
     },
   ];
