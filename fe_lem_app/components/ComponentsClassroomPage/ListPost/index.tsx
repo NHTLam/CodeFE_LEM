@@ -47,8 +47,10 @@ export const ListPost = () => {
   ];
 
   var classroomId = "";
+  var appUserId = "";
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
+    appUserId = localStorage.getItem("userId") ?? "";
   }
 
   const filter: FilterData = {
@@ -76,12 +78,11 @@ export const ListPost = () => {
     code: "",
     name: "",
     isClassWork: false,
-    appUserId: 1,
+    appUserId: Number(appUserId) == 0 ? 1 : Number(appUserId),
     description: "",
     instruction: "",
     pinned: false,
     createdAt: new Date(),
-    endAt: new Date(),
     updatedAt: new Date(),
     deletedAt: new Date(),
   });
@@ -137,12 +138,14 @@ export const ListPost = () => {
       id: 0,
       classEventId: classEventId,
       description: descriptionComment,
-      appUserId: 1,
+      appUserId: Number(appUserId) == 0 ? 1 : Number(appUserId),
     };
     console.log(data);
 
     await CreateComment(data);
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
     toast.success("Create comment success", {
       style: {
         color: "green",
@@ -164,12 +167,13 @@ export const ListPost = () => {
         comment: [classEvent.comment],
         pinned: true,
         createdAt: new Date(),
-        endAt: new Date(),
         updatedAt: new Date(),
         deletedAt: new Date(),
       };
       await UpdateClassEvent(data);
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
       toast.success("Pin success", {
         style: {
           color: "green",
@@ -189,7 +193,6 @@ export const ListPost = () => {
         comment: [classEvent.comment],
         pinned: classEvent.pinned,
         createdAt: new Date(),
-        endAt: new Date(),
         updatedAt: new Date(),
         deletedAt: new Date(),
       };

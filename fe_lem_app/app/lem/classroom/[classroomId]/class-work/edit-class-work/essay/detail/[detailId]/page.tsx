@@ -55,7 +55,7 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
         const data = await GetClassEvent(filter);
         const dataAnswer = await DetailStudentAnswer({
           id: 0,
-          appUserId: 1,
+          appUserId: Number(appUserId) == 0 ? 1 : Number(appUserId),
           classEventId: parseInt(params.detailId),
         });
         setClassWork(data);

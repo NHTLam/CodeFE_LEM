@@ -10,8 +10,10 @@ import { toast } from "sonner";
 
 const MakeEssayPage = () => {
   var classroomId = "";
+  var appUserId = "";
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
+    appUserId = localStorage.getItem("userId") ?? "";
   }
 
   function upLoadFile() {
@@ -35,7 +37,7 @@ const MakeEssayPage = () => {
       isClassWork: true,
       classroomId: Number(classroomId),
       code: "",
-      appUserId: 1,
+      appUserId: Number(appUserId) == 0 ? 1 : Number(appUserId),
       questions: questionList,
     });
 
