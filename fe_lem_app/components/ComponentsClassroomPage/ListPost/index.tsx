@@ -199,7 +199,9 @@ export const ListPost = () => {
       setCreatePost(data);
     } else if (index == 2) {
       await DeleteClassEvent(classEvent.id);
-      window.location.reload();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
       toast.success("Delete success", {
         style: {
           color: "green",
@@ -272,7 +274,9 @@ export const ListPost = () => {
               <button
                 onClick={async () => {
                   await CreateClassEvent(createPost);
-                  window.location.reload();
+                  setTimeout(() => {
+                    window.location.reload();
+                  }, 1000);
                   toast.success("Create success", {
                     style: {
                       color: "green",
