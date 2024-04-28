@@ -1,7 +1,6 @@
 "use client";
 
 import { Search, Trash, Pin, Filter } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
 
 export const Info = ({ parentCallback }) => {
   const handleSearch = (searchKey: string) => {

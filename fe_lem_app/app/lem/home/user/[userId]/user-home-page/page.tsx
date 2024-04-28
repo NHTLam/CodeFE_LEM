@@ -5,12 +5,10 @@ import { ClassList } from "@/components/ComponentsUserPage/ClassList";
 import { useEffect, useState } from "react";
 
 const HomePage = () => {
-  var searchKey = "";
   const dataFromChild = (childrenData: string) => {
-    searchKey = childrenData;
     setNewSearchKey(childrenData);
   };
-  const [newSearchKey, setNewSearchKey] = useState(searchKey);
+  const [newSearchKey, setNewSearchKey] = useState("");
 
   return (
     <div className="mb-20 w-full">

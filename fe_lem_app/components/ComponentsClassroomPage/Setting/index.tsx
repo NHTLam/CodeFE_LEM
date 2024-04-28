@@ -3,7 +3,7 @@ import { Role } from "@/models/appUserClassroomMapping";
 import { Classroom } from "@/models/classroom";
 import { ListAppUserByClassroom } from "@/services/app-user-service";
 import { DeleteClass, GetClass } from "@/services/class-service";
-import { ListPermission } from "@/services/permission-service";
+import { ListPath, ListPermission } from "@/services/permission-service";
 import {
   CreateRole,
   DeleteRole,
@@ -28,6 +28,7 @@ export const Setting = () => {
   const [updateRole, setUpdateRole] = useState<any>();
   const [showError, setShowError] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [listPath, setListPath] = useState<any>();
   const [removeFromDisplayPermissions, setRemoveFromDisplayPermissions] =
     useState<any>();
 
@@ -83,6 +84,12 @@ export const Setting = () => {
       }
     };
     fetchPermissionData();
+
+    const getListPath = async () => {
+      const data = await ListPath(classroomId);
+      setListPath(data);
+    };
+    getListPath();
   }, []);
 
   async function handleSaveRole() {
@@ -189,6 +196,18 @@ export const Setting = () => {
     setIsEdit(true);
   }
 
+  var isAllowMangeRole = false;
+  var isAllowDeleteClass = false;
+  if (listPath !== null && listPath !== undefined) {
+    isAllowMangeRole = listPath.some(
+      (path) => path === "/lem/role/create-role",
+    );
+
+    isAllowDeleteClass = listPath.some(
+      (path) => path === "/lem/classroom/delete",
+    );
+  }
+
   return (
     <>
       <div className="mx-20 rounded-sm p-3">
@@ -214,113 +233,131 @@ export const Setting = () => {
               <div className="col-span-2 px-4 py-2">4</div>
             </div>
           </div>
-          <hr className="my-5" />
-          <div>
-            <div className="flex px-4 py-2">
-              <div className="flex grow items-center text-lg font-semibold">
-                Manage Role
-              </div>
-              <div className="">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowModal(true);
-                    setIsEdit(false);
-                    setSelectedPermissions([]);
-                  }}
-                  className="float-right flex w-20 justify-center rounded-sm border border-green-500 py-1.5 text-sm text-green-500 hover:bg-green-100"
-                >
-                  Add Role
-                </button>
-              </div>
-            </div>
-            <div className="mt-3 px-4 text-center sm:mt-5">
-              <div className="mt-2">
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                  <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
-                    <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
-                      <tr>
-                        <th scope="col" className="w-1/6 px-6 py-3">
-                          No
-                        </th>
-                        <th scope="col" className="w-1/6 px-6 py-3">
-                          Role Name
-                        </th>
-                        <th scope="col" className="w-1/6 px-6 py-3">
-                          Role Type
-                        </th>
-                        <th scope="col" className="w-1/3 px-6 py-3">
-                          Description
-                        </th>
-                        <th scope="col" className="w-1/6 self-center px-6 py-3">
-                          Action
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {roles?.map((role, roleIdx) => (
-                        <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
-                          <td className="px-6 py-4">{roleIdx + 1}</td>
-                          <td className="px-6 py-4">{role.name}</td>
-                          <td className="px-6 py-4">
-                            {role.roleTypeId == 1 ? "Default" : "User Create"}
-                          </td>
-                          <td className="px-6 py-4">{role.description}</td>
-                          <td className="px-6 py-4">
-                            {role.roleTypeId == 1 ? (
-                              <div className="flex">
-                                <button
-                                  disabled={true}
-                                  className="mr-3 flex w-10 justify-center rounded-sm text-gray-400"
-                                >
-                                  <Edit />
-                                </button>
-                                <button
-                                  disabled={true}
-                                  className="mr-3 flex w-10 justify-center rounded-sm  text-gray-400"
-                                >
-                                  <Trash2 />
-                                </button>
-                              </div>
-                            ) : (
-                              <div className="flex">
-                                <button
-                                  onClick={() =>
-                                    handleViewPermssionOfCurrentRole(role)
-                                  }
-                                  className="mr-3 flex w-10 justify-center rounded-sm text-blue-600"
-                                >
-                                  <Edit />
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteRole(role.id)}
-                                  className="mr-3 flex w-10 justify-center rounded-sm  text-rose-600"
-                                >
-                                  <Trash2 />
-                                </button>
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+          {isAllowMangeRole ? (
+            <>
+              <hr className="my-5" />
+              <div>
+                <div className="flex px-4 py-2">
+                  <div className="flex grow items-center text-lg font-semibold">
+                    Manage Role
+                  </div>
+                  <div className="">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowModal(true);
+                        setIsEdit(false);
+                        setSelectedPermissions([]);
+                      }}
+                      className="float-right flex w-20 justify-center rounded-sm border border-green-500 py-1.5 text-sm text-green-500 hover:bg-green-100"
+                    >
+                      Add Role
+                    </button>
+                  </div>
+                </div>
+                <div className="mt-3 px-4 text-center sm:mt-5">
+                  <div className="mt-2">
+                    <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+                      <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                        <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                          <tr>
+                            <th scope="col" className="w-1/6 px-6 py-3">
+                              No
+                            </th>
+                            <th scope="col" className="w-1/6 px-6 py-3">
+                              Role Name
+                            </th>
+                            <th scope="col" className="w-1/6 px-6 py-3">
+                              Role Type
+                            </th>
+                            <th scope="col" className="w-1/3 px-6 py-3">
+                              Description
+                            </th>
+                            <th
+                              scope="col"
+                              className="w-1/6 self-center px-6 py-3"
+                            >
+                              Action
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {roles?.map((role, roleIdx) => (
+                            <tr className="border-b bg-white hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-600">
+                              <td className="px-6 py-4">{roleIdx + 1}</td>
+                              <td className="px-6 py-4">{role.name}</td>
+                              <td className="px-6 py-4">
+                                {role.roleTypeId == 1
+                                  ? "Default"
+                                  : "User Create"}
+                              </td>
+                              <td className="px-6 py-4">{role.description}</td>
+                              <td className="px-6 py-4">
+                                {role.roleTypeId == 1 ? (
+                                  <div className="flex">
+                                    <button
+                                      disabled={true}
+                                      className="mr-3 flex w-10 justify-center rounded-sm text-gray-400"
+                                    >
+                                      <Edit />
+                                    </button>
+                                    <button
+                                      disabled={true}
+                                      className="mr-3 flex w-10 justify-center rounded-sm  text-gray-400"
+                                    >
+                                      <Trash2 />
+                                    </button>
+                                  </div>
+                                ) : (
+                                  <div className="flex">
+                                    <button
+                                      onClick={() =>
+                                        handleViewPermssionOfCurrentRole(role)
+                                      }
+                                      className="mr-3 flex w-10 justify-center rounded-sm text-blue-600"
+                                    >
+                                      <Edit />
+                                    </button>
+                                    <button
+                                      onClick={() => handleDeleteRole(role.id)}
+                                      className="mr-3 flex w-10 justify-center rounded-sm  text-rose-600"
+                                    >
+                                      <Trash2 />
+                                    </button>
+                                  </div>
+                                )}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <hr className="my-5" />
-          <div className="px-4 py-2 text-lg font-semibold text-rose-700">
-            Danger zone
-          </div>
-          <div className="px-4 py-2">
-            <button
-              onClick={() => setShowDeleteModal(true)}
-              className="my-1 mr-10 flex w-60 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
-            >
-              Delete this class
-            </button>
-          </div>
+            </>
+          ) : (
+            <></>
+          )}
+
+          {isAllowDeleteClass ? (
+            <>
+              <hr className="my-5" />
+              <div className="px-4 py-2 text-lg font-semibold text-rose-700">
+                Danger zone
+              </div>
+              <div className="px-4 py-2">
+                <button
+                  onClick={() => setShowDeleteModal(true)}
+                  className="my-1 mr-10 flex w-60 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none"
+                >
+                  Delete this class
+                </button>
+              </div>
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
 

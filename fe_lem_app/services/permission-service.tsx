@@ -21,3 +21,24 @@ export async function ListPermission(classroomId) {
     return null;
   }
 }
+
+export async function ListPath(classroomId) {
+  try {
+    const res = await fetch(DATA_SOURCE_URL + "list-path", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        classroomId: Number(classroomId),
+      }),
+    });
+
+    const result = await res.json();
+    return result;
+  } catch (error) {
+    console.error("Error parsing JSON:", error);
+    return null;
+  }
+}

@@ -12,11 +12,11 @@ interface InforGroupsPros {
   dataBoards: Board[] | null;
 }
 export const InforGroups = ({ dataBoards }: InforGroupsPros) => {
-  const [selectedMembers, setSelectedMembers] = useState<number[]>([]);
-  const [oldSelectedMembers, setOldSelectedMembers] = useState<number[]>([]);
-  const [usersInClass, setUsersInClass] = useState<AppUser[] | null>(null);
+  const [selectedMembers, setSelectedMembers] = useState<number[]>([]); //Những id của thành viên được chọn trong nhóm
+  const [oldSelectedMembers, setOldSelectedMembers] = useState<number[]>([]); //Những id thành viên đã được chọn từ trước
+  const [usersInClass, setUsersInClass] = useState<AppUser[] | null>(null); //Danh sách người dùng trong lớp
   const [showModal, setShowModal] = useState(false);
-  const [numberGroupsCreate, setNumberGroupsCreate] = useState("");
+  const [numberGroupsCreate, setNumberGroupsCreate] = useState(""); //số lượng nhóm muốn được lập
   const [showError, setShowError] = useState(false);
   const [showErrorUser, setShowErrorUser] = useState(false);
   const [showErrorTable, setShowErrorTable] = useState(false);
@@ -316,7 +316,7 @@ export const InforGroups = ({ dataBoards }: InforGroupsPros) => {
                         </div>
                         {showErrorTable ? (
                           <p className="mt-2 text-sm text-rose-500">
-                            You can not untick user already in board
+                            You can not untick user already have group
                           </p>
                         ) : (
                           <></>
