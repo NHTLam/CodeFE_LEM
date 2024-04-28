@@ -1,7 +1,6 @@
 "use client";
 
 import { toast } from "sonner";
-//import { List } from "@prisma/client";
 import { ElementRef, useRef } from "react";
 import { MoreHorizontal, X } from "lucide-react";
 
@@ -10,10 +9,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-//import { useAction } from "@/hooks/use-action";
-//import { copyList } from "@/actions/copy-list";
-//import { deleteList } from "@/actions/delete-list";
-import { FormSubmit } from "@/components/Form/form-submit";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { Button } from "@nextui-org/react";
 import { Card } from "@/models/card";

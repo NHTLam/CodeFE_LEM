@@ -137,7 +137,7 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
       const appUserJobMappings = [
         {
           jobId: job.id,
-          appUserId: Number(selected.id),
+          appUserId: Number(selected?.id),
         },
       ];
       updateJob!.appUserJobMapings = appUserJobMappings;
@@ -246,7 +246,7 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                                   <div className="relative">
                                     <Listbox.Button className="relative my-1 flex w-full cursor-default justify-center rounded-lg border border-stroke bg-white py-2 pl-3 pr-10 text-left text-sm outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
                                       <span className="block truncate">
-                                        {selected.userName}
+                                        {selected?.userName}
                                       </span>
                                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                                         <ChevronDown className="h-5 w-5 text-gray-400" />
@@ -280,7 +280,7 @@ export const JobItem = ({ data, index, boardData }: CardItemProps) => {
                                                       : "font-normal"
                                                   }`}
                                                 >
-                                                  {person.userName}
+                                                  {person?.userName}
                                                 </span>
                                                 {selected ? (
                                                   <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">

@@ -51,7 +51,7 @@ export async function CreateRole(role, classroomId) {
       },
       body: JSON.stringify({
         name: role.name,
-        decription: role.description,
+        description: role.description,
         permissionRoleMappings: role.permissionRoleMappings,
         classroomId: Number(classroomId),
       }),
@@ -77,6 +77,7 @@ export async function UpdateRole(role, classroomId) {
       id: role.id,
       name: role.name,
       description: role.description,
+      permissionRoleMappings: role.permissionRoleMappings,
       classroomId: Number(classroomId),
     }),
   });
@@ -85,7 +86,7 @@ export async function UpdateRole(role, classroomId) {
 }
 
 export async function DeleteRole(roleId: number, classroomId) {
-  await fetch(DATA_SOURCE_URL + "delete-role", {
+  const result = await fetch(DATA_SOURCE_URL + "delete-role", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -97,5 +98,5 @@ export async function DeleteRole(roleId: number, classroomId) {
     }),
   });
 
-  return roleId;
+  return result;
 }

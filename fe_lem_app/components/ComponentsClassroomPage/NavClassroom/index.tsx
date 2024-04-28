@@ -29,9 +29,13 @@ export const NavClassroom = (params) => {
   if (classEvents !== null && classEvents !== undefined) {
     classEvents.forEach((e) => {
       const path1 = `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do/${e.id}`;
-      const path2 = `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/do/${e.id}`;
+      const path2 = `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/detail/${e.id}`;
+      const path3 = `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/mark/${e.id}`;
+      const path4 = `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/do/${e.id}`;
       dynamicUnUsePath.push(path1);
       dynamicUnUsePath.push(path2);
+      dynamicUnUsePath.push(path3);
+      dynamicUnUsePath.push(path4);
     });
   }
 

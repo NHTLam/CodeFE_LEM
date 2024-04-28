@@ -7,11 +7,8 @@ import { useEffect, useState } from "react";
 
 import { Input } from "@nextui-org/react";
 import { cn } from "@/lib/utils";
-import { unsplash } from "@/lib/unsplash";
+import { unsplash } from "@/services/unsplash-service";
 import { defaultImages } from "@/public/defaultImages/images";
-
-import { FormErrors } from "./form-error";
-import { FieldValues, UseFormRegister } from "react-hook-form";
 
 interface FormPickerProps {
   id: string;
@@ -112,7 +109,6 @@ export const FormPicker = ({ id, errors, setUrlImg }: FormPickerProps) => {
           </div>
         ))}
       </div>
-      <FormErrors id="imageUrl" errors={errors} />
     </div>
   );
 };

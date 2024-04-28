@@ -1,6 +1,12 @@
 import { Groups } from "@/components/ComponentsClassroomPage/Groups";
+import Lines from "@/components/Lines";
 const GroupPages = () => {
-  return <Groups />;
+  return (
+    <>
+      <Lines />
+      <Groups />
+    </>
+  );
 };
 
 export default GroupPages;
