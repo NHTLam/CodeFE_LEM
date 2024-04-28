@@ -10,13 +10,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-//import { useAction } from "@/hooks/useAction";
 import { Button } from "@nextui-org/react";
-//import { useProModal } from "@/hooks/use-pro-modal";
 import { useForm } from "react-hook-form";
 
 import { FormInput } from "./form-input";
-import { FormSubmit } from "./form-submit";
 import { FormPicker } from "./form-picker";
 import { CreateBoard } from "@/services/board-service";
 import { Board } from "@/models/board";
@@ -159,7 +156,13 @@ export const FormPopover = ({
             // errors={fieldErrors}
           />
           <div className="mt-3">
-            <FormSubmit>Create</FormSubmit>
+            <button
+              type="submit"
+              color="primary"
+              className="my-1 flex w-full justify-center rounded-sm border border-stroke bg-blue-500 py-1 text-base text-white outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+            >
+              Create
+            </button>
           </div>
         </form>
       </PopoverContent>

@@ -1,8 +1,9 @@
 "use client";
+import { GetAppUser } from "@/services/app-user-service";
 import { Listbox, Transition } from "@headlessui/react";
 import Image from "next/image";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 const Navbar = () => {
   var currentUserId = "";
@@ -10,6 +11,15 @@ const Navbar = () => {
     currentUserId = localStorage.getItem("userId") ?? "";
   }
   const [selected, setSelected] = useState(false);
+  const [user, setUser] = useState<any>();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await GetAppUser(Number(currentUserId));
+      setUser(data);
+    };
+    fetchData();
+  }, []);
 
   function setLogout() {
     if (typeof window !== "undefined") {
@@ -28,7 +38,7 @@ const Navbar = () => {
             className="h-auto dark:hidden"
           />
         </Link>
-
+        <p className="absolute right-25">{user?.userName ?? "Unknow user"}</p>
         <div className="absolute right-10">
           <Listbox value={selected} onChange={setSelected}>
             <div className="relative z-10">

@@ -1,9 +1,10 @@
 import { ListClassWork } from "@/components/ComponentsClassroomPage/ListClassWork";
-import { NavClassroom } from "@/components/ComponentsClassroomPage/NavClassroom";
+import Lines from "@/components/Lines";
 
 const ClassWork = () => {
   return (
     <>
+      <Lines />
       <ListClassWork />
     </>
   );

@@ -1,6 +1,7 @@
 import { NavClassroom } from "@/components/ComponentsClassroomPage/NavClassroom";
 import Footer from "@/components/ComponentsLandingPage/Footer";
 import Navbar from "@/components/ComponentsUserPage/Navbar";
+import Lines from "@/components/Lines";
 import { Toaster } from "sonner";
 
 export default function ClassroomLayout({
