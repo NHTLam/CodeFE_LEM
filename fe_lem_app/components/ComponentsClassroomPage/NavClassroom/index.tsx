@@ -32,16 +32,23 @@ export const NavClassroom = (params) => {
       const path2 = `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/detail/${e.id}`;
       const path3 = `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/mark/${e.id}`;
       const path4 = `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/do/${e.id}`;
+      const path5 = `/lem/classroom/${classroomId}/class-work/edit-class-work/activity/do/${e.id}`;
+      const path6 = `/lem/classroom/${classroomId}/class-work/edit-class-work/activity/detail/${e.id}`;
+      const path7 = `/lem/classroom/${classroomId}/class-work/edit-class-work/activity/mark/${e.id}`;
       dynamicUnUsePath.push(path1);
       dynamicUnUsePath.push(path2);
       dynamicUnUsePath.push(path3);
       dynamicUnUsePath.push(path4);
+      dynamicUnUsePath.push(path5);
+      dynamicUnUsePath.push(path6);
+      dynamicUnUsePath.push(path7);
     });
   }
 
   const unUsePath = [
     `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/make`,
     `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/make`,
+    `/lem/classroom/${classroomId}/class-work/edit-class-work/activity/make`,
   ];
   unUsePath.push(...dynamicUnUsePath);
 

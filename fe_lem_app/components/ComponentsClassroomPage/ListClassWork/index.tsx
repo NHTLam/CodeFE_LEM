@@ -50,6 +50,10 @@ export const ListClassWork = () => {
       link: `/lem/classroom/${classroomId}/class-work/edit-class-work/essay/make`,
     },
     {
+      name: "Multiple choice",
+      link: `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/make`,
+    },
+    {
       name: "Activity",
       link: `/lem/classroom/${classroomId}/class-work/edit-class-work/activity/make`,
     },
