@@ -9,6 +9,7 @@ import { Listbox, Transition } from "@headlessui/react";
 import Link from "next/link";
 import { FilterData } from "@/models/filter";
 import { ListClassEvent } from "@/services/class-event-service";
+import { ListPath } from "@/services/permission-service";
 
 export const ListClassWork = () => {
   var classroomId = "";
@@ -27,6 +28,7 @@ export const ListClassWork = () => {
   };
 
   const [classEvents, setClassEvents] = useState<any>();
+  const [listPath, setListPath] = useState<any>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,6 +36,12 @@ export const ListClassWork = () => {
       setClassEvents(data);
     };
     fetchData();
+
+    const getListPath = async () => {
+      const data = await ListPath(classroomId);
+      setListPath(data);
+    };
+    getListPath();
   }, []);
 
   const classWorkTypes = [
@@ -46,8 +54,6 @@ export const ListClassWork = () => {
       link: `/lem/classroom/${classroomId}/class-work/edit-class-work/activity/make`,
     },
   ];
-  const [post, setPost] = useState<any>(false);
-  const [showComment, setShowComment] = useState<any>(false);
   const [selected, setSelected] = useState(classWorkTypes[0]);
 
   const ConvertDateTime = (datetime) => {
@@ -58,61 +64,77 @@ export const ListClassWork = () => {
     return format;
   };
 
+  var isAllowCreateClassWork = false;
+  var isAllowCreateFeedBack = false;
+  if (listPath !== null && listPath !== undefined) {
+    isAllowCreateClassWork = listPath.some(
+      (path) => path === "/lem/classroom/create-classwork",
+    );
+
+    isAllowCreateFeedBack = listPath.some(
+      (path) => path === "/lem/classroom/mark-or-feedback",
+    );
+  }
+
   return (
     <div>
       <div className="mx-50 mt-10 flex justify-end">
-        <Listbox value={selected} onChange={setSelected}>
-          <div className="relative z-10 pl-15">
-            <Listbox.Button className="relative my-1 flex w-full cursor-default justify-center rounded-lg border border-stroke bg-white py-2 pl-3 pr-10 text-left text-sm outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
-              <span className="block truncate">{selected.name}</span>
-              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronDown className="h-5 w-5 text-gray-400" />
-              </span>
-            </Listbox.Button>
-            <Transition
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                {classWorkTypes.map((person, personIdx) => (
-                  <Listbox.Option
-                    key={personIdx}
-                    className={({ active }) =>
-                      `relative w-full cursor-default select-none py-2 pr-4 ${
-                        active ? "bg-amber-100 text-amber-900" : ""
-                      }`
-                    }
-                    value={person}
-                  >
-                    {({ selected }) => (
-                      <>
-                        <Link href={`${person.link}`}>
-                          <span
-                            className={`block truncate pl-5 ${
-                              selected ? "font-medium" : "font-normal"
-                            }`}
-                          >
-                            {person.name}
-                          </span>
-                          {selected ? (
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                              <CheckIcon
-                                className="h-5 w-5"
-                                aria-hidden="true"
-                              />
+        {isAllowCreateClassWork ? (
+          <Listbox value={selected} onChange={setSelected}>
+            <div className="relative z-10 pl-15">
+              <Listbox.Button className="relative my-1 flex w-full cursor-default justify-center rounded-lg border border-stroke bg-white py-2 pl-3 pr-10 text-left text-sm outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
+                <span className="block truncate">{selected.name}</span>
+                <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                  <ChevronDown className="h-5 w-5 text-gray-400" />
+                </span>
+              </Listbox.Button>
+              <Transition
+                as={Fragment}
+                leave="transition ease-in duration-100"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+              >
+                <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+                  {classWorkTypes.map((person, personIdx) => (
+                    <Listbox.Option
+                      key={personIdx}
+                      className={({ active }) =>
+                        `relative w-full cursor-default select-none py-2 pr-4 ${
+                          active ? "bg-amber-100 text-amber-900" : ""
+                        }`
+                      }
+                      value={person}
+                    >
+                      {({ selected }) => (
+                        <>
+                          <Link href={`${person.link}`}>
+                            <span
+                              className={`block truncate pl-5 ${
+                                selected ? "font-medium" : "font-normal"
+                              }`}
+                            >
+                              {person.name}
                             </span>
-                          ) : null}
-                        </Link>
-                      </>
-                    )}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </Transition>
-          </div>
-        </Listbox>
+                            {selected ? (
+                              <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                                <CheckIcon
+                                  className="h-5 w-5"
+                                  aria-hidden="true"
+                                />
+                              </span>
+                            ) : null}
+                          </Link>
+                        </>
+                      )}
+                    </Listbox.Option>
+                  ))}
+                </Listbox.Options>
+              </Transition>
+            </div>
+          </Listbox>
+        ) : (
+          <></>
+        )}
       </div>
 
       <div className="col-span-2 m-4 flex flex-col items-center space-y-4">
@@ -141,13 +163,17 @@ export const ListClassWork = () => {
                   <h1 className="text-xl font-semibold">{classEvent.name}</h1>
                 </div>
               </div>
-              <Link
-                href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/mark/${classEvent.id}`}
-              >
-                <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-                  Mark
-                </button>
-              </Link>
+              {isAllowCreateFeedBack ? (
+                <Link
+                  href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/mark/${classEvent.id}`}
+                >
+                  <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                    Mark
+                  </button>
+                </Link>
+              ) : (
+                <></>
+              )}
               {classEvent.isSubmit == false ? (
                 <Link
                   href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do/${classEvent.id}`}
@@ -169,21 +195,6 @@ export const ListClassWork = () => {
           </div>
         ))}
       </div>
-    </div>
-  );
-};
-
-ListClassWork.Skeleton = function SkeletonClassEventList() {
-  return (
-    <div className="gird-cols-2 grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
-      <Skeleton className="aspect-video h-full w-full p-2" />
     </div>
   );
 };

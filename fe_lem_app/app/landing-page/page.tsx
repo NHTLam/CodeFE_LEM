@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 
 export default function LandingPage() {
   return (
-    <main>
+    <main suppressHydrationWarning>
       <Hero />
       <Feature />
       <About />

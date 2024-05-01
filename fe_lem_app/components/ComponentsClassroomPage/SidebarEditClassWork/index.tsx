@@ -12,12 +12,6 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
   }
-  const member = [
-    { name: "Member A" },
-    { name: "Member B" },
-    { name: "Member C" },
-  ];
-  const [selected, setSelected] = useState(member[0]);
   const [canRedirect, setCanRedirect] = useState(false);
   const [name, setName] = useState<any>();
 
@@ -52,58 +46,8 @@ export const SidebarEditClassWork = ({ ParentCallBack }) => {
           className="text-body-color dark:text-body-color-dark dark:shadow-two flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
         />
       </div>
-      <div className="mt-5 flex gap-x-3">
-        <p className="mt-1.5">Intended for: </p>
-        <Listbox value={selected} onChange={setSelected}>
-          <div className="relative z-10">
-            <Listbox.Button className="relative my-1 flex w-full cursor-default justify-center rounded-lg border border-stroke bg-white py-2 pl-3 pr-10 text-left text-sm outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none">
-              <span className="block truncate">{selected.name}</span>
-              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronDown className="h-5 w-5 text-gray-400" />
-              </span>
-            </Listbox.Button>
-            <Transition
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                {member.map((person, personIdx) => (
-                  <Listbox.Option
-                    key={personIdx}
-                    className={({ active }) =>
-                      `relative cursor-default select-none py-2 pr-4 ${
-                        active ? "bg-amber-100 text-amber-900" : ""
-                      }`
-                    }
-                    value={person}
-                  >
-                    {({ selected }) => (
-                      <>
-                        <span
-                          className={`block truncate pl-5 ${
-                            selected ? "font-medium" : "font-normal"
-                          }`}
-                        >
-                          {person.name}
-                        </span>
-                        {selected ? (
-                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
-                          </span>
-                        ) : null}
-                      </>
-                    )}
-                  </Listbox.Option>
-                ))}
-              </Listbox.Options>
-            </Transition>
-          </div>
-        </Listbox>
-      </div>
       <div className="mt-5 flex">
-        <p className="mt-1.5">Submission deadline: </p>
+        <p className="mt-1.5">Deadline: </p>
         <Datepicker
           value={value}
           onChange={handleValueChange}

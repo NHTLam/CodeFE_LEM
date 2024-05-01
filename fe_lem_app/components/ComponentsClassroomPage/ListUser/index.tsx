@@ -5,6 +5,7 @@ import {
   UpdateAppUser,
 } from "@/services/app-user-service";
 import { GetClass } from "@/services/class-service";
+import { ListPath } from "@/services/permission-service";
 import { ListRole } from "@/services/role-service";
 import { Dialog, Transition } from "@headlessui/react";
 import { Avatar } from "@nextui-org/react";
@@ -30,6 +31,7 @@ export const ListUser = () => {
   const [classroomCode, setClassroomCode] = useState("");
   const [selectedRoles, setSelectedRoles] = useState<number[]>([]);
   const [updateUser, setUpdateUser] = useState<any>();
+  const [listPath, setListPath] = useState<any>();
 
   var currentUserId = "";
   var classroomId = "";
@@ -65,6 +67,12 @@ export const ListUser = () => {
         }
       };
       fetchRoleData();
+
+      const getListPath = async () => {
+        const data = await ListPath(classroomId);
+        setListPath(data);
+      };
+      getListPath();
     };
     fetchData();
     console.log("usersInClass2: " + usersInClass);
@@ -117,6 +125,16 @@ export const ListUser = () => {
     window.location.reload();
   }
 
+  var isAllowAssignRole = false;
+  var isAllowKick = false;
+  if (listPath !== null && listPath !== undefined) {
+    isAllowAssignRole = listPath.some(
+      (path) => path === "/lem/role/create-role",
+    );
+
+    isAllowKick = listPath.some((path) => path === "/lem/classroom/kick");
+  }
+
   return (
     <>
       {roles === null || roles === undefined ? (
@@ -165,20 +183,30 @@ export const ListUser = () => {
                         </div>
                       </div>
                       <div className="absolute right-45 flex gap-2">
-                        <button
-                          onClick={() => handleViewRoleOfCurrentUser(user)}
-                          className="my-1 flex w-20 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
-                        >
-                          <UserCog className="w-full" />
-                        </button>
+                        {isAllowAssignRole ? (
+                          <button
+                            onClick={() => handleViewRoleOfCurrentUser(user)}
+                            className="my-1 flex w-20 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 hover:text-primary dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5 dark:hover:text-primary dark:hover:shadow-none"
+                          >
+                            <UserCog className="w-full" />
+                          </button>
+                        ) : (
+                          <></>
+                        )}
                         {user.id === Number(currentUserId) ? (
                           <></>
                         ) : (
-                          <button className="my-1 flex w-20 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none">
-                            <Link href="">
-                              <UserRoundX className="w-full" />
-                            </Link>
-                          </button>
+                          <>
+                            {isAllowKick ? (
+                              <button className="my-1 flex w-20 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-rose-600 hover:bg-red-200/5 hover:text-red-600 dark:border-transparent dark:bg-red-200 dark:hover:border-rose-600 dark:hover:bg-red-200/5 dark:hover:text-red-600 dark:hover:shadow-none">
+                                <Link href="">
+                                  <UserRoundX className="w-full" />
+                                </Link>
+                              </button>
+                            ) : (
+                              <></>
+                            )}
+                          </>
                         )}
                       </div>
                     </div>

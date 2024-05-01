@@ -29,7 +29,7 @@ export const ClassListRecents = ({ searchKey }: ClassListRecentsPros) => {
               new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
             );
           });
-          currentClassRecents = currentClassRecents.slice(0, 5);
+          currentClassRecents = currentClassRecents.slice(0, 4);
 
           if (
             searchKey !== null &&

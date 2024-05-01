@@ -1,11 +1,8 @@
 "use client";
 import { useState } from "react";
-import { Circle, Upload } from "lucide-react";
-import { FileTable } from "@/components/ComponentsClassroomPage/FileTable";
 import { MakeEssay } from "@/components/ComponentsClassroomPage/MakeEssay";
 import { SidebarEditClassWork } from "@/components/ComponentsClassroomPage/SidebarEditClassWork";
 import { CreateClassEvent } from "@/services/class-event-service";
-import { CreateQuestion } from "@/services/question-service";
 import { toast } from "sonner";
 
 const MakeEssayPage = () => {
@@ -14,14 +11,6 @@ const MakeEssayPage = () => {
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
     appUserId = localStorage.getItem("userId") ?? "";
-  }
-
-  function upLoadFile() {
-    console.log("Upload File");
-  }
-
-  function AddAnswer() {
-    console.log("Upload File");
   }
 
   const [questionList, setQuestionList] = useState<any[]>([]);
