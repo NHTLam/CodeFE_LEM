@@ -43,7 +43,7 @@ export const ListClassWork = () => {
     },
     {
       name: "Activity",
-      link: `/lem/classroom/${classroomId}/class-work/edit-class-work/multiple-choice/make`,
+      link: `/lem/classroom/${classroomId}/class-work/edit-class-work/activity/make`,
     },
   ];
   const [post, setPost] = useState<any>(false);
