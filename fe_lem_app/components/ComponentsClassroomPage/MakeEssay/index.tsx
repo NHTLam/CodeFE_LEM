@@ -10,6 +10,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
   const [current, setCurrent] = useState<number>(0);
   const [currentList, setCurrentList] = useState<any[]>([]);
   const [questionList, setQuestionList] = useState<any[]>([]);
+  const [attachments, setAttachments] = useState<any>([]);
 
   const addQuestion = () => {
     setCurrent(current + 1);
@@ -32,6 +33,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
             instruction: instruction[index],
             description: description[index],
             correctAnswer: instruction[index],
+            attachments: attachments,
           },
         ];
 
@@ -43,6 +45,11 @@ export const MakeEssay = ({ ParentCallBack }) => {
         color: "green",
       },
     });
+  };
+
+  const dataChildren = (childData) => {
+    setAttachments(childData);
+    console.log(childData);
   };
 
   return (
@@ -99,7 +106,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
         </div>
 
         <div className="mb-20 mt-5">
-          <FileTable />
+          <FileTable ParentCallBack={dataChildren} />
         </div>
       </div>
     </>

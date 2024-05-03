@@ -17,14 +17,6 @@ const MakeActivityPage = () => {
     appUserId = localStorage.getItem("userId") ?? "";
   }
 
-  function upLoadFile() {
-    console.log("Upload File");
-  }
-
-  function AddAnswer() {
-    console.log("Upload File");
-  }
-
   const [questionList, setQuestionList] = useState<any[]>([]);
 
   const dataChildren = (childData) => {

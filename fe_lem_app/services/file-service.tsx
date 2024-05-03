@@ -2,19 +2,13 @@ const DATA_SOURCE_URL = process.env.BASE_URL + "/lem/attachment/";
 const token =
   typeof window !== "undefined" ? localStorage.getItem("token") ?? "" : null;
 
-export async function UploadFile(
-  listFile: FileList,
-  questionId: number,
-  classroomId,
-) {
+export async function UploadFile(listFile: FileList, classroomId) {
   const formData = new FormData();
   const filesArray = Array.from(listFile);
   // Thêm từng tệp vào FormData
   filesArray.forEach((file) => {
     formData.append("files", file);
   });
-
-  formData.append("questionId", questionId.toString());
   formData.append("classroomId", classroomId);
 
   // Gửi yêu cầu POST với FormData
@@ -26,7 +20,8 @@ export async function UploadFile(
     body: formData,
   });
 
-  return result;
+  const attachments = await result.json();
+  return attachments;
 }
 
 export async function DownloadFile(fileId: number, classroomId) {

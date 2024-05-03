@@ -1,30 +1,37 @@
 "use client";
+import { LoadingForTable } from "@/components/LoadingForTable";
 import { DeleteFile, DownloadFile, UploadFile } from "@/services/file-service";
 import { Dialog, Transition } from "@headlessui/react";
 import { Download, FileUp, Trash2 } from "lucide-react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
-export const FileTable = () => {
+export const FileTable = ({ ParentCallBack }) => {
   var classroomId = "";
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
   }
   const [showModal, setShowModal] = useState(false);
   const [selectedFile, setSelectedFile] = useState<any>([]);
+  const [attachments, setAttachments] = useState<any>([]);
+  const [loading, setLoading] = useState(false);
 
   const handleUploadFile = async () => {
-    const result = await UploadFile(selectedFile, 9, classroomId); //Tạm thời fix cứng question id
-    window.location.reload();
+    setLoading(true);
+    const result = await UploadFile(selectedFile, classroomId);
+    setAttachments(attachments.concat(result));
+    ParentCallBack(attachments);
+    setLoading(false);
+    //window.location.reload();
   };
 
-  const handleDownloadFile = async () => {
-    const result = await DownloadFile(8, classroomId); //Tạm thời fix cứng id
+  const handleDownloadFile = async (attachment) => {
+    const result = await DownloadFile(attachment.id, classroomId);
 
     const blob = await result.blob();
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "COMP1649 Annotated TOC CW 2023-2024 Partnerships[181].docx";
+    a.download = attachment.name;
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
@@ -32,10 +39,12 @@ export const FileTable = () => {
     // window.location.reload();
   };
 
-  const handleDeleteFile = async () => {
-    const result = await DeleteFile(6); //Tạm thời fix cứng id
-    // window.location.reload();
+  const handleDeleteFile = async (id) => {
+    const result = await DeleteFile(id);
+    const newAttachments = attachments.filter((x) => x.id !== id);
+    setAttachments(newAttachments);
   };
+
   return (
     <>
       <div className="flex justify-between">
@@ -50,47 +59,71 @@ export const FileTable = () => {
           Upload File
         </button>
       </div>
-
       <div className="flex flex-col">
         <div className="inline-block min-w-full py-2 align-middle">
           <div className="overflow-hidden border-b border-gray-200 shadow sm:rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <tbody className="divide-y divide-gray-200 bg-white">
                 <tr className="w-24 whitespace-nowrap bg-gray-50">
-                  <td className="w-1/5 whitespace-nowrap px-6 py-4">No</td>
-                  <td className="w-2/5 whitespace-nowrap px-6 py-4">Name</td>
-                  <td className="w-1/5 whitespace-nowrap px-6 py-4">
+                  <td className="w-1/12 whitespace-nowrap px-6 py-4">No</td>
+                  <td className="w-7/12 whitespace-nowrap px-6 py-4">Name</td>
+                  <td className="w-2/12 whitespace-nowrap px-6 py-4">
                     Capacity
                   </td>
-                  <td className="w-1/5 whitespace-nowrap px-6 py-4">Action</td>
+                  <td className="w-2/12 whitespace-nowrap px-6 py-4">Action</td>
                 </tr>
-                {/* <tr>
-                  <td className="whitespace-nowrap px-6 py-4"></td>
-                  <td className="whitespace-nowrap px-6 py-4"></td>
-                  <td className="whitespace-nowrap px-6 py-4">No Data</td>
-                  <td className="whitespace-nowrap px-6 py-4"></td>
-                </tr> */}
-                <tr>
-                  <td className="whitespace-nowrap px-6 py-4">1</td>
-                  <td className="whitespace-nowrap px-6 py-4">File 1</td>
-                  <td className="whitespace-nowrap px-6 py-4">1.6 MB</td>
-                  <td className="whitespace-nowrap px-6 py-4">
-                    <div className="flex">
-                      <button
-                        onClick={() => handleDownloadFile()}
-                        className="mr-3 flex w-10 justify-center rounded-sm"
-                      >
-                        <Download />
-                      </button>
-                      <button
-                        onClick={() => handleDeleteFile()}
-                        className="mr-3 flex w-10 justify-center rounded-sm"
-                      >
-                        <Trash2 />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
+                {loading ? (
+                  <>
+                    <LoadingForTable />
+                  </>
+                ) : (
+                  <>
+                    {attachments?.length ?? 0 !== 0 ? (
+                      <>
+                        {attachments?.map((attachment, index) => (
+                          <tr>
+                            <td className="whitespace-nowrap px-6 py-4">
+                              {index + 1}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4">
+                              {attachment.name}
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4">
+                              {(attachment.capacity / 1024).toFixed(2)} KB
+                            </td>
+                            <td className="whitespace-nowrap px-6 py-4">
+                              <div className="flex">
+                                <button
+                                  onClick={() => handleDownloadFile(attachment)}
+                                  className="mr-3 flex w-10 justify-center rounded-sm"
+                                >
+                                  <Download />
+                                </button>
+                                <button
+                                  onClick={() =>
+                                    handleDeleteFile(attachment.id)
+                                  }
+                                  className="mr-3 flex w-10 justify-center rounded-sm"
+                                >
+                                  <Trash2 />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </>
+                    ) : (
+                      <tr>
+                        <td className="whitespace-nowrap px-6 py-4"></td>
+                        <td className="whitespace-nowrap px-6 py-4 pr-20 text-right">
+                          No Data
+                        </td>
+                        <td className="whitespace-nowrap px-6 py-4"></td>
+                        <td className="whitespace-nowrap px-6 py-4"></td>
+                      </tr>
+                    )}
+                  </>
+                )}
               </tbody>
             </table>
           </div>
@@ -171,7 +204,7 @@ export const FileTable = () => {
                             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                               <span className="font-semibold">
                                 Click to upload
-                              </span>{" "}
+                              </span>
                               or drag and drop
                             </p>
                             {(selectedFile?.length ?? 0) !== 0 ? (
