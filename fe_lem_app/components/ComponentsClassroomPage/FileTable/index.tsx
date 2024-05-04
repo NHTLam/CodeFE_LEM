@@ -18,11 +18,17 @@ export const FileTable = ({ ParentCallBack }) => {
   const handleUploadFile = async () => {
     setLoading(true);
     const result = await UploadFile(selectedFile, classroomId);
+    debugger;
     setAttachments(attachments.concat(result));
-    ParentCallBack(attachments);
     setLoading(false);
     //window.location.reload();
   };
+
+  useEffect(() => {
+    if (attachments !== null) {
+      ParentCallBack(attachments);
+    }
+  }, [attachments]);
 
   const handleDownloadFile = async (attachment) => {
     const result = await DownloadFile(attachment.id, classroomId);

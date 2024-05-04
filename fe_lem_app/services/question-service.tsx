@@ -50,6 +50,7 @@ export async function UpdateQuestion(question: any, classroomId) {
       correctAnswer: question.correctAnswer,
       studentAnswers: question.studentAnswers,
       answers: question.answers,
+      attachments: question.attachments,
       classroomId: Number(classroomId),
     }),
   });

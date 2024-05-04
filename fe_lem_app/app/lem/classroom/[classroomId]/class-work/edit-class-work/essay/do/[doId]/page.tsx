@@ -20,6 +20,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
   const [next, setNext] = useState<any>("");
   const [current, setCurrent] = useState<number>(0);
   const [studentAnswer, setStudentAnswer] = useState<object>({});
+  const [attachments, setAttachments] = useState<any>([]);
   const [currentValue, setCurrentValue] = useState<any>();
 
   var classroomId = "";
@@ -55,7 +56,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
         name: studentAnswer[index] || "",
       });
     }
-    
+
     setTimeout(() => {
       window.location.href = `/lem/classroom/${classroomId}/class-work`;
     }, 1000);
@@ -83,6 +84,11 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
       }
     }
     setCurrentValue("");
+  };
+
+  const dataChildren = (childData) => {
+    setAttachments(childData);
+    console.log(childData);
   };
 
   return (
@@ -146,7 +152,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
         ></textarea>
       </div>
       <div className="mx-8 mb-5">
-        <FileTable />
+        <FileTable ParentCallBack={dataChildren} />
       </div>
     </>
   );

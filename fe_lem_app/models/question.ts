@@ -10,4 +10,5 @@ export interface Question {
     description?: string;
     classEvent: ClassEvent;
     answer?: Answer[]; 
+    attachments?: any[];
 }

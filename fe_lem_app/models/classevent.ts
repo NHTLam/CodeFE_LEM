@@ -16,6 +16,6 @@ export type ClassEvent = {
   updatedAt: Date;
   deletedAt?: Date;
   comment?: Comment[]; 
-  question?: Question[]; 
+  questions?: Question[]; 
   classroom: Classroom; 
 };

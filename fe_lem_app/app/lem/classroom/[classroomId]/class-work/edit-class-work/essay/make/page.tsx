@@ -4,6 +4,7 @@ import { MakeEssay } from "@/components/ComponentsClassroomPage/MakeEssay";
 import { SidebarEditClassWork } from "@/components/ComponentsClassroomPage/SidebarEditClassWork";
 import { CreateClassEvent } from "@/services/class-event-service";
 import { toast } from "sonner";
+import { UpdateQuestion } from "@/services/question-service";
 
 const MakeEssayPage = () => {
   var classroomId = "";
@@ -29,11 +30,16 @@ const MakeEssayPage = () => {
       appUserId: Number(appUserId) == 0 ? 1 : Number(appUserId),
       questions: questionList,
     });
-
+    const questions = data?.questions;
+    if (questions !== null && questions !== undefined) {
+      var question = data!.questions![0];
+      question.attachments = questionList[0].attachments;
+      const newQuestion = await UpdateQuestion(question, classroomId);
+    }
     setTimeout(() => {
       window.location.href = `/lem/classroom/${classroomId}/class-work`;
     }, 1000);
-    toast.success("Create question success", {
+    toast.success("Create classwork success", {
       style: {
         color: "green",
       },

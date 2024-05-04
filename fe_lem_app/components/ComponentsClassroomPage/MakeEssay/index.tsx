@@ -21,7 +21,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
     ParentCallBack(questionList);
   }, [questionList, ParentCallBack]);
 
-  const createQuestion = () => {
+  const createQuestion = (isNoti) => {
     setQuestionList([]);
     for (let index = 0; index < current; index++) {
       setQuestionList((prev) => {
@@ -40,15 +40,19 @@ export const MakeEssay = ({ ParentCallBack }) => {
         return updated;
       });
     }
-    toast.success("Create question success", {
-      style: {
-        color: "green",
-      },
-    });
+    if (isNoti) {
+      toast.success("Create question success", {
+        style: {
+          color: "green",
+        },
+      });
+    }
   };
 
   const dataChildren = (childData) => {
     setAttachments(childData);
+    const isNoti = false;
+    createQuestion(isNoti);
     console.log(childData);
   };
 
@@ -92,7 +96,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
         ))}
         <div className="flex w-full justify-end">
           <button
-            onClick={createQuestion}
+            onClick={() => createQuestion(true)}
             className="my-1 mr-5 mt-6 flex w-50 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
           >
             Submit

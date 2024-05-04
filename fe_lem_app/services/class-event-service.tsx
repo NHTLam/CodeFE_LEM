@@ -89,7 +89,7 @@ export async function CreateClassEvent(classevent: any) {
   } catch (error) {
     // Handle network errors or unexpected exceptions
     console.error("Error creating classevent:", error);
-    return { error: "An unexpected error occurred." }; // Return a generic error message
+    return null;
   }
 }
 
