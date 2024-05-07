@@ -121,7 +121,7 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
       <hr className="mx-7 my-4" />
       <div className="mx-5">
         <p className="mx-2 mt-5 font-bold">Instruction:</p>
-        <p className="mx-2">{classWork?.questions[current].instruction}</p>
+        <p className="mx-2">{classWork?.questions[current].correctAnswer}</p>
       </div>
       <hr className="mx-7 my-4" />
       <div className="mx-5 mb-10">
@@ -129,8 +129,10 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
         <p className="mx-2">{answer[current]?.name}</p>
       </div>
       <div className="mx-8 mb-5">
-        <p className="ml-2">Attached file</p>
-        <FileTable />
+        <FileTable
+          ParentCallBack={null}
+          data={classWork?.questions[current].attachments}
+        />
       </div>
       <div className="mb-20">
         <p className="ml-10">FeedBack</p>
@@ -160,7 +162,7 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
                       Marker
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
-                      {answer[current]?.appUserFeedback.userName}
+                      {answer[current]?.appUserFeedback?.userName}
                     </td>
                   </tr>
                   <tr>

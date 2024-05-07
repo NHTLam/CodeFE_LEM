@@ -6,6 +6,7 @@ import { FileTable } from "@/components/ComponentsClassroomPage/FileTable";
 import { GetClassEvent } from "@/services/class-event-service";
 import { CreateStudentAnswer } from "@/services/student-answer-service";
 import { toast } from "sonner";
+import { UpdateQuestion } from "@/services/question-service";
 
 interface WorkIdPageProps {
   params: {
@@ -15,13 +16,9 @@ interface WorkIdPageProps {
 
 const DoEssayPage = ({ params }: WorkIdPageProps) => {
   const [classWork, setClassWork] = useState<any>();
-  const [first, setFirst] = useState<any>(true);
-  const [previous, setPrevious] = useState<any>("");
-  const [next, setNext] = useState<any>("");
   const [current, setCurrent] = useState<number>(0);
   const [studentAnswer, setStudentAnswer] = useState<object>({});
   const [attachments, setAttachments] = useState<any>([]);
-  const [currentValue, setCurrentValue] = useState<any>();
 
   var classroomId = "";
   var appUserId = "";
@@ -37,15 +34,17 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
   };
 
   useEffect(() => {
-    if (first == true) {
-      const fetchData = async () => {
-        const data = await GetClassEvent(filter);
-        setClassWork(data);
-        console.log("classWork: " + classWork);
-      };
-      fetchData();
-      setFirst(false);
-    }
+    const fetchData = async () => {
+      const data = await GetClassEvent(filter);
+      setClassWork(data);
+      if (data?.questions !== null && data?.questions !== undefined) {
+        const currentAttachments = data?.questions![0].attachments;
+        const newAttachments = attachments.concat(currentAttachments);
+        setAttachments(newAttachments);
+      }
+    };
+    fetchData();
+    console.log("attachments: " + attachments);
   }, []);
 
   const submitAnswer = async () => {
@@ -56,7 +55,11 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
         name: studentAnswer[index] || "",
       });
     }
-
+    if (classWork.questions !== null && classWork.questions !== undefined) {
+      var question = classWork!.questions![0];
+      question.attachments = attachments;
+      const newQuestion = await UpdateQuestion(question, classroomId);
+    }
     setTimeout(() => {
       window.location.href = `/lem/classroom/${classroomId}/class-work`;
     }, 1000);
@@ -83,11 +86,14 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
         }
       }
     }
-    setCurrentValue("");
   };
 
   const dataChildren = (childData) => {
-    setAttachments(childData);
+    if (attachments === null) {
+      setAttachments([]);
+    }
+    const newAttachments = attachments.concat(childData);
+    setAttachments(newAttachments);
     console.log(childData);
   };
 
@@ -133,7 +139,7 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
       <hr className="mx-7 my-4" />
       <div className="mx-5">
         <p className="mx-2 mt-5 font-bold">Instruction:</p>
-        <p className="mx-2">{classWork?.questions[current].instruction}</p>
+        <p className="mx-2">{classWork?.questions[current].correctAnswer}</p>
       </div>
       <div className="mx-7 my-5 rounded-md">
         <textarea
@@ -152,7 +158,10 @@ const DoEssayPage = ({ params }: WorkIdPageProps) => {
         ></textarea>
       </div>
       <div className="mx-8 mb-5">
-        <FileTable ParentCallBack={dataChildren} />
+        <FileTable
+          ParentCallBack={dataChildren}
+          data={classWork?.questions[0].attachments}
+        />
       </div>
     </>
   );

@@ -99,7 +99,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
             onClick={() => createQuestion(true)}
             className="my-1 mr-5 mt-6 flex w-50 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800 dark:hover:shadow-none"
           >
-            Submit
+            Save
           </button>
           <button
             onClick={addQuestion}
@@ -110,7 +110,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
         </div>
 
         <div className="mb-20 mt-5">
-          <FileTable ParentCallBack={dataChildren} />
+          <FileTable ParentCallBack={dataChildren} data={[]} />
         </div>
       </div>
     </>

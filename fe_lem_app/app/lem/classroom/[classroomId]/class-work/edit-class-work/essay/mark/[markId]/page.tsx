@@ -114,27 +114,27 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
     setCurrentValue("");
   };
 
-    const submitAnswer = async () => {
-        for (let index = 0; index < answer.length; index++) {
-            await UpdateStudentAnswer({
-                appUserId: userId,
-                questionId: classWork?.questions[index].id,
-                name: answer[index]?.name,
-                id: answer[index]?.id,
-                grade: grade[index],
-                feedback: feedback[index],
-                appUserFeedbackId: 1,
-            });
-        }
-        setTimeout(() => {
-            window.location.href = `/lem/classroom/${classroomId}/class-work`;
-          }, 1000);
-        toast.success("Create question success", {
-            style: {
-              color: "green",
-            },
-          });
+  const submitAnswer = async () => {
+    for (let index = 0; index < answer.length; index++) {
+      await UpdateStudentAnswer({
+        appUserId: userId,
+        questionId: classWork?.questions[index].id,
+        name: answer[index]?.name,
+        id: answer[index]?.id,
+        grade: grade[index],
+        feedback: feedback[index],
+        appUserFeedbackId: 1,
+      });
     }
+    setTimeout(() => {
+      window.location.href = `/lem/classroom/${classroomId}/class-work`;
+    }, 1000);
+    toast.success("Create question success", {
+      style: {
+        color: "green",
+      },
+    });
+  };
 
   return (
     <>
@@ -247,7 +247,10 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
         <p className="mx-2">{answer[current]?.name}</p>
       </div>
       <div className="mx-8 mb-5">
-        <FileTable />
+        <FileTable
+          ParentCallBack={null}
+          data={classWork?.questions[current].attachments}
+        />
       </div>
       <div className="mb-20">
         <p className="ml-10">FeedBack</p>

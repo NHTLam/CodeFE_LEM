@@ -5,7 +5,12 @@ import { Dialog, Transition } from "@headlessui/react";
 import { Download, FileUp, Trash2 } from "lucide-react";
 import { Fragment, useEffect, useState } from "react";
 
-export const FileTable = ({ ParentCallBack }) => {
+interface FileTablePros {
+  ParentCallBack: any;
+  data: any;
+}
+
+export const FileTable = ({ ParentCallBack, data }: FileTablePros) => {
   var classroomId = "";
   if (typeof window !== "undefined") {
     classroomId = localStorage.getItem("classroomId") ?? "";
@@ -18,17 +23,37 @@ export const FileTable = ({ ParentCallBack }) => {
   const handleUploadFile = async () => {
     setLoading(true);
     const result = await UploadFile(selectedFile, classroomId);
-    debugger;
     setAttachments(attachments.concat(result));
     setLoading(false);
+
+    if ((result?.length ?? 0) !== 0 && ParentCallBack !== null) {
+      ParentCallBack(result);
+    }
     //window.location.reload();
   };
 
   useEffect(() => {
-    if (attachments !== null) {
-      ParentCallBack(attachments);
+    if ((data?.length ?? 0) !== 0 && data !== undefined) {
+      data.forEach((e) => {
+        e.notDel = true;
+      });
+
+      const currentAttachments = attachments.concat(data);
+      if (currentAttachments?.length > 0) {
+        debugger;
+        const distinctAttachments = currentAttachments.reduce(
+          (acc, attachment) => {
+            if (!acc.map((x) => x.id).includes(attachment.id)) {
+              acc.push(attachment);
+            }
+            return acc;
+          },
+          [],
+        );
+        setAttachments(distinctAttachments);
+      }
     }
-  }, [attachments]);
+  }, [data]);
 
   const handleDownloadFile = async (attachment) => {
     const result = await DownloadFile(attachment.id, classroomId);
@@ -105,14 +130,18 @@ export const FileTable = ({ ParentCallBack }) => {
                                 >
                                   <Download />
                                 </button>
-                                <button
-                                  onClick={() =>
-                                    handleDeleteFile(attachment.id)
-                                  }
-                                  className="mr-3 flex w-10 justify-center rounded-sm"
-                                >
-                                  <Trash2 />
-                                </button>
+                                {attachment.notDel ? (
+                                  <></>
+                                ) : (
+                                  <button
+                                    onClick={() =>
+                                      handleDeleteFile(attachment.id)
+                                    }
+                                    className="mr-3 flex w-10 justify-center rounded-sm"
+                                  >
+                                    <Trash2 />
+                                  </button>
+                                )}
                               </div>
                             </td>
                           </tr>
