@@ -62,8 +62,9 @@ export const ListClassWork = () => {
 
   const ConvertDateTime = (datetime) => {
     const convert = new Date(datetime);
-    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${convert.getMonth() + 1
-      }/${convert.getFullYear()}`;
+    const format = `${convert.getHours()}:${convert.getMinutes()}, ${convert.getDate()}/${
+      convert.getMonth() + 1
+    }/${convert.getFullYear()}`;
     return format;
   };
 
@@ -102,7 +103,8 @@ export const ListClassWork = () => {
                     <Listbox.Option
                       key={personIdx}
                       className={({ active }) =>
-                        `relative w-full cursor-default select-none py-2 pr-4 ${active ? "bg-amber-100 text-amber-900" : ""
+                        `relative w-full cursor-default select-none py-2 pr-4 ${
+                          active ? "bg-amber-100 text-amber-900" : ""
                         }`
                       }
                       value={person}
@@ -111,8 +113,9 @@ export const ListClassWork = () => {
                         <>
                           <Link href={`${person.link}`}>
                             <span
-                              className={`block truncate pl-5 ${selected ? "font-medium" : "font-normal"
-                                }`}
+                              className={`block truncate pl-5 ${
+                                selected ? "font-medium" : "font-normal"
+                              }`}
                             >
                               {person.name}
                             </span>
@@ -166,14 +169,15 @@ export const ListClassWork = () => {
               </div>
               {isAllowCreateFeedBack ? (
                 <>
-                  {classEvent?.questions[0].instruction != null ? (
+                  {classEvent?.questions[0]?.instruction != null ? (
                     <Link
                       href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/mark/${classEvent.id}`}
                     >
                       <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
                         Mark
                       </button>
-                    </Link>) : (
+                    </Link>
+                  ) : (
                     <Link
                       href={`/lem/classroom/${classroomId}/class-work/edit-class-work/activity/mark/${classEvent.id}`}
                     >
@@ -186,34 +190,37 @@ export const ListClassWork = () => {
               ) : (
                 <></>
               )}
-              {classEvent.isSubmit == false ? (<>
-                {classEvent?.questions[0].instruction != null ? (
-                  <Link
-                    href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do/${classEvent.id}`}
-                  >
-                    <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-                      Do
-                    </button>
-                  </Link>) : (
-                  <Link
-                    href={`/lem/classroom/${classroomId}/class-work/edit-class-work/activity/do/${classEvent.id}`}
-                  >
-                    <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
-                      Do
-                    </button>
-                  </Link>
-                )}
-              </>
+              {classEvent.isSubmit == false ? (
+                <>
+                  {classEvent?.questions[0]?.instruction != null ? (
+                    <Link
+                      href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/do/${classEvent.id}`}
+                    >
+                      <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                        Do
+                      </button>
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/lem/classroom/${classroomId}/class-work/edit-class-work/activity/do/${classEvent.id}`}
+                    >
+                      <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
+                        Do
+                      </button>
+                    </Link>
+                  )}
+                </>
               ) : (
                 <>
-                  {classEvent?.questions[0].instruction != null ? (
+                  {classEvent?.questions[0]?.instruction != null ? (
                     <Link
                       href={`/lem/classroom/${classroomId}/class-work/edit-class-work/essay/detail/${classEvent.id}`}
                     >
                       <button className="my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base transition-all duration-300 hover:border-blue-800 hover:bg-blue-800/5 hover:text-lime-800 dark:border-transparent dark:bg-blue-800 dark:hover:border-blue-800 dark:hover:bg-blue-800/5 dark:hover:text-lime-800 dark:hover:shadow-none">
                         Detail
                       </button>
-                    </Link>) : (
+                    </Link>
+                  ) : (
                     <Link
                       href={`/lem/classroom/${classroomId}/class-work/edit-class-work/activity/detail/${classEvent.id}`}
                     >
@@ -223,7 +230,6 @@ export const ListClassWork = () => {
                     </Link>
                   )}
                 </>
-
               )}
             </div>
           </div>
