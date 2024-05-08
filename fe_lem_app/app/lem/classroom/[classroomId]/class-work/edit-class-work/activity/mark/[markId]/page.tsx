@@ -218,7 +218,10 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
         <p className="mx-2">{answer[current]?.name}</p>
       </div>
       <div className="mx-8 mb-5">
-        <FileTable data={[]} ParentCallBack={null} />
+        <FileTable
+          ParentCallBack={null}
+          data={classWork?.questions[current].attachments}
+        />
       </div>
       <div className="mb-20">
         <p className="ml-10">FeedBack</p>

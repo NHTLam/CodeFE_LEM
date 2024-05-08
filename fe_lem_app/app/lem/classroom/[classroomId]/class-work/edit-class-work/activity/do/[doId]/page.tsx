@@ -64,7 +64,6 @@ const DoActivityPage = ({ params }: WorkIdPageProps) => {
     });
   };
 
-
   const dataChildren = (childData) => {
     setAttachments(childData);
     console.log(childData);
@@ -99,12 +98,15 @@ const DoActivityPage = ({ params }: WorkIdPageProps) => {
         <textarea
           rows={2}
           placeholder="Answer"
-          onChange={e => setStudentAnswer(e.target.value)}
+          onChange={(e) => setStudentAnswer(e.target.value)}
           className="flex w-full grow rounded-sm border border-stroke px-2 py-1 text-base outline-none transition-all duration-300 hover:border-primary hover:bg-primary/5 dark:border-transparent dark:bg-[#2C303B] dark:hover:border-primary dark:hover:bg-primary/5"
         ></textarea>
       </div>
       <div className="mx-8 mb-5">
-        <FileTable ParentCallBack={dataChildren} data={[]}/>
+        <FileTable
+          ParentCallBack={dataChildren}
+          data={classWork?.questions[current].attachments}
+        />
       </div>
     </>
   );
