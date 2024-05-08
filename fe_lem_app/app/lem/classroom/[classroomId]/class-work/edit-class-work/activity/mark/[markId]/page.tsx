@@ -124,7 +124,7 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
                 id: answer[index]?.id,
                 grade: grade[index],
                 feedback: feedback[index],
-                appUserFeedbackId: 1,
+                appUserFeedbackId: appUserId,
             });
         }
         setTimeout(() => {
@@ -210,21 +210,6 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
                 Mark
               </button>
             </div>
-            {/* <div className="mr-10 h-10 border border-gray-500"></div>
-            <div className="flex font-semibold text-blue-500">
-              <button
-                onClick={() => SwapPage(0)}
-                className="my-1 flex w-30 justify-center rounded-sm border border-stroke pt-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800"
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => SwapPage(1)}
-                className="my-1 ml-10 flex w-30 justify-center rounded-sm border border-stroke pt-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800"
-              >
-                Next
-              </button>
-            </div> */}
           </div>
         </div>
         <hr />
@@ -234,24 +219,16 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
             <p>Activity</p>
           </div>
         </div>
-        {/* <p className="mx-2 mt-5 font-bold">Description:</p>
-        <p className="mx-2">{classWork?.questions[current].description}</p> */}
-      </div>
-      {/* <hr className="mx-7 my-4" />
-      <div className="mx-5">
-        <p className="mx-2 mt-5 font-bold">Instruction:</p>
-        <p className="mx-2">{classWork?.questions[current].instruction}</p>
+        <p className="mx-2 mt-5 font-bold">Description:</p>
+        <p className="mx-2">{classWork?.questions[current].description}</p>
       </div>
       <hr className="mx-7 my-4" />
       <div className="mx-5 mb-10">
         <p className="mx-2 mt-5 font-bold">Answer:</p>
         <p className="mx-2">{answer[current]?.name}</p>
-      </div> */}
-      <div className="mx-8 mt-10 mb-30">
-        <TableDetail />
       </div>
       <div className="mx-8 mb-5">
-        <FileTable />
+        <FileTable data={[]} ParentCallBack={null}/>
       </div>
       <div className="mb-20">
         <p className="ml-10">FeedBack</p>

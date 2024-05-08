@@ -95,45 +95,23 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
               Return
             </button>
           </Link>
-        {/* </div>
-        <div className="flex items-center justify-between text-2xl font-semibold text-blue-500"> */}
-          {/* <div className="flex">
+        </div>
+        <div className="flex items-center justify-between text-2xl font-semibold text-blue-500">
+          <div className="flex">
             <ClipboardPen className="mr-2 h-10 w-10" />
             <p>{classWork?.questions[current].name}</p>
-          </div> */}
-          {/* <div className="flex">
-            <button
-              onClick={() => SwapPage(0)}
-              className="dark:hover:shadetailw-none my-1 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800"
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => SwapPage(1)}
-              className="dark:hover:shadetailw-none my-1 ml-20 flex w-30 justify-center rounded-sm border border-stroke py-1 text-base outline-none transition-all duration-300 hover:border-lime-800 hover:bg-lime-800/5 hover:text-lime-800 dark:border-transparent dark:bg-lime-800 dark:hover:border-lime-800 dark:hover:bg-lime-800/5 dark:hover:text-lime-800"
-            >
-              Next
-            </button>
-          </div> */}
+          </div>
         </div>
-        {/* <p className="mx-2 mt-5 font-bold">Description:</p>
-        <p className="mx-2">{classWork?.questions[current].description}</p> */}
-      </div>
-      {/* <hr className="mx-7 my-4" />
-      <div className="mx-5">
-        <p className="mx-2 mt-5 font-bold">Instruction:</p>
-        <p className="mx-2">{classWork?.questions[current].instruction}</p>
+        <p className="mx-2 mt-5 font-bold">Description:</p>
+        <p className="mx-2">{classWork?.questions[current].description}</p>
       </div>
       <hr className="mx-7 my-4" />
       <div className="mx-5 mb-10">
         <p className="mx-2 mt-5 font-bold">Answer:</p>
         <p className="mx-2">{answer[current]?.name}</p>
-      </div> */}
-      <div className="mx-8 mt-10 mb-30">
-        <TableDetail />
       </div>
       <div className="mx-8 mb-5">
-        <FileTable />
+        <FileTable ParentCallBack={null} data={[]} />
       </div>
       <div className="mb-20">
         <p className="ml-10">FeedBack</p>
@@ -163,7 +141,7 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
                       Marker
                     </td>
                     <td className="whitespace-nowrap px-6 py-4">
-                      {answer[current]?.appUserFeedback.userName}
+                      {answer[current]?.appUserFeedback?.userName}
                     </td>
                   </tr>
                   <tr>
