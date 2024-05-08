@@ -1,18 +1,9 @@
 "use client";
 import { Fragment, useEffect, useState } from "react";
-import {
-  CheckIcon,
-  ChevronDown,
-  Circle,
-  ClipboardPen,
-  Upload,
-} from "lucide-react";
+import { CheckIcon, ChevronDown, ClipboardPen } from "lucide-react";
 import Link from "next/link";
-import { FeedBackTable } from "@/components/ComponentsClassroomPage/FeedbackTable";
 import { FileTable } from "@/components/ComponentsClassroomPage/FileTable";
 import { GetClassEvent } from "@/services/class-event-service";
-import { FilterData } from "@/models/filter";
-import { UpdateQuestion } from "@/services/question-service";
 import {
   CreateStudentAnswer,
   DetailStudentAnswer,
@@ -21,7 +12,6 @@ import {
 } from "@/services/student-answer-service";
 import { Listbox, Transition } from "@headlessui/react";
 import { toast } from "sonner";
-import { TableDetail } from "@/components/ComponentsClassroomPage/TableDetail";
 
 interface WorkIdPageProps {
   params: {
@@ -115,27 +105,27 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
     setCurrentValue("");
   };
 
-    const submitAnswer = async () => {
-        for (let index = 0; index < answer.length; index++) {
-            await UpdateStudentAnswer({
-                appUserId: userId,
-                questionId: classWork?.questions[index].id,
-                name: answer[index]?.name,
-                id: answer[index]?.id,
-                grade: grade[index],
-                feedback: feedback[index],
-                appUserFeedbackId: appUserId,
-            });
-        }
-        setTimeout(() => {
-            window.location.href = `/lem/classroom/${classroomId}/class-work`;
-          }, 1000);
-        toast.success("Create question success", {
-            style: {
-              color: "green",
-            },
-          });
+  const submitAnswer = async () => {
+    for (let index = 0; index < answer.length; index++) {
+      await UpdateStudentAnswer({
+        appUserId: userId,
+        questionId: classWork?.questions[index].id,
+        name: answer[index]?.name,
+        id: answer[index]?.id,
+        grade: grade[index],
+        feedback: feedback[index],
+        appUserFeedbackId: appUserId,
+      });
     }
+    setTimeout(() => {
+      window.location.href = `/lem/classroom/${classroomId}/class-work`;
+    }, 1000);
+    toast.success("Create question success", {
+      style: {
+        color: "green",
+      },
+    });
+  };
 
   return (
     <>
@@ -228,7 +218,7 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
         <p className="mx-2">{answer[current]?.name}</p>
       </div>
       <div className="mx-8 mb-5">
-        <FileTable data={[]} ParentCallBack={null}/>
+        <FileTable data={[]} ParentCallBack={null} />
       </div>
       <div className="mb-20">
         <p className="ml-10">FeedBack</p>

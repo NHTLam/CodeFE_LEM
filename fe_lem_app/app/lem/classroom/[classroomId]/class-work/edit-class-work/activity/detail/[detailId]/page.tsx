@@ -11,7 +11,6 @@ import {
   CreateStudentAnswer,
   DetailStudentAnswer,
 } from "@/services/student-answer-service";
-import { TableDetail } from "@/components/ComponentsClassroomPage/TableDetail";
 
 interface WorkIdPageProps {
   params: {
