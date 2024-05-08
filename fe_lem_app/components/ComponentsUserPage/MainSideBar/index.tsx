@@ -18,6 +18,7 @@ import { Classroom } from "@/models/classroom";
 import { GetOwnBoard } from "@/services/board-service";
 import { Board } from "@/models/board";
 import { Dialog, Transition } from "@headlessui/react";
+import { toast } from "sonner";
 
 interface SidebarProps {
   storageKey?: string;
@@ -79,7 +80,22 @@ export const Sidebar = ({ storageKey = "t-sidebar-state" }: SidebarProps) => {
 
   async function handleJoinClass() {
     const isSuccess = await JoinClass(classroomCode, token);
-    window.location.reload();
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+    if (isSuccess === null) {
+      toast.success("Join class fail", {
+        style: {
+          color: "red",
+        },
+      });
+    } else {
+      toast.success("Join class success", {
+        style: {
+          color: "green",
+        },
+      });
+    }
   }
 
   return (
