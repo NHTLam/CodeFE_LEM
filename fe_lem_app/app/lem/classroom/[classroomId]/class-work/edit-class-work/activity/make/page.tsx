@@ -33,7 +33,7 @@ const MakeActivityPage = () => {
     setTimeout(() => {
       window.location.href = `/lem/classroom/${classroomId}/class-work`;
     }, 1000);
-    toast.success("Mark question success", {
+    toast.success("Create success", {
       style: {
         color: "green",
       },

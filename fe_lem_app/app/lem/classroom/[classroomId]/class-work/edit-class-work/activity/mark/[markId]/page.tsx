@@ -33,7 +33,6 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
   const [userId, setUserId] = useState<number>(1);
   const [grade, setGrade] = useState<object>({});
   const [feedback, setFeedback] = useState<object>({});
-  const [currentValue, setCurrentValue] = useState<any>();
 
   var classroomId = "";
   var appUserId = "";
@@ -84,25 +83,6 @@ const detailActivityPage = ({ params }: WorkIdPageProps) => {
       setUserId(id);
     };
     fetchData();
-  };
-
-  const SwapPage = (num) => {
-    if (Array.isArray(classWork?.questions)) {
-      if (num == 0) {
-        if (current == 0) {
-          setCurrent(classWork?.questions.length - 1);
-        } else {
-          setCurrent(current - 1);
-        }
-      } else if (num == 1) {
-        if (current == classWork?.questions.length - 1) {
-          setCurrent(0);
-        } else {
-          setCurrent(current + 1);
-        }
-      }
-    }
-    setCurrentValue("");
   };
 
   const submitAnswer = async () => {

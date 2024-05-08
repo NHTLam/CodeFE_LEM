@@ -29,7 +29,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
           ...prev,
           {
             id: 0,
-            name: `Câu ${index + 1}`,
+            name: `Question ${index + 1}`,
             instruction: instruction[index] ?? "",
             description: description[index],
             correctAnswer: instruction[index],
@@ -41,7 +41,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
       });
     }
     if (isNoti) {
-      toast.success("Create question success", {
+      toast.success("Create success", {
         style: {
           color: "green",
         },
@@ -61,7 +61,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
       <div className="w-full border-l pl-4">
         {currentList.map((index) => (
           <div key={index} className="mb-5 flex w-full">
-            <p className="w-20">Câu {index + 1}:</p>
+            <p className="w-20">Question {index + 1}:</p>
             <div className="w-full">
               <div className="flex">
                 <p className="mr-5">Question: </p>
