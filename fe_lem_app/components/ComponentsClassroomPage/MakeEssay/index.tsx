@@ -30,7 +30,7 @@ export const MakeEssay = ({ ParentCallBack }) => {
           {
             id: 0,
             name: `Câu ${index + 1}`,
-            instruction: instruction[index],
+            instruction: instruction[index] ?? "",
             description: description[index],
             correctAnswer: instruction[index],
             attachments: attachments,
