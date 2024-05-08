@@ -43,7 +43,7 @@ const MakeEssayPage = () => {
       setTimeout(() => {
         window.location.href = `/lem/classroom/${classroomId}/class-work`;
       }, 1000);
-      toast.success("Create classwork success", {
+      toast.success("Mark classwork success", {
         style: {
           color: "green",
         },

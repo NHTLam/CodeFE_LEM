@@ -50,12 +50,12 @@ export const NavItem = ({ isExpanded, classroom, onExpand }: NavItemProps) => {
     {
       label: "Groups",
       icon: <Boxes className="mr-2 h-4 w-4" />,
-      href: `/classroom/${classroom.id}/groups`,
+      href: `/lem/classroom/${classroom.id}/groups`,
     },
     {
       label: "People",
       icon: <Users className="mr-2 h-4 w-4" />,
-      href: `/classroom/${classroom.id}/people`,
+      href: `/lem/classroom/${classroom.id}/people`,
     },
   ];
 

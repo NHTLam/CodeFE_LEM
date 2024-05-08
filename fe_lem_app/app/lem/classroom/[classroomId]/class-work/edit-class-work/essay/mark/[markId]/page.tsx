@@ -123,7 +123,7 @@ const detailEssayPage = ({ params }: WorkIdPageProps) => {
         id: answer[index]?.id,
         grade: grade[index],
         feedback: feedback[index],
-        appUserFeedbackId: 1,
+        appUserFeedbackId: appUserId,
       });
     }
     setTimeout(() => {

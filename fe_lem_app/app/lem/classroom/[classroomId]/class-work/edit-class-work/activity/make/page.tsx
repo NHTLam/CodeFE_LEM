@@ -1,11 +1,7 @@
 "use client";
 import { useState } from "react";
-import { Circle, Upload } from "lucide-react";
-import { FileTable } from "@/components/ComponentsClassroomPage/FileTable";
-import { MakeEssay } from "@/components/ComponentsClassroomPage/MakeEssay";
 import { SidebarEditClassWork } from "@/components/ComponentsClassroomPage/SidebarEditClassWork";
 import { CreateClassEvent } from "@/services/class-event-service";
-import { CreateQuestion } from "@/services/question-service";
 import { toast } from "sonner";
 import { MakeActivity } from "@/components/ComponentsClassroomPage/MakeActivity";
 
@@ -37,7 +33,7 @@ const MakeActivityPage = () => {
     setTimeout(() => {
       window.location.href = `/lem/classroom/${classroomId}/class-work`;
     }, 1000);
-    toast.success("Create question success", {
+    toast.success("Mark question success", {
       style: {
         color: "green",
       },
