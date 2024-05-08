@@ -22,7 +22,6 @@ const Signin = () => {
       password: data.password,
     };
 
-    localStorage.setItem("token", "");
     const message = await Login(userData);
     console.log("Status: " + message);
 

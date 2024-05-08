@@ -24,6 +24,7 @@ const Navbar = () => {
   function setLogout() {
     if (typeof window !== "undefined") {
       localStorage.setItem("token", "");
+      localStorage.setItem("userId", "");
     }
   }
   return (
