@@ -84,10 +84,7 @@ const Navbar = () => {
                     }
                     value="Profile"
                   >
-                    <Link
-                      href={`/lem/home/user/${currentUserId}/profile`}
-                      onClick={setLogout}
-                    >
+                    <Link href={`/lem/home/user/${currentUserId}/profile`}>
                       <span
                         className={`block truncate pl-5 ${
                           selected ? "font-medium" : "font-normal"
